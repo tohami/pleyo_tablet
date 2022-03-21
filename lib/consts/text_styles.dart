@@ -4,33 +4,33 @@ import 'colors.dart';
 
 class TextStyles {
   static const textXLarge = TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'CoconPro',
     fontSize: 60.0,
-    color: Colors.black,
+    color: Color(ColorCode.whiteBackground),
     fontWeight: FontWeight.w700,
   );
   static const textLarge = TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'CoconPro',
     fontSize: 30.0,
-    color: Colors.black,
+    color: Color(ColorCode.whiteBackground),
     fontWeight: FontWeight.w700,
   );
   static const textMedium = TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'CoconPro',
     fontSize: 16,
-    color: Colors.black,
+    color: Color(ColorCode.whiteBackground),
     fontWeight: FontWeight.w700,
   );
   static const textSmall = TextStyle(
-    fontFamily: 'Nunito',
+    fontFamily: 'CoconPro',
     fontSize: 13,
-    color: Colors.black,
+    color: Color(ColorCode.whiteBackground),
     fontWeight: FontWeight.w700,
   );
   static const textXSmall = TextStyle(
-    fontFamily: 'Nunito',
+    fontFamily: 'CoconPro',
     fontSize: 11,
-    color: Colors.black,
+    color: Color(ColorCode.whiteBackground),
     fontWeight: FontWeight.w600,
   );
 }

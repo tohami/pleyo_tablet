@@ -28,6 +28,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
+      builder: (context, widget) => ResponsiveWrapper.builder(
+          BouncingScrollWrapper.builder(context, widget!),
+          minWidth: 600,
+          defaultScale: true,
+          defaultName: TABLET,
+          breakpoints: [
+            // const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
+            // const ResponsiveBreakpoint.autoScale(600, name: MOBILE),
+            // const ResponsiveBreakpoint.autoScale(850, name: TABLET),
+            // const ResponsiveBreakpoint.autoScale(1080, name: DESKTOP),
+            const ResponsiveBreakpoint.autoScale(600, name: TABLET),
+          ]),
       debugShowCheckedModeBanner: false,
       enableLog: true,
       logWriterCallback: Logger.write,
