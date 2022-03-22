@@ -6,6 +6,7 @@ class ColorCode {
   static const accentLightColor = 0xff2ff7f7;
   static const darkGrayBackground = 0xff494949;
   static const shadowBackground = 0x42000000;
+  static const textShadowBackground = 0x4d2ff7f7;
   static const lightGrayBackground = 0x4dffffff;
   static const whiteBackground = 0xffffffff;
   static const white2Background = 0x99ffffff;

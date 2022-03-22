@@ -91,7 +91,7 @@ class ScanQRController extends SuperController<bool> {
       qrCode.value = scanData.code ?? "";
       Future.delayed(const Duration(seconds: 3)).then((value) {
         if (qrCode.value.isNotEmpty) {
-          Get.rootDelegate.offNamed(Routes.HOME);
+          Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS);
         } else {
           Get.rootDelegate.offNamed(Routes.SPLASH);
         }

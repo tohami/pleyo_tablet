@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/pages/available_points/bindings/available_points_binding.dart';
+import 'package:pleyo_tablet_app/pages/available_points/presentation/views/available_points_view.dart';
 import 'package:pleyo_tablet_app/pages/custom_trial_ticket/bindings/custom_trial_ticket_binding.dart';
 import 'package:pleyo_tablet_app/pages/custom_trial_ticket/presentation/views/custom_trial_ticket_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
@@ -28,6 +30,11 @@ class AppPages {
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),
       binding: ScanQRBinding(),
+    ),
+    GetPage(
+      name: Routes.AVAILABLE_POINTS,
+      page: () => const AvailablePointsView(),
+      binding: AvailablePointsBinding(),
     ),
     GetPage(
       name: Routes.LOGIN,

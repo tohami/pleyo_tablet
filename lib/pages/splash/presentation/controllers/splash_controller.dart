@@ -12,14 +12,6 @@ class SplashController extends SuperController<dynamic> {
   @override
   void onInit() {
     super.onInit();
-    // Future.delayed(const Duration(seconds: 3)).then((value) {
-    //   var isLoggedIn = FirebaseAuth.instance.currentUser != null;
-    //   if (isLoggedIn) {
-    //     Get.rootDelegate.offNamed(Routes.HOME);
-    //   } else {
-    //     Get.rootDelegate.offNamed(Routes.LOGIN);
-    //   }
-    // });
   }
 
   @override
