@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/pages/custom_trial_ticket/bindings/custom_trial_ticket_binding.dart';
 import 'package:pleyo_tablet_app/pages/custom_trial_ticket/presentation/views/custom_trial_ticket_view.dart';
-import 'package:pleyo_tablet_app/pages/generate_qr/bindings/generate_qr_binding.dart';
-import 'package:pleyo_tablet_app/pages/generate_qr/presentation/views/generate_qr_view.dart';
+import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
+import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 
 import '../middleware/auth_middleware.dart';
 import '../pages/home/bindings/home_binding.dart';
@@ -25,6 +25,11 @@ class AppPages {
         page: () => const SplashView(),
         binding: SplashBinding()),
     GetPage(
+      name: Routes.SCAN_QR,
+      page: () => ScanQRView(),
+      binding: ScanQRBinding(),
+    ),
+    GetPage(
       name: Routes.LOGIN,
       middlewares: [EnsureNotAuthedMiddleware()],
       page: () => LoginView(),
@@ -32,15 +37,8 @@ class AppPages {
     ),
     GetPage(
       name: Routes.HOME,
-      middlewares: [EnsureAuthMiddleware()],
       page: () => const HomeView(),
       binding: HomeBinding(),
-    ),
-    GetPage(
-      name: Routes.GENERATE_QR,
-      middlewares: [EnsureAuthMiddleware()],
-      page: () => const GenerateQRView(),
-      binding: GenerateQRBinding(),
     ),
     GetPage(
       name: Routes.CUSTOM_TRIAL_TICKET,

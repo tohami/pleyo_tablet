@@ -1,25 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
-class GenerateQRController extends SuperController<bool> {
-  GenerateQRController();
+class ScanQRController extends SuperController<bool> {
+  ScanQRController();
 
-  String username = "";
-  String email = "";
-  RxBool isEmailClicked = false.obs;
-  RxBool isPrintClicked = false.obs;
-  RxBool isValidEmail = false.obs;
-  RxBool isPrintStep = false.obs;
+  Barcode? result;
+  QRViewController? controller;
+  RxBool isValid = false.obs;
+  RxString qrCode = "".obs;
 
   TextEditingController emailController = TextEditingController();
 
   @override
   void onInit() {
     change(null, status: RxStatus.success());
-
-    username = FirebaseAuth.instance.currentUser?.displayName ?? "test";
   }
 
   @override
@@ -31,6 +28,7 @@ class GenerateQRController extends SuperController<bool> {
   void onClose() {
     // ignore: avoid_print
     print('onClose called');
+    controller?.dispose();
     super.onClose();
   }
 
@@ -86,15 +84,18 @@ class GenerateQRController extends SuperController<bool> {
     print('onResumed called');
   }
 
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.rootDelegate.offNamed(Routes.SPLASH);
-  }
-
-  void sendEmail() {
-    isValidEmail.value = emailController.text.isNotEmpty;
-    if (isValidEmail.value) {
-      isPrintStep.value = true;
-    }
+  void onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      controller.stopCamera();
+      qrCode.value = scanData.code ?? "";
+      Future.delayed(const Duration(seconds: 3)).then((value) {
+        if (qrCode.value.isNotEmpty) {
+          Get.rootDelegate.offNamed(Routes.HOME);
+        } else {
+          Get.rootDelegate.offNamed(Routes.SPLASH);
+        }
+      });
+    });
   }
 }

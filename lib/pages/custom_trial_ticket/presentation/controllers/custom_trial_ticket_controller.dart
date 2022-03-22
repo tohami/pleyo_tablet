@@ -9,7 +9,7 @@ class CustomTrialTicketController extends SuperController<bool> {
   RxBool isValidAmount = false.obs;
   double points = 0.0;
 
-  bool isTrial = Get.rootDelegate.parameters["is_trial"] == "1" ;
+  bool isTrial = Get.rootDelegate.parameters["is_trial"] == "1";
 
   TextEditingController amountController = TextEditingController();
 
@@ -92,6 +92,6 @@ class CustomTrialTicketController extends SuperController<bool> {
   }
 
   void onContinueClicked() {
-    Get.rootDelegate.offNamed(Routes.GENERATE_QR);
+    Get.rootDelegate.offNamed(Routes.SCAN_QR);
   }
 }

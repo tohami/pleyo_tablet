@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ColorCode {
   static const primary = 0xff343434;
   static const accentDarkColor = 0x1a2ff7f7;
+  static const accentLightColor = 0xff2ff7f7;
   static const darkGrayBackground = 0xff494949;
   static const shadowBackground = 0x42000000;
   static const lightGrayBackground = 0x4dffffff;

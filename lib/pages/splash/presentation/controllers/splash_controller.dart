@@ -33,4 +33,8 @@ class SplashController extends SuperController<dynamic> {
 
   @override
   void onResumed() {}
+
+  onStartClicked() {
+    Get.rootDelegate.offNamed(Routes.SCAN_QR);
+  }
 }

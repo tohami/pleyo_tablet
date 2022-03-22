@@ -22,27 +22,31 @@ class SplashView extends GetView<SplashController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 420,
-              height: 420,
-              decoration: BoxDecoration(
-                color: const Color(ColorCode.darkGrayBackground),
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                    width: 3.0, color: const Color(ColorCode.accentDarkColor)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(ColorCode.shadowBackground),
-                    offset: Offset(0, 4),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: CustomText(
-                  'START',
-                  textStyle: TextStyles.textXLarge.copyWith(
-                    color: const Color(ColorCode.lightGrayBackground),
+            GestureDetector(
+              onTap: controller.onStartClicked(),
+              child: Container(
+                width: 420,
+                height: 420,
+                decoration: BoxDecoration(
+                  color: const Color(ColorCode.darkGrayBackground),
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                      width: 3.0,
+                      color: const Color(ColorCode.accentDarkColor)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(ColorCode.shadowBackground),
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: CustomText(
+                    'START',
+                    textStyle: TextStyles.textXLarge.copyWith(
+                      color: const Color(ColorCode.lightGrayBackground),
+                    ),
                   ),
                 ),
               ),

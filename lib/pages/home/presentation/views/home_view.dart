@@ -103,7 +103,7 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   TicketWidgetContainer(
                     () {
-                      Get.rootDelegate.toNamed(Routes.GENERATE_QR);
+                      Get.rootDelegate.toNamed(Routes.SCAN_QR);
                     },
                     const TicketWidget('2 € ticket'),
                     points: '10',
@@ -111,7 +111,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   TicketWidgetContainer(
                     () {
-                      Get.rootDelegate.toNamed(Routes.GENERATE_QR);
+                      Get.rootDelegate.toNamed(Routes.SCAN_QR);
                     },
                     const TicketWidget('5 € ticket'),
                     points: '30',
@@ -119,7 +119,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   TicketWidgetContainer(
                     () {
-                      Get.rootDelegate.toNamed(Routes.GENERATE_QR);
+                      Get.rootDelegate.toNamed(Routes.SCAN_QR);
                     },
                     const TicketWidget('10 € ticket'),
                     points: '70',
@@ -127,7 +127,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   TicketWidgetContainer(
                     () {
-                      Get.rootDelegate.toNamed(Routes.GENERATE_QR);
+                      Get.rootDelegate.toNamed(Routes.SCAN_QR);
                     },
                     const TicketWidget('15 € ticket'),
                     points: '120',
