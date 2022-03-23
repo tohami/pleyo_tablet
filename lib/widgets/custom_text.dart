@@ -23,7 +23,7 @@ class CustomText extends StatelessWidget {
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
-      softWrap: false,
+      softWrap: true,
     );
   }
 }
