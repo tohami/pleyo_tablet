@@ -10,8 +10,12 @@ class ColorCode {
   static const lightGrayBackground = 0x4dffffff;
   static const whiteBackground = 0xffffffff;
   static const white2Background = 0x99ffffff;
+  static const white3Background = 0xccffffff;
+  static const grayBackground = 0xffb6b6b6;
+  static const yellowBackground = 0xfffeff40;
+  static const darkYellowBackground = 0xffb2b22d;
+  static const customAccentBackground = 0xff21adad;
 
-  static const grayBackground = 0xffE6E6E6;
   static const customGrayBackground = 0xffbfbfbf;
   static const blackBackground = 0xff000000;
   static const lightBlackBackground = 0xff404040;

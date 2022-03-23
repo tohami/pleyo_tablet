@@ -75,9 +75,4 @@ class HomeController extends SuperController<bool> {
     // ignore: avoid_print
     print('onResumed called');
   }
-
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.rootDelegate.offNamed(Routes.SPLASH);
-  }
 }

@@ -37,15 +37,15 @@ class AppPages {
       binding: AvailablePointsBinding(),
     ),
     GetPage(
+      name: Routes.HOME,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
       name: Routes.LOGIN,
       middlewares: [EnsureNotAuthedMiddleware()],
       page: () => LoginView(),
       binding: LoginBinding(),
-    ),
-    GetPage(
-      name: Routes.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
     ),
     GetPage(
       name: Routes.CUSTOM_TRIAL_TICKET,
