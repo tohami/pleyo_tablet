@@ -35,7 +35,15 @@ class VideoWidget extends StatelessWidget {
             width: 300,
             height: 180,
             child: ObxValue<RxBool>((state) {
-              return state.value ? VideoPlayer(_controller) : Container();
+              return state.value
+                  ? VideoPlayer(_controller)
+                  : Container(
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(ColorCode.accentLightColor),
+                        ),
+                      ),
+                    );
             }, isInitialized),
           ),
           const SizedBox(
@@ -64,7 +72,7 @@ class VideoWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomText(
-                      'Heartbeat Spaces',
+                      _gameModel.name,
                       textAlign: TextAlign.start,
                       maxLines: 1,
                       textStyle: TextStyles.textLarge.copyWith(
@@ -76,7 +84,7 @@ class VideoWidget extends StatelessWidget {
                       height: 2,
                     ),
                     CustomText(
-                      'Jeu de rythme • Arcade • Casual',
+                      _gameModel.description,
                       textAlign: TextAlign.start,
                       maxLines: 1,
                       textStyle: TextStyles.textMedium.copyWith(

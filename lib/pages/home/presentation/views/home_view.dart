@@ -1,4 +1,3 @@
-import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,297 +56,346 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
         ),
-        body: Container(
-          color: const Color(ColorCode.primary),
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        width: 213,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+        body: SingleChildScrollView(
+          child: Container(
+            color: const Color(ColorCode.primary),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: 213,
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 150,
+                                height: 60,
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(ColorCode.darkGrayBackground),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0),
+                                  ),
+                                  border: Border.all(
+                                      width: 3.0,
+                                      color: const Color(
+                                          ColorCode.accentLightColor)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/images/icon_coins.svg',
+                                      fit: BoxFit.cover,
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    CustomText(
+                                      '285',
+                                      textStyle: TextStyles.textMedium.copyWith(
+                                        fontSize: 20,
+                                        shadows: [
+                                          const Shadow(
+                                            color: Color(
+                                                ColorCode.textShadowBackground),
+                                            offset: Offset(0, 3),
+                                            blurRadius: 10,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: 60,
+                                height: 60,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0),
+                                  ),
+                                  border: Border.all(
+                                      width: 3.0,
+                                      color: const Color(
+                                          ColorCode.accentLightColor)),
+                                  color:
+                                      const Color(ColorCode.accentLightColor),
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/images/icon_logout.svg',
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 60,
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color:
-                                    const Color(ColorCode.darkGrayBackground),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  bottomLeft: Radius.circular(10.0),
-                                ),
-                                border: Border.all(
-                                    width: 3.0,
-                                    color: const Color(
-                                        ColorCode.accentLightColor)),
-                              ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/images/icon_coins.svg',
-                                    fit: BoxFit.cover,
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                  CustomText(
-                                    '285',
-                                    textStyle: TextStyles.textMedium.copyWith(
-                                      fontSize: 20,
-                                      shadows: [
-                                        const Shadow(
-                                          color: Color(
-                                              ColorCode.textShadowBackground),
-                                          offset: Offset(0, 3),
-                                          blurRadius: 10,
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 60,
-                              height: 60,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0),
-                                ),
-                                border: Border.all(
-                                    width: 3.0,
-                                    color: const Color(
-                                        ColorCode.accentLightColor)),
-                                color: const Color(ColorCode.accentLightColor),
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/images/icon_logout.svg',
-                                fit: BoxFit.fill,
-                              ),
-                            )
-                          ],
+                        const SizedBox(
+                          height: 15,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        width: 213,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                        Container(
+                          width: 213,
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 60,
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color:
-                                    const Color(ColorCode.darkGrayBackground),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  bottomLeft: Radius.circular(10.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 150,
+                                height: 60,
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(ColorCode.darkGrayBackground),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0),
+                                  ),
+                                  border: Border.all(
+                                      width: 3.0,
+                                      color: const Color(
+                                          ColorCode.white2Background)),
                                 ),
-                                border: Border.all(
-                                    width: 3.0,
-                                    color: const Color(
-                                        ColorCode.white2Background)),
-                              ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/images/icon_person.svg',
-                                    fit: BoxFit.fitHeight,
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                  CustomText(
-                                    'Kévin',
-                                    textStyle: TextStyles.textMedium.copyWith(
-                                      fontSize: 20,
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/images/icon_person.svg',
+                                      fit: BoxFit.fitHeight,
+                                      width: 30,
+                                      height: 30,
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 60,
-                              height: 60,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    CustomText(
+                                      'Kévin',
+                                      textStyle: TextStyles.textMedium.copyWith(
+                                        fontSize: 20,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                border: Border.all(
-                                  width: 3.0,
+                              ),
+                              Container(
+                                width: 60,
+                                height: 60,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0),
+                                  ),
+                                  border: Border.all(
+                                    width: 3.0,
+                                    color:
+                                        const Color(ColorCode.grayBackground),
+                                  ),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0x42000000),
+                                      offset: Offset(0, 4),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
                                   color: const Color(ColorCode.grayBackground),
                                 ),
+                                child: SvgPicture.asset(
+                                  'assets/images/icon_add.svg',
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    ObxValue<RxBool>((state) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          FlutterSwitch(
+                            width: 147.0,
+                            height: 60.0,
+                            valueFontSize: 25.0,
+                            toggleSize: 45.0,
+                            value: state.value,
+                            borderRadius: 30.0,
+                            showOnOff: false,
+                            padding: 5,
+                            activeColor:
+                                const Color(ColorCode.yellowBackground),
+                            inactiveColor:
+                                const Color(ColorCode.accentLightColor),
+                            activeSwitchBorder: Border.all(
+                              width: 2.0,
+                              color:
+                                  const Color(ColorCode.darkYellowBackground),
+                            ),
+                            inactiveSwitchBorder: Border.all(
+                              width: 2.0,
+                              color:
+                                  const Color(ColorCode.customAccentBackground),
+                            ),
+                            activeIcon: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    const Color(ColorCode.darkGrayBackground),
+                                borderRadius: BorderRadius.circular(15.0),
                                 boxShadow: const [
                                   BoxShadow(
-                                    color: Color(0x42000000),
-                                    offset: Offset(0, 4),
-                                    blurRadius: 4,
+                                    color: Color(ColorCode.shadowBackground),
+                                    offset: Offset(0, 3),
+                                    blurRadius: 6,
                                   ),
                                 ],
-                                color: const Color(ColorCode.grayBackground),
                               ),
-                              child: SvgPicture.asset(
-                                'assets/images/icon_add.svg',
-                                fit: BoxFit.fill,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  'assets/images/icon_awesome_trophy.svg',
+                                  fit: BoxFit.contain,
+                                  width: 20,
+                                  height: 17.78,
+                                ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                            inactiveIcon: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    const Color(ColorCode.darkGrayBackground),
+                                borderRadius: BorderRadius.circular(15.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(ColorCode.shadowBackground),
+                                    offset: Offset(0, 3),
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  'assets/images/icon_cake.svg',
+                                  fit: BoxFit.contain,
+                                  width: 16.25,
+                                  height: 20,
+                                ),
+                              ),
+                            ),
+                            toggleColor: Colors.transparent,
+                            onToggle: (val) {
+                              controller.changeMode(val);
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CustomText(
+                            state.value ? 'Championnat' : 'Party',
+                            textStyle: TextStyles.textMedium.copyWith(
+                              fontFamily: 'Parisine Plus Std Clair',
+                              color: const Color(ColorCode.white3Background),
+                            ),
+                          )
+                        ],
+                      );
+                    }, controller.isParty),
+                  ],
+                ),
+                //end of header
+                const SizedBox(
+                  height: 60,
+                ),
+                CustomText(
+                  'Neon',
+                  textStyle: TextStyles.textLarge.copyWith(
+                    fontSize: 40,
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Container(
+                  width: Get.width,
+                  height: 260,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      VideoWidget(
+                        GameModel(
+                            id: "10",
+                            name: "Heartbeat Spaces",
+                            description: "Jeu de rythme • Arcade • Casual",
+                            url:
+                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                        key: ValueKey(1),
+                      ),
+                      VideoWidget(
+                        GameModel(
+                            id: "10",
+                            name: "Heartbeat Spaces",
+                            description: "Jeu de rythme • Arcade • Casual",
+                            url:
+                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                        key: ValueKey(2),
                       ),
                     ],
                   ),
-                  ObxValue<RxBool>((state) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FlutterSwitch(
-                          width: 147.0,
-                          height: 60.0,
-                          valueFontSize: 25.0,
-                          toggleSize: 45.0,
-                          value: state.value,
-                          borderRadius: 30.0,
-                          showOnOff: false,
-                          padding: 5,
-                          activeColor: const Color(ColorCode.yellowBackground),
-                          inactiveColor:
-                              const Color(ColorCode.accentLightColor),
-                          activeSwitchBorder: Border.all(
-                            width: 2.0,
-                            color: const Color(ColorCode.darkYellowBackground),
-                          ),
-                          inactiveSwitchBorder: Border.all(
-                            width: 2.0,
-                            color:
-                                const Color(ColorCode.customAccentBackground),
-                          ),
-                          activeIcon: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(ColorCode.darkGrayBackground),
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(ColorCode.shadowBackground),
-                                  offset: Offset(0, 3),
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/images/icon_awesome_trophy.svg',
-                                fit: BoxFit.contain,
-                                width: 20,
-                                height: 17.78,
-                              ),
-                            ),
-                          ),
-                          inactiveIcon: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(ColorCode.darkGrayBackground),
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(ColorCode.shadowBackground),
-                                  offset: Offset(0, 3),
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/images/icon_cake.svg',
-                                fit: BoxFit.contain,
-                                width: 16.25,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                          toggleColor: Colors.transparent,
-                          onToggle: (val) {
-                            controller.changeMode(val);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        CustomText(
-                          state.value ? 'Championnat' : 'Party',
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontFamily: 'Parisine Plus Std Clair',
-                            color: const Color(ColorCode.white3Background),
-                          ),
-                        )
-                      ],
-                    );
-                  }, controller.isParty),
-                ],
-              ),
-              //end of header
-              const SizedBox(
-                height: 79,
-              ),
-              CustomText(
-                'Neon',
-                textStyle: TextStyles.textLarge.copyWith(
-                  fontSize: 40,
                 ),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    VideoWidget(
-                      GameModel(
-                          id: "10",
-                          name: "HeartBeat space",
-                          description: "awesome game from pleyo",
-                          url:
-                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                      key: ValueKey(1),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 50,
                 ),
-              )
-            ],
+                CustomText(
+                  'Space Invaders',
+                  textStyle: TextStyles.textLarge.copyWith(
+                    fontSize: 40,
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Container(
+                  width: Get.width,
+                  height: 260,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      VideoWidget(
+                        GameModel(
+                            id: "10",
+                            name: "Heartbeat Spaces",
+                            description: "Jeu de rythme • Arcade • Casual",
+                            url:
+                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                        key: ValueKey(3),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
