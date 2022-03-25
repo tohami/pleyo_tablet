@@ -9,9 +9,11 @@ import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
   final GameModel _gameModel;
+  final VoidCallback onTap;
   late VideoPlayerController _controller;
   RxBool isInitialized = false.obs;
-  VideoWidget(this._gameModel, {Key? key}) : super(key: key) {
+  VideoWidget(this._gameModel, {required this.onTap, Key? key})
+      : super(key: key) {
     _controller = VideoPlayerController.network(_gameModel.url,
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
       ..initialize().then((_) {
@@ -24,79 +26,82 @@ class VideoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 315,
-      height: 256,
-      margin: EdgeInsets.only(right: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 300,
-            height: 180,
-            child: ObxValue<RxBool>((state) {
-              return state.value
-                  ? VideoPlayer(_controller)
-                  : Container(
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(ColorCode.accentLightColor),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 315,
+        height: 256,
+        margin: EdgeInsets.only(right: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 300,
+              height: 180,
+              child: ObxValue<RxBool>((state) {
+                return state.value
+                    ? VideoPlayer(_controller)
+                    : Container(
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(ColorCode.accentLightColor),
+                          ),
                         ),
-                      ),
-                    );
-            }, isInitialized),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(ColorCode.customAccent2Background),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    'assets/images/icon_awesome_play.svg',
-                    fit: BoxFit.fill,
+                      );
+              }, isInitialized),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color(ColorCode.customAccent2Background),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/images/icon_awesome_play.svg',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    CustomText(
-                      _gameModel.name,
-                      textAlign: TextAlign.start,
-                      maxLines: 1,
-                      textStyle: TextStyles.textLarge.copyWith(
-                        fontWeight: FontWeight.normal,
-                        color: const Color(ColorCode.white4Background),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    CustomText(
-                      _gameModel.description,
-                      textAlign: TextAlign.start,
-                      maxLines: 1,
-                      textStyle: TextStyles.textMedium.copyWith(
-                        color: const Color(ColorCode.white2Background),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  width: 20,
                 ),
-              ),
-            ],
-          )
-        ],
+                Expanded(
+                  child: Column(
+                    children: [
+                      CustomText(
+                        _gameModel.name,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        textStyle: TextStyles.textLarge.copyWith(
+                          fontWeight: FontWeight.normal,
+                          color: const Color(ColorCode.white4Background),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      CustomText(
+                        _gameModel.description,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        textStyle: TextStyles.textMedium.copyWith(
+                          color: const Color(ColorCode.white2Background),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

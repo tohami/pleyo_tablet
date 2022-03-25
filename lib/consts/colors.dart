@@ -17,8 +17,11 @@ class ColorCode {
   static const darkYellowBackground = 0xffb2b22d;
   static const customAccentBackground = 0xff21adad;
   static const customAccent2Background = 0xff6efafa;
+  static const blackBackground = 0x99000000;
+  static const greenBackground = 0xff71f231;
+  static const yellow2Background = 0xffebdc0d;
+  static const redBackground = 0xffef1212;
 
   static const customGrayBackground = 0xffbfbfbf;
-  static const blackBackground = 0xff000000;
   static const lightBlackBackground = 0xff404040;
 }

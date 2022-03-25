@@ -4,7 +4,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
-  RxBool isParty = false.obs;
+  RxBool isParty = true.obs;
 
   HomeController();
 

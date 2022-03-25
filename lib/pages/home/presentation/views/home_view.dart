@@ -7,6 +7,7 @@ import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
+import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
 import '../controllers/home_controller.dart';
@@ -350,7 +351,10 @@ class HomeView extends GetView<HomeController> {
                             description: "Jeu de rythme • Arcade • Casual",
                             url:
                                 "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        key: ValueKey(1),
+                        onTap: () {
+                          showBottomSheetModal(context);
+                        },
+                        key: const ValueKey(1),
                       ),
                       VideoWidget(
                         GameModel(
@@ -359,7 +363,10 @@ class HomeView extends GetView<HomeController> {
                             description: "Jeu de rythme • Arcade • Casual",
                             url:
                                 "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        key: ValueKey(2),
+                        onTap: () {
+                          showBottomSheetModal(context);
+                        },
+                        key: const ValueKey(2),
                       ),
                     ],
                   ),
@@ -389,7 +396,10 @@ class HomeView extends GetView<HomeController> {
                             description: "Jeu de rythme • Arcade • Casual",
                             url:
                                 "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        key: ValueKey(3),
+                        onTap: () {
+                          showBottomSheetModal(context);
+                        },
+                        key: const ValueKey(3),
                       ),
                     ],
                   ),
@@ -404,7 +414,7 @@ class HomeView extends GetView<HomeController> {
 
   Widget partySwitch(RxBool isParty) {
     var championContainer = Container(
-      key: ValueKey(2),
+      key: const ValueKey(2),
       decoration: BoxDecoration(
         color: const Color(0xfffeff40),
         borderRadius: BorderRadius.circular(30.0),
@@ -413,7 +423,7 @@ class HomeView extends GetView<HomeController> {
     );
 
     var partyContainer = Container(
-      key: ValueKey(1),
+      key: const ValueKey(1),
       decoration: BoxDecoration(
         color: const Color(0xff2ff7f7),
         borderRadius: BorderRadius.circular(30.0),
@@ -525,5 +535,21 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
     );
+  }
+
+  showBottomSheetModal(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        backgroundColor: const Color(ColorCode.darkGrayBackground),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (context) {
+          return const StartGameBottomSheet();
+        });
   }
 }
