@@ -40,7 +40,7 @@ class VideoWidget extends StatelessWidget {
               height: 180,
               child: ObxValue<RxBool>((state) {
                 return state.value
-                    ? VideoPlayer(_controller)
+                    ? Container()
                     : Container(
                         child: const Center(
                           child: CircularProgressIndicator(

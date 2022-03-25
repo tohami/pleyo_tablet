@@ -5,6 +5,7 @@ import '../../../../routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
   RxBool isParty = true.obs;
+  RxBool playerIsSelected = false.obs;
 
   HomeController();
 
@@ -12,6 +13,8 @@ class HomeController extends SuperController<bool> {
 
   @override
   void onInit() {
+    change(null, status: RxStatus.success());
+
     username = FirebaseAuth.instance.currentUser?.displayName ?? "test";
   }
 
@@ -81,5 +84,9 @@ class HomeController extends SuperController<bool> {
 
   void changeMode(bool val) {
     isParty.value = val;
+  }
+
+  void changePlayerSelection(bool val) {
+    playerIsSelected.value = val;
   }
 }

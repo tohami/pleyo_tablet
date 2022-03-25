@@ -549,7 +549,9 @@ class HomeView extends GetView<HomeController> {
         ),
         isScrollControlled: true,
         builder: (context) {
-          return const StartGameBottomSheet();
+          return StartGameBottomSheet(
+            controller: controller,
+          );
         });
   }
 }
