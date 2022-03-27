@@ -16,6 +16,11 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   final ISplashRepository splashRepository;
 
   @override
+  void onClose() {
+    _buttonAnimationController.dispose() ;
+    super.onClose();
+  }
+  @override
   void onInit() {
     super.onInit();
 

@@ -38,11 +38,11 @@ class SplashView extends GetView<SplashController> {
                       border: Border.all(
                           width: 3.0,
                           color: const Color(ColorCode.accentLightColor).withOpacity(controller.buttonAnimation.value)),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                          color: Color(ColorCode.shadowBackground),
-                          offset: Offset(0, 4),
-                          blurRadius: 4,
+                          color: const Color(ColorCode.shadowBackground),
+                          offset: const Offset(0, 4),
+                          blurRadius: controller.isButtonTapDown.value ? 0 : 4,
                         ),
                       ],
                     ),
