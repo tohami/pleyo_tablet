@@ -421,25 +421,25 @@ class HomeView extends GetView<HomeController> {
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: ()=>controller.isAddPlayerActive.toggle(),
-            child: ObxValue<RxBool>((state) {
-              return Container(
-                height: 60,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color:
-                  const Color(ColorCode.darkGrayBackground),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    bottomLeft: Radius.circular(10.0),
-                  ),
-                  border: Border.all(
-                      width: 3.0,
-                      color: const Color(
-                          ColorCode.white2Background)),
+          ObxValue<RxBool>((state) {
+            return Container(
+              height: 60,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color:
+                const Color(ColorCode.darkGrayBackground),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  bottomLeft: Radius.circular(10.0),
                 ),
-                child:  AnimatedSize(
+                border: Border.all(
+                    width: 3.0,
+                    color: const Color(
+                        ColorCode.white2Background)),
+              ),
+              child:  GestureDetector(
+                onTap: state.value ? null : ()=> controller.isAddPlayerActive.toggle(),
+                child: AnimatedSize(
                   duration: const Duration(milliseconds:250),
                   child: Row(
                     key: ValueKey(state.value),
@@ -450,8 +450,8 @@ class HomeView extends GetView<HomeController> {
                         width: 30,
                         height: 30,
                       ),
-                      SizedBox(width: 16,),
-                      Container(
+                      const SizedBox(width: 16,),
+                      SizedBox(
                         width: state.value ? 210 :70,
                         child: CustomText(
                           state.value ? 'Typing...' : 'Kévin',
@@ -464,35 +464,38 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                 ),
-              ) ;
-            } , controller.isAddPlayerActive),
-          ),
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
               ),
-              border: Border.all(
-                width: 3.0,
-                color:
-                const Color(ColorCode.grayBackground),
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x42000000),
-                  offset: Offset(0, 4),
-                  blurRadius: 4,
+            ) ;
+          } , controller.isAddPlayerActive),
+          GestureDetector(
+            onTap: ()=> controller.isAddPlayerActive.toggle(),
+            child: Container(
+              width: 60,
+              height: 60,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
                 ),
-              ],
-              color: const Color(ColorCode.grayBackground),
-            ),
-            child: SvgPicture.asset(
-              'assets/images/icon_add.svg',
-              fit: BoxFit.fill,
+                border: Border.all(
+                  width: 3.0,
+                  color:
+                  const Color(ColorCode.grayBackground),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x42000000),
+                    offset: Offset(0, 4),
+                    blurRadius: 4,
+                  ),
+                ],
+                color: const Color(ColorCode.grayBackground),
+              ),
+              child: SvgPicture.asset(
+                'assets/images/icon_add.svg',
+                fit: BoxFit.fill,
+              ),
             ),
           )
         ],
