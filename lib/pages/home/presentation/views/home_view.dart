@@ -538,6 +538,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   showBottomSheetModal(BuildContext context) {
+    controller.playerIsSelected.value = false;
     return showModalBottomSheet(
         context: context,
         backgroundColor: const Color(ColorCode.darkGrayBackground),
