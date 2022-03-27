@@ -548,9 +548,15 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         isScrollControlled: true,
+
         builder: (context) {
-          return StartGameBottomSheet(
-            controller: controller,
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StartGameBottomSheet(
+                controller: controller,
+              ),
+            ],
           );
         });
   }
