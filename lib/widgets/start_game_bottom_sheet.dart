@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/pages/home/presentation/controllers/home_controller.dart';
+import 'package:pleyo_tablet_app/widgets/custom_button.dart';
+import 'package:pleyo_tablet_app/widgets/custom_button_container.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
-import 'package:pleyo_tablet_app/widgets/custom_text_field_container.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_difficulty_widget.dart';
 import 'package:pleyo_tablet_app/widgets/player_widget.dart';
@@ -55,22 +56,15 @@ class StartGameBottomSheet extends StatelessWidget {
                     PlayerWidget(
                       addPlayer: true,
                       onTap: () {
+                        controller.playerName.value = '';
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 backgroundColor: const Color(ColorCode.primary),
-                                content: Container(
-                                  width: 300,
-                                  height: 180,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      controller.obx((state) => CustomText(
+                                title: ObxValue<RxString>(
+                                    (state) => Center(
+                                          child: CustomText(
                                             controller
                                                     .playerName.value.isNotEmpty
                                                 ? 'C\'est bien vous ?'
@@ -79,43 +73,112 @@ class StartGameBottomSheet extends StatelessWidget {
                                                 TextStyles.textLarge.copyWith(
                                               fontSize: 24,
                                             ),
-                                          )),
-                                      // CustomText(
-                                      //   'Entrez votre nom',
-                                      //   textStyle:
-                                      //       TextStyles.textLarge.copyWith(
-                                      //     fontSize: 24,
-                                      //   ),
-                                      // ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      CustomTextFormField(
-                                        controller:
-                                            controller.playerNameController,
-                                        onSubmit: (val) {
-                                          controller.playerName.value = val;
-                                        },
-                                        hasBorder: true,
-                                        borderColor: ColorCode.whiteBackground,
-                                        borderWidth: 3,
-                                        fontColor: const Color(
-                                            ColorCode.whiteBackground),
-                                        fontSize: 16,
-                                        hint: 'Typing',
-                                        prefix: const Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                              start: 12.0, top: 5, bottom: 5),
-                                          child: Icon(
-                                            Icons.person,
-                                            size: 30,
-                                            color: Colors.white,
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                    controller.playerName),
+                                content: Container(
+                                  width: 300,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                ), // Message which will be pop up on the screen
+                                  alignment: Alignment.center,
+                                  child: CustomTextFormField(
+                                    controller: controller.playerNameController,
+                                    onSubmit: (val) {
+                                      controller.playerName.value = val;
+                                    },
+                                    hasBorder: true,
+                                    borderColor: ColorCode.whiteBackground,
+                                    borderWidth: 3,
+                                    fontColor:
+                                        const Color(ColorCode.whiteBackground),
+                                    fontSize: 16,
+                                    hint: 'Typing',
+                                    prefix: const Padding(
+                                      padding: EdgeInsetsDirectional.only(
+                                          start: 12.0, top: 5, bottom: 5),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  ObxValue<RxString>(
+                                      (state) => Visibility(
+                                            visible: controller
+                                                .playerName.value.isNotEmpty,
+                                            child: CustomButtonContainer(
+                                              CustomButton(
+                                                CustomText(
+                                                  'Non',
+                                                  textStyle: TextStyles
+                                                      .textMedium
+                                                      .copyWith(
+                                                          color: const Color(
+                                                              ColorCode
+                                                                  .black2Background),
+                                                          fontSize: 25),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                () {
+                                                  controller
+                                                      .playerNameController
+                                                      .clear();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                backGroundColor: const Color(
+                                                    ColorCode.white3Background),
+                                                borderRadius: 4,
+                                              ),
+                                              width: 100,
+                                              height: 55,
+                                            ),
+                                          ),
+                                      controller.playerName),
+                                  ObxValue<RxString>(
+                                      (state) => Visibility(
+                                            visible: controller
+                                                .playerName.value.isNotEmpty,
+                                            child: CustomButtonContainer(
+                                              CustomButton(
+                                                CustomText(
+                                                  'Oui',
+                                                  textStyle: TextStyles
+                                                      .textMedium
+                                                      .copyWith(
+                                                          color: const Color(
+                                                              ColorCode
+                                                                  .accentLightColor),
+                                                          fontSize: 25),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                () {
+                                                  controller
+                                                      .playerNameController
+                                                      .clear();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                backGroundColor: const Color(
+                                                    ColorCode
+                                                        .darkGrayBackground),
+                                                borderRadius: 4,
+                                              ),
+                                              width: 100,
+                                              height: 55,
+                                              borderWidth: 2.0,
+                                              borderColor:
+                                                  ColorCode.accentLightColor,
+                                            ),
+                                          ),
+                                      controller.playerName),
+                                ],
+                                actionsAlignment: MainAxisAlignment.center,
+
+                                // Message which will be pop up on the screen
                               );
                             });
                       },
