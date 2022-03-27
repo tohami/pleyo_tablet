@@ -1,9 +1,7 @@
-import 'package:animated_flip_counter/animated_flip_counter.dart';
-import 'package:countup/countup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:number_slide_animation/number_slide_animation.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
@@ -47,13 +45,11 @@ class AvailablePointsView extends GetView<AvailablePointsController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Countup(
-                        begin: 0,
-                        end: 200,
-                        duration: Duration(seconds: 3),
-                        separator: '',
+                      NumberSlideAnimation(
+                        number : "259" ,
+                        duration: const Duration(seconds: 3),
                         curve: Curves.easeOut,
-                        style: TextStyles.textXLarge.copyWith(
+                        textStyle: TextStyles.textXLarge.copyWith(
                           color: const Color(ColorCode.whiteBackground),
                           shadows: [
                             const Shadow(

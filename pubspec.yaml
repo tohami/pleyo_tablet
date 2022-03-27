@@ -39,7 +39,7 @@ dependencies:
   responsive_framework: ^0.1.7
   qr_code_scanner: ^0.7.0
   animated_flip_counter: ^0.2.4
-  countup: ^0.1.4
+  number_slide_animation: ^0.2.1
   flutter_switch: ^0.3.2
   adobe_xd: ^2.0.1
   video_player: ^2.3.0

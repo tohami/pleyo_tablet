@@ -78,13 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  countup:
-    dependency: "direct main"
-    description:
-      name: countup
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   csslib:
     dependency: transitive
     description:
@@ -247,6 +240,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  number_slide_animation:
+    dependency: "direct main"
+    description:
+      name: number_slide_animation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   path:
     dependency: transitive
     description:
