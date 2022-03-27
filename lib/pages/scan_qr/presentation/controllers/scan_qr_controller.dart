@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
-class ScanQRController extends SuperController<bool> {
+class ScanQRController extends SuperController<bool> with GetSingleTickerProviderStateMixin{
+  late AnimationController _boxAnimationController;
+  late Animation<double> boxAnimation;
+
   ScanQRController();
 
   Barcode? result;
@@ -16,6 +19,24 @@ class ScanQRController extends SuperController<bool> {
 
   @override
   void onInit() {
+    super.onInit() ;
+    _boxAnimationController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+
+    boxAnimation = Tween<double>(
+      begin: 1,
+      end: 1.05,
+    ).animate(
+      CurvedAnimation(
+        parent: _boxAnimationController,
+        curve: Curves.easeIn,
+      ),
+    );
+    try {
+      _boxAnimationController
+          .repeat(reverse: true)
+          .orCancel;
+    }on TickerCanceled catch (e) {}
     change(null, status: RxStatus.success());
   }
 
@@ -29,6 +50,7 @@ class ScanQRController extends SuperController<bool> {
     // ignore: avoid_print
     print('onClose called');
     controller?.dispose();
+    _boxAnimationController.dispose() ;
     super.onClose();
   }
 
