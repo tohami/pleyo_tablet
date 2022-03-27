@@ -5,9 +5,6 @@ import '../routes/app_pages.dart';
 class EnsureAuthMiddleware extends GetMiddleware {
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    if (FirebaseAuth.instance.currentUser == null) {
-      return null ;
-    }
     return await super.redirectDelegate(route);
   }
 }
@@ -15,9 +12,6 @@ class EnsureAuthMiddleware extends GetMiddleware {
 class EnsureNotAuthedMiddleware extends GetMiddleware {
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    if (FirebaseAuth.instance.currentUser != null) {
-        return null;
-    }
     return await super.redirectDelegate(route);
   }
 }

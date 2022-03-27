@@ -43,13 +43,11 @@ class AppPages {
     ),
     GetPage(
       name: Routes.LOGIN,
-      middlewares: [EnsureNotAuthedMiddleware()],
       page: () => LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
       name: Routes.CUSTOM_TRIAL_TICKET,
-      middlewares: [EnsureAuthMiddleware()],
       page: () => const CustomTrialTicketView(),
       binding: CustomTrialTicketBinding(),
     ),

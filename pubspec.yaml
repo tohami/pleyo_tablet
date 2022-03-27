@@ -31,7 +31,6 @@ dependencies:
     sdk: flutter
 
   get: ^4.6.1
-  get_storage: ^2.0.3
   cupertino_icons: ^1.0.2
   firebase_core: ^1.13.1
   firebase_auth: ^3.3.7
