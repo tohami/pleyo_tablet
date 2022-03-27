@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
+  RxBool isLogoutActive = true.obs ;
+  RxBool isAddPlayerActive = false.obs ;
+
   RxBool isParty = true.obs;
   TextEditingController playerNameController = TextEditingController();
 
@@ -88,4 +92,21 @@ class HomeController extends SuperController<bool> {
     isParty.value = val;
   }
 
+  void onLogoutClicked () {
+    if(isLogoutActive.value){
+      //logout the player
+      Get.rootDelegate.backUntil(Routes.SPLASH);
+    }else {
+      isLogoutActive.value = true ;
+    }
+  }
+
+  void onAddPlayerClicked () {
+    if(isAddPlayerActive.value){
+      //logout the player
+
+    }else {
+      isAddPlayerActive.value = true ;
+    }
+  }
 }

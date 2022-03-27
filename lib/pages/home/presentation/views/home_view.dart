@@ -14,6 +14,7 @@ import '../controllers/home_controller.dart';
 
 // ignore: must_be_immutable
 class HomeView extends GetView<HomeController> {
+
   const HomeView({Key? key}) : super(key: key);
 
   @override
@@ -69,260 +70,16 @@ class HomeView extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 213,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 60,
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(ColorCode.darkGrayBackground),
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    bottomLeft: Radius.circular(10.0),
-                                  ),
-                                  border: Border.all(
-                                      width: 3.0,
-                                      color: const Color(
-                                          ColorCode.accentLightColor)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/icon_coins.svg',
-                                      fit: BoxFit.cover,
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                    const SizedBox(
-                                      width: 16,
-                                    ),
-                                    CustomText(
-                                      '285',
-                                      textStyle: TextStyles.textMedium.copyWith(
-                                        fontSize: 20,
-                                        shadows: [
-                                          const Shadow(
-                                            color: Color(
-                                                ColorCode.textShadowBackground),
-                                            offset: Offset(0, 3),
-                                            blurRadius: 10,
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 60,
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(10.0),
-                                    bottomRight: Radius.circular(10.0),
-                                  ),
-                                  border: Border.all(
-                                      width: 3.0,
-                                      color: const Color(
-                                          ColorCode.accentLightColor)),
-                                  color:
-                                      const Color(ColorCode.accentLightColor),
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/images/icon_logout.svg',
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        playerPointsWidget(),
                         const SizedBox(
                           height: 15,
                         ),
-                        Container(
-                          width: 213,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 60,
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(ColorCode.darkGrayBackground),
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    bottomLeft: Radius.circular(10.0),
-                                  ),
-                                  border: Border.all(
-                                      width: 3.0,
-                                      color: const Color(
-                                          ColorCode.white2Background)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/icon_person.svg',
-                                      fit: BoxFit.fitHeight,
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                    const SizedBox(
-                                      width: 16,
-                                    ),
-                                    CustomText(
-                                      'Kévin',
-                                      textStyle: TextStyles.textMedium.copyWith(
-                                        fontSize: 20,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 60,
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(10.0),
-                                    bottomRight: Radius.circular(10.0),
-                                  ),
-                                  border: Border.all(
-                                    width: 3.0,
-                                    color:
-                                        const Color(ColorCode.grayBackground),
-                                  ),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0x42000000),
-                                      offset: Offset(0, 4),
-                                      blurRadius: 4,
-                                    ),
-                                  ],
-                                  color: const Color(ColorCode.grayBackground),
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/images/icon_add.svg',
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        playerNameWidget(),
                       ],
                     ),
-                    ObxValue<RxBool>((state) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FlutterSwitch(
-                            width: 147.0,
-                            height: 60.0,
-                            valueFontSize: 25.0,
-                            toggleSize: 45.0,
-                            value: state.value,
-                            borderRadius: 30.0,
-                            showOnOff: false,
-                            padding: 5,
-                            activeColor:
-                                const Color(ColorCode.yellowBackground),
-                            inactiveColor:
-                                const Color(ColorCode.accentLightColor),
-                            activeSwitchBorder: Border.all(
-                              width: 2.0,
-                              color:
-                                  const Color(ColorCode.darkYellowBackground),
-                            ),
-                            inactiveSwitchBorder: Border.all(
-                              width: 2.0,
-                              color:
-                                  const Color(ColorCode.customAccentBackground),
-                            ),
-                            activeIcon: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color:
-                                    const Color(ColorCode.darkGrayBackground),
-                                borderRadius: BorderRadius.circular(15.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(ColorCode.shadowBackground),
-                                    offset: Offset(0, 3),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/images/icon_awesome_trophy.svg',
-                                  fit: BoxFit.contain,
-                                  width: 20,
-                                  height: 17.78,
-                                ),
-                              ),
-                            ),
-                            inactiveIcon: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color:
-                                    const Color(ColorCode.darkGrayBackground),
-                                borderRadius: BorderRadius.circular(15.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(ColorCode.shadowBackground),
-                                    offset: Offset(0, 3),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/images/icon_cake.svg',
-                                  fit: BoxFit.contain,
-                                  width: 16.25,
-                                  height: 20,
-                                ),
-                              ),
-                            ),
-                            toggleColor: Colors.transparent,
-                            onToggle: (val) {
-                              controller.changeMode(val);
-                            },
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          CustomText(
-                            state.value ? 'Championnat' : 'Party',
-                            textStyle: TextStyles.textMedium.copyWith(
-                              fontFamily: 'Parisine Plus Std Clair',
-                              color: const Color(ColorCode.white3Background),
-                            ),
-                          )
-                        ],
-                      );
-                    }, controller.isParty),
+                    gameModeWidget(),
                   ],
                 ),
                 //end of header
@@ -559,5 +316,271 @@ class HomeView extends GetView<HomeController> {
             ],
           );
         });
+  }
+
+  Widget playerPointsWidget() {
+    return Container(
+      height: 60,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: ()=>controller.isLogoutActive.toggle(),
+            child: ObxValue<RxBool>((state) {
+              return Container(
+                height: 60,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color:
+                  const Color(ColorCode.darkGrayBackground),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                  ),
+                  border: Border.all(
+                      width: 3.0,
+                      color: const Color(
+                          ColorCode.accentLightColor)),
+                ),
+                child:  AnimatedSize(
+                  duration: const Duration(milliseconds:250),
+                  child: Row(
+                    key: ValueKey(state.value),
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/icon_coins.svg',
+                        fit: BoxFit.cover,
+                        width: 30,
+                        height: 30,
+                      ),
+                      SizedBox(width: 16,),
+                      Container(
+                        width: state.value ? 210 :70,
+                        child: CustomText(
+                          state.value ? 'Voulez-vous quitter ?' : '285',
+                          textAlign: TextAlign.start,
+                          textStyle: TextStyles.textMedium.copyWith(
+                            fontSize: 20,
+                            shadows: [
+                              const Shadow(
+                                color: Color(
+                                    ColorCode.textShadowBackground),
+                                offset: Offset(0, 3),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ) ;
+            } , controller.isLogoutActive),
+          ),
+          Container(
+            width: 60,
+            height: 60,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
+              ),
+              border: Border.all(
+                  width: 3.0,
+                  color: const Color(
+                      ColorCode.accentLightColor)),
+              color:
+              const Color(ColorCode.accentLightColor),
+            ),
+            child: SvgPicture.asset(
+              'assets/images/icon_logout.svg',
+              fit: BoxFit.fill,
+            ),
+          )
+        ],
+      ),
+    ) ;
+  }
+
+  Widget playerNameWidget() {
+    return Container(
+      width: 213,
+      height: 60,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 150,
+            height: 60,
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color:
+              const Color(ColorCode.darkGrayBackground),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0),
+              ),
+              border: Border.all(
+                  width: 3.0,
+                  color: const Color(
+                      ColorCode.white2Background)),
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/icon_person.svg',
+                  fit: BoxFit.fitHeight,
+                  width: 30,
+                  height: 30,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                CustomText(
+                  'Kévin',
+                  textStyle: TextStyles.textMedium.copyWith(
+                    fontSize: 20,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            width: 60,
+            height: 60,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
+              ),
+              border: Border.all(
+                width: 3.0,
+                color:
+                const Color(ColorCode.grayBackground),
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x42000000),
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                ),
+              ],
+              color: const Color(ColorCode.grayBackground),
+            ),
+            child: SvgPicture.asset(
+              'assets/images/icon_add.svg',
+              fit: BoxFit.fill,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget gameModeWidget() {
+    return ObxValue<RxBool>((state) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          FlutterSwitch(
+            width: 147.0,
+            height: 60.0,
+            valueFontSize: 25.0,
+            toggleSize: 45.0,
+            value: state.value,
+            borderRadius: 30.0,
+            showOnOff: false,
+            padding: 5,
+            activeColor:
+            const Color(ColorCode.yellowBackground),
+            inactiveColor:
+            const Color(ColorCode.accentLightColor),
+            activeSwitchBorder: Border.all(
+              width: 2.0,
+              color:
+              const Color(ColorCode.darkYellowBackground),
+            ),
+            inactiveSwitchBorder: Border.all(
+              width: 2.0,
+              color:
+              const Color(ColorCode.customAccentBackground),
+            ),
+            activeIcon: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:
+                const Color(ColorCode.darkGrayBackground),
+                borderRadius: BorderRadius.circular(15.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(ColorCode.shadowBackground),
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/icon_awesome_trophy.svg',
+                  fit: BoxFit.contain,
+                  width: 20,
+                  height: 17.78,
+                ),
+              ),
+            ),
+            inactiveIcon: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:
+                const Color(ColorCode.darkGrayBackground),
+                borderRadius: BorderRadius.circular(15.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(ColorCode.shadowBackground),
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/icon_cake.svg',
+                  fit: BoxFit.contain,
+                  width: 16.25,
+                  height: 20,
+                ),
+              ),
+            ),
+            toggleColor: Colors.transparent,
+            onToggle: (val) {
+              controller.changeMode(val);
+            },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          CustomText(
+            state.value ? 'Championnat' : 'Party',
+            textStyle: TextStyles.textMedium.copyWith(
+              fontFamily: 'Parisine Plus Std Clair',
+              color: const Color(ColorCode.white3Background),
+            ),
+          )
+        ],
+      );
+    }, controller.isParty) ;
   }
 }
