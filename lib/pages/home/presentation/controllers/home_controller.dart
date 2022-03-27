@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 
 class HomeController extends SuperController<bool> {
   RxBool isParty = true.obs;
-  RxBool playerIsSelected = false.obs;
-  RxString playerName = ''.obs;
   TextEditingController playerNameController = TextEditingController();
 
   HomeController();
@@ -90,7 +88,4 @@ class HomeController extends SuperController<bool> {
     isParty.value = val;
   }
 
-  void changePlayerSelection(bool val) {
-    playerIsSelected.value = val;
-  }
 }
