@@ -95,7 +95,7 @@ class HomeController extends SuperController<bool> {
   void onLogoutClicked () {
     if(isLogoutActive.value){
       //logout the player
-      Get.rootDelegate.backUntil(Routes.SPLASH);
+      Get.rootDelegate.offNamed(Routes.SPLASH);
     }else {
       isLogoutActive.value = true ;
     }

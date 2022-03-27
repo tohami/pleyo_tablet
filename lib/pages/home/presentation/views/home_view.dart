@@ -382,25 +382,28 @@ class HomeView extends GetView<HomeController> {
               ) ;
             } , controller.isLogoutActive),
           ),
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
+          GestureDetector(
+            onTap: () => controller.onLogoutClicked(),
+            child: Container(
+              width: 60,
+              height: 60,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+                border: Border.all(
+                    width: 3.0,
+                    color: const Color(
+                        ColorCode.accentLightColor)),
+                color:
+                const Color(ColorCode.accentLightColor),
               ),
-              border: Border.all(
-                  width: 3.0,
-                  color: const Color(
-                      ColorCode.accentLightColor)),
-              color:
-              const Color(ColorCode.accentLightColor),
-            ),
-            child: SvgPicture.asset(
-              'assets/images/icon_logout.svg',
-              fit: BoxFit.fill,
+              child: SvgPicture.asset(
+                'assets/images/icon_logout.svg',
+                fit: BoxFit.fill,
+              ),
             ),
           )
         ],
