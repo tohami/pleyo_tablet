@@ -409,8 +409,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget playerNameWidget() {
-    return Container(
-      width: 213,
+   return Container(
       height: 60,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
@@ -419,41 +418,51 @@ class HomeView extends GetView<HomeController> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 150,
-            height: 60,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color:
-              const Color(ColorCode.darkGrayBackground),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-              ),
-              border: Border.all(
-                  width: 3.0,
-                  color: const Color(
-                      ColorCode.white2Background)),
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/icon_person.svg',
-                  fit: BoxFit.fitHeight,
-                  width: 30,
-                  height: 30,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                CustomText(
-                  'Kévin',
-                  textStyle: TextStyles.textMedium.copyWith(
-                    fontSize: 20,
+          GestureDetector(
+            onTap: ()=>controller.isAddPlayerActive.toggle(),
+            child: ObxValue<RxBool>((state) {
+              return Container(
+                height: 60,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color:
+                  const Color(ColorCode.darkGrayBackground),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
                   ),
-                )
-              ],
-            ),
+                  border: Border.all(
+                      width: 3.0,
+                      color: const Color(
+                          ColorCode.white2Background)),
+                ),
+                child:  AnimatedSize(
+                  duration: const Duration(milliseconds:250),
+                  child: Row(
+                    key: ValueKey(state.value),
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/icon_person.svg',
+                        fit: BoxFit.fitHeight,
+                        width: 30,
+                        height: 30,
+                      ),
+                      SizedBox(width: 16,),
+                      Container(
+                        width: state.value ? 210 :70,
+                        child: CustomText(
+                          state.value ? 'Typing...' : 'Kévin',
+                          textAlign: TextAlign.start,
+                          textStyle: TextStyles.textMedium.copyWith(
+                            fontSize: 20,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ) ;
+            } , controller.isAddPlayerActive),
           ),
           Container(
             width: 60,
@@ -485,7 +494,7 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       ),
-    );
+    ) ;
   }
 
   Widget gameModeWidget() {

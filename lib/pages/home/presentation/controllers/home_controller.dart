@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
-  RxBool isLogoutActive = true.obs ;
+  RxBool isLogoutActive = false.obs ;
   RxBool isAddPlayerActive = false.obs ;
 
   RxBool isParty = true.obs;
