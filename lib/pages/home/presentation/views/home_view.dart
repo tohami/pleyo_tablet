@@ -7,6 +7,7 @@ import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
+import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
@@ -443,6 +444,8 @@ class HomeView extends GetView<HomeController> {
                   duration: const Duration(milliseconds:250),
                   child: Row(
                     key: ValueKey(state.value),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/images/icon_person.svg',
@@ -451,10 +454,21 @@ class HomeView extends GetView<HomeController> {
                         height: 30,
                       ),
                       const SizedBox(width: 16,),
-                      SizedBox(
-                        width: state.value ? 210 :70,
+                      state.value ? SizedBox(
+                        width: 210 ,
+                        child: CustomTextFormField(
+                          controller: controller.playerNameController,
+                          fontSize:20,
+                          onSubmit: (val) {
+                            // playerName.value = val;
+                          },
+                          fontColor: const Color(
+                              ColorCode.whiteBackground),
+                        ),
+                      ) : SizedBox(
+                        width:70,
                         child: CustomText(
-                          state.value ? 'Typing...' : 'Kévin',
+                          'Kévin',
                           textAlign: TextAlign.start,
                           textStyle: TextStyles.textMedium.copyWith(
                             fontSize: 20,
