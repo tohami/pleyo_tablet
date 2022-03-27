@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
-import '../../../../routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
   RxBool isParty = true.obs;
