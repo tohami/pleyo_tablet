@@ -21,15 +21,15 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
   void onInit() {
     super.onInit() ;
     _boxAnimationController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
     boxAnimation = Tween<double>(
       begin: 1,
-      end: 1.05,
+      end: 1.10,
     ).animate(
       CurvedAnimation(
         parent: _boxAnimationController,
-        curve: Curves.easeIn,
+        curve: Curves.ease,
       ),
     );
     try {
