@@ -21,8 +21,6 @@ class ScanQRView extends GetView<ScanQRController> {
         body: Stack(
           children: [
             SizedBox(
-              width: Get.width,
-              height: Get.height,
               child: QRView(
                 key: qrKey,
                 onQRViewCreated: controller.onQRViewCreated,
@@ -32,10 +30,8 @@ class ScanQRView extends GetView<ScanQRController> {
               animation: controller.boxAnimation,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: controller.boxAnimation.value,
-                  child: child
-                );
-              } ,
+                    scale: controller.boxAnimation.value, child: child);
+              },
               child: Stack(
                 children: [
                   Opacity(
@@ -43,8 +39,6 @@ class ScanQRView extends GetView<ScanQRController> {
                     child: SvgPicture.asset(
                       'assets/images/scan_qr_bg.svg',
                       fit: BoxFit.cover,
-                      width: Get.width,
-                      height: Get.height,
                     ),
                   ),
                   Center(
@@ -74,7 +68,6 @@ class ScanQRView extends GetView<ScanQRController> {
                 ],
               ),
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
