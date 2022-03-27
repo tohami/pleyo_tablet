@@ -23,7 +23,7 @@ class SplashView extends GetView<SplashController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: controller.onStartClicked(),
+              onTap: () => controller.onStartClicked(),
               child: Container(
                 width: 420,
                 height: 420,

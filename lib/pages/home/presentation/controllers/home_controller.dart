@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../routes/app_pages.dart';
@@ -6,6 +7,8 @@ import '../../../../routes/app_pages.dart';
 class HomeController extends SuperController<bool> {
   RxBool isParty = true.obs;
   RxBool playerIsSelected = false.obs;
+  RxString playerName = ''.obs;
+  TextEditingController playerNameController = TextEditingController();
 
   HomeController();
 
@@ -14,8 +17,6 @@ class HomeController extends SuperController<bool> {
   @override
   void onInit() {
     change(null, status: RxStatus.success());
-
-    username = FirebaseAuth.instance.currentUser?.displayName ?? "test";
   }
 
   @override
@@ -80,6 +81,12 @@ class HomeController extends SuperController<bool> {
   void onResumed() {
     // ignore: avoid_print
     print('onResumed called');
+  }
+
+  @override
+  void dispose() {
+    playerNameController.dispose();
+    super.dispose();
   }
 
   void changeMode(bool val) {
