@@ -27,7 +27,7 @@ class GameDifficultyWidget extends StatelessWidget {
         width: 480,
         height: 60,
         margin: const EdgeInsets.only(top: 25),
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
           color: const Color(ColorCode.darkGrayBackground),
           borderRadius: BorderRadius.circular(10.0),
@@ -47,7 +47,6 @@ class GameDifficultyWidget extends StatelessWidget {
                 title,
                 textStyle: TextStyles.textMedium.copyWith(
                   fontSize: 20,
-                  height: 0.6,
                 ),
                 textAlign: TextAlign.start,
               ),

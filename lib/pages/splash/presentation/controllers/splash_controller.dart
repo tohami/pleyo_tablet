@@ -58,6 +58,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   void onResumed() {}
 
   onStartClicked() {
-    Get.rootDelegate.offNamed(Routes.SCAN_QR);
+    Get.rootDelegate.offNamed(Routes.HOME);
   }
 }

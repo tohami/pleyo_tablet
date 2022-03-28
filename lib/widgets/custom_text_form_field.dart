@@ -52,6 +52,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: true,
       cursorColor: const Color(ColorCode.whiteBackground),
       enabled: isEnabled ?? true,
       controller: controller,
