@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends SuperController<bool> {
-  RxBool isParty = true.obs;
+  RxBool isChampionnat = true.obs;
   RxBool playerIsSelected = false.obs;
   RxString playerName = ''.obs;
   TextEditingController playerNameController = TextEditingController();
@@ -87,7 +87,7 @@ class HomeController extends SuperController<bool> {
   }
 
   void changeMode(bool val) {
-    isParty.value = val;
+    isChampionnat.value = val;
   }
 
   void changePlayerSelection(bool val) {

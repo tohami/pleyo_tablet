@@ -8,11 +8,13 @@ import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
+  final int buttonColor;
   final GameModel _gameModel;
   final VoidCallback onTap;
   late VideoPlayerController _controller;
   RxBool isInitialized = false.obs;
-  VideoWidget(this._gameModel, {required this.onTap, Key? key})
+  VideoWidget(this._gameModel,
+      {required this.onTap, required this.buttonColor, Key? key})
       : super(key: key) {
     _controller = VideoPlayerController.network(_gameModel.url,
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
@@ -42,9 +44,9 @@ class VideoWidget extends StatelessWidget {
                 return state.value
                     ? Container()
                     : Container(
-                        child: const Center(
+                        child: Center(
                           child: CircularProgressIndicator(
-                            color: Color(ColorCode.accentLightColor),
+                            color: Color(buttonColor),
                           ),
                         ),
                       );
@@ -59,7 +61,7 @@ class VideoWidget extends StatelessWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: const Color(ColorCode.customAccent2Background),
+                    color: Color(buttonColor),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   child: Center(
