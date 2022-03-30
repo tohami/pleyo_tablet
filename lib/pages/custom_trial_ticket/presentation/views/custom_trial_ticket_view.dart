@@ -365,7 +365,7 @@ class CustomTrialTicketView extends GetView<CustomTrialTicketController> {
                       backGroundColor: controller.isValidAmount.value
                           ? Colors.black
                           : const Color(0x4d000000),
-                      key: const ValueKey("loginBtn"),
+                      key: const ValueKey("game_statusBtn"),
                       borderRadius: 2,
                     ),
                     width: 327,
