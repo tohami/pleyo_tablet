@@ -9,7 +9,7 @@ class HomeController extends SuperController<bool> {
   RxBool isLogoutActive = false.obs ;
   RxBool isAddPlayerActive = false.obs ;
 
-  RxBool isParty = true.obs;
+  RxBool isChampionnat = true.obs;
   TextEditingController playerNameController = TextEditingController();
 
   HomeController();
@@ -93,7 +93,7 @@ class HomeController extends SuperController<bool> {
   }
 
   void changeMode(bool val) {
-    isParty.value = val;
+    isChampionnat.value = val;
   }
 
   void onLogoutClicked () {
