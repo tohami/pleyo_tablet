@@ -48,11 +48,12 @@ class HomeController extends SuperController<bool> {
         if (machineVariation == null) {
           game.variationList?.clear();
         } else {
-          List<String?> machineVariationIds =
-          machineVariation.variationList!.map((e) => e.idVariation)
+          List<String?> machineVariationIds = machineVariation.variationList!
+              .map((e) => e.idVariation)
               .toList();
           //remove games thats not included in the machine
-          game.variationList?.removeWhere((element) => !machineVariationIds.contains(element.idVariation));
+          game.variationList?.removeWhere(
+              (element) => !machineVariationIds.contains(element.idVariation));
         }
 
         return game;
@@ -181,30 +182,30 @@ class HomeController extends SuperController<bool> {
     var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
     try {
       var transactionResult = await currentQrCodeRef.runTransaction((value) {
-        if(value == null) {
+        if (value == null) {
           return Transaction.abort();
         }
 
-        var qrCode = QrCodeModel.fromJson(value as Map<dynamic, dynamic>) ;
+        var qrCode = QrCodeModel.fromJson(value as Map<dynamic, dynamic>);
 
-        if(qrCode.isLocked == "true") {
-          Get.snackbar("Error", "Your card currently used to run game on other machine, please try again");
+        if (qrCode.isLocked == "true") {
+          Get.snackbar("Error",
+              "Your card currently used to run game on other machine, please try again");
           return Transaction.abort();
-        }else if((qrCode.remainingCredit??0) < 10){
-          Get.snackbar("Error", "You don't have enough points to run this game ");
+        } else if ((qrCode.remainingCredit ?? 0) < 10) {
+          Get.snackbar(
+              "Error", "You don't have enough points to run this game ");
           return Transaction.abort();
         }
 
-        qrCode.remainingCredit = qrCode.remainingCredit! - 10 ;
-        qrCode.isLocked = "true" ;
+        qrCode.remainingCredit = qrCode.remainingCredit! - 10;
+        qrCode.isLocked = "true";
 
-        return Transaction.success(
-          qrCode.toJson()
-        ) ;
+        return Transaction.success(qrCode.toJson());
       });
 
-      if(!transactionResult.committed){
-        return ;
+      if (!transactionResult.committed) {
+        return;
       }
 
       // var currentPoints = codeRef.
@@ -217,8 +218,8 @@ class HomeController extends SuperController<bool> {
           isOnPartyMode: (!isChampion.value).toString(),
           partyName: playerName,
           playerNickName: playerName,
-          publicHashtag: qrCodeModel.value.publicHashTag?.substring(
-              qrCodeModel.value.publicHashTag!.length - 5),
+          publicHashtag: qrCodeModel.value.publicHashTag
+              ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
           globalLeaderboardName: "${now.month}_${now.year}");
 
       var newCommand = messageQueueRef.push();
@@ -226,8 +227,8 @@ class HomeController extends SuperController<bool> {
       newCommand
           .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
 
-      throw Error() ;
-    }catch (e){
+      throw Error();
+    } catch (e) {
       //return the credit if the game not started
       await currentQrCodeRef.update({
         "remainingCredit": ServerValue.increment(10),
