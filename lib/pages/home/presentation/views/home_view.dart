@@ -5,18 +5,15 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
 import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
-import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
 import '../controllers/home_controller.dart';
 
 // ignore: must_be_immutable
 class HomeView extends GetView<HomeController> {
-
   const HomeView({Key? key}) : super(key: key);
 
   @override
@@ -61,7 +58,7 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         body: SingleChildScrollView(
-         physics: const ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           child: Container(
             color: const Color(ColorCode.primary),
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
@@ -89,13 +86,13 @@ class HomeView extends GetView<HomeController> {
                   // isChampion must be called any where to force rebuild
                   controller.isChampion.value;
 
-                  if(controller.games.isNotEmpty) {
+                  if (controller.games.isNotEmpty) {
                     return ListView.builder(
                       itemCount: controller.games.length,
                       shrinkWrap: true,
-                      clipBehavior: Clip.none ,
-                      physics: const NeverScrollableScrollPhysics() ,
-                      itemBuilder: (context , index) {
+                      clipBehavior: Clip.none,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // key: ValueKey("${}"),
@@ -103,18 +100,20 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: controller.games[index],isChampion: controller.isChampion.value,onPlayClicked: (game) {
-                              showBottomSheetModal(context) ;
-                            },) ,
-
+                            GameWidget(
+                              game: controller.games[index],
+                              isChampion: controller.isChampion.value,
+                              onPlayClicked: (game) {
+                                showBottomSheetModal(context);
+                              },
+                            ),
                           ],
-                        ) ;
+                        );
                       },
-                    ) ;
-                  }else {
-                    return Container() ;
+                    );
+                  } else {
+                    return Container();
                   }
-
                 }),
               ],
             ),
@@ -123,7 +122,6 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
-
 
   showBottomSheetModal(BuildContext context) {
     return showModalBottomSheet(
@@ -136,7 +134,6 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         isScrollControlled: true,
-
         builder: (context) {
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -158,19 +155,18 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       child: Obx(() {
-        var isLogout = controller.isLogoutActive.value ;
-        var isChampion = controller.isChampion.value ;
-        var points = controller.qrCodeModel.value.remainingCredit.toString() ;
+        var isLogout = controller.isLogoutActive.value;
+        var isChampion = controller.isChampion.value;
+        var points = controller.qrCodeModel.value.remainingCredit.toString();
         return Row(
           children: [
             GestureDetector(
-              onTap: ()=>controller.isLogoutActive.toggle(),
-              child:  Container(
+              onTap: () => controller.isLogoutActive.toggle(),
+              child: Container(
                 height: 60,
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                  color:
-                  const Color(ColorCode.darkGrayBackground),
+                  color: const Color(ColorCode.darkGrayBackground),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10.0),
                     bottomLeft: Radius.circular(10.0),
@@ -178,13 +174,11 @@ class HomeView extends GetView<HomeController> {
                   border: Border.all(
                       width: 3.0,
                       color: isChampion
-                          ? const Color(
-                          ColorCode.accentLightColor)
-                          : const Color(
-                          ColorCode.yellowBackground)),
+                          ? const Color(ColorCode.accentLightColor)
+                          : const Color(ColorCode.yellowBackground)),
                 ),
-                child:  AnimatedSize(
-                  duration: const Duration(milliseconds:250),
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 250),
                   child: Row(
                     key: ValueKey(isLogout),
                     children: [
@@ -194,9 +188,11 @@ class HomeView extends GetView<HomeController> {
                         width: 30,
                         height: 30,
                       ),
-                      SizedBox(width: 16,),
+                      SizedBox(
+                        width: 16,
+                      ),
                       Container(
-                        width: isLogout ? 210 :70,
+                        width: isLogout ? 210 : 70,
                         child: CustomText(
                           isLogout ? 'Voulez-vous quitter ?' : points,
                           textAlign: TextAlign.start,
@@ -204,8 +200,7 @@ class HomeView extends GetView<HomeController> {
                             fontSize: 20,
                             shadows: [
                               const Shadow(
-                                color: Color(
-                                    ColorCode.textShadowBackground),
+                                color: Color(ColorCode.textShadowBackground),
                                 offset: Offset(0, 3),
                                 blurRadius: 10,
                               )
@@ -232,15 +227,11 @@ class HomeView extends GetView<HomeController> {
                   border: Border.all(
                       width: 3.0,
                       color: isChampion
-                          ? const Color(
-                          ColorCode.accentLightColor)
-                          : const Color(
-                          ColorCode.yellowBackground)),
+                          ? const Color(ColorCode.accentLightColor)
+                          : const Color(ColorCode.yellowBackground)),
                   color: isChampion
-                      ? const Color(
-                      ColorCode.accentLightColor)
-                      : const Color(
-                      ColorCode.yellowBackground),
+                      ? const Color(ColorCode.accentLightColor)
+                      : const Color(ColorCode.yellowBackground),
                 ),
                 child: SvgPicture.asset(
                   'assets/images/icon_logout.svg',
@@ -249,13 +240,13 @@ class HomeView extends GetView<HomeController> {
               ),
             )
           ],
-        ) ;
+        );
       }),
-    ) ;
+    );
   }
 
   Widget playerNameWidget() {
-   return Container(
+    return Container(
       height: 60,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
@@ -265,26 +256,25 @@ class HomeView extends GetView<HomeController> {
       child: Row(
         children: [
           Obx(() {
-            var isAddPlayerActive = controller.isAddPlayerActive.value ;
+            var isAddPlayerActive = controller.isAddPlayerActive.value;
             return Container(
               height: 60,
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
+                color: const Color(ColorCode.darkGrayBackground),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   bottomLeft: Radius.circular(10.0),
                 ),
                 border: Border.all(
-                    width: 3.0,
-                    color: const Color(
-                        ColorCode.white2Background)),
+                    width: 3.0, color: const Color(ColorCode.white2Background)),
               ),
-              child:  GestureDetector(
-                onTap: isAddPlayerActive ? null : ()=> controller.isAddPlayerActive.toggle(),
+              child: GestureDetector(
+                onTap: isAddPlayerActive
+                    ? null
+                    : () => controller.isAddPlayerActive.toggle(),
                 child: AnimatedSize(
-                  duration: const Duration(milliseconds:250),
+                  duration: const Duration(milliseconds: 250),
                   child: Row(
                     key: ValueKey(isAddPlayerActive),
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -296,36 +286,40 @@ class HomeView extends GetView<HomeController> {
                         width: 30,
                         height: 30,
                       ),
-                      const SizedBox(width: 16,),
-                      isAddPlayerActive ? SizedBox(
-                        width: 210 ,
-                        child: CustomTextFormField(
-                          controller: controller.playerNameController,
-                          fontSize:20,
-                          onSubmit: (val) {
-                            // playerName.value = val;
-                          },
-                          fontColor: const Color(
-                              ColorCode.whiteBackground),
-                        ),
-                      ) : SizedBox(
-                        width:70,
-                        child: CustomText(
-                          'Kévin',
-                          textAlign: TextAlign.start,
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontSize: 20,
-                          ),
-                        ),
-                      )
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      isAddPlayerActive
+                          ? SizedBox(
+                              width: 210,
+                              child: CustomTextFormField(
+                                controller: controller.playerNameController,
+                                fontSize: 20,
+                                onSubmit: (val) {
+                                  // playerName.value = val;
+                                },
+                                fontColor:
+                                    const Color(ColorCode.whiteBackground),
+                              ),
+                            )
+                          : SizedBox(
+                              width: 70,
+                              child: CustomText(
+                                'Kévin',
+                                textAlign: TextAlign.start,
+                                textStyle: TextStyles.textMedium.copyWith(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
                     ],
                   ),
                 ),
               ),
-            ) ;
+            );
           }),
           GestureDetector(
-            onTap: ()=> controller.isAddPlayerActive.toggle(),
+            onTap: () => controller.isAddPlayerActive.toggle(),
             child: Container(
               width: 60,
               height: 60,
@@ -337,8 +331,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 border: Border.all(
                   width: 3.0,
-                  color:
-                  const Color(ColorCode.grayBackground),
+                  color: const Color(ColorCode.grayBackground),
                 ),
                 boxShadow: const [
                   BoxShadow(
@@ -357,7 +350,7 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       ),
-    ) ;
+    );
   }
 
   Widget gameModeWidget() {
@@ -374,26 +367,21 @@ class HomeView extends GetView<HomeController> {
             borderRadius: 30.0,
             showOnOff: false,
             padding: 5,
-            activeColor:
-            const Color(ColorCode.yellowBackground),
-            inactiveColor:
-            const Color(ColorCode.accentLightColor),
+            activeColor: const Color(ColorCode.yellowBackground),
+            inactiveColor: const Color(ColorCode.accentLightColor),
             activeSwitchBorder: Border.all(
               width: 2.0,
-              color:
-              const Color(ColorCode.darkYellowBackground),
+              color: const Color(ColorCode.darkYellowBackground),
             ),
             inactiveSwitchBorder: Border.all(
               width: 2.0,
-              color:
-              const Color(ColorCode.customAccentBackground),
+              color: const Color(ColorCode.customAccentBackground),
             ),
             activeIcon: Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
+                color: const Color(ColorCode.darkGrayBackground),
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: const [
                   BoxShadow(
@@ -416,8 +404,7 @@ class HomeView extends GetView<HomeController> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
+                color: const Color(ColorCode.darkGrayBackground),
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: const [
                   BoxShadow(
@@ -453,6 +440,6 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       );
-    }, controller.isChampion) ;
+    }, controller.isChampion);
   }
 }
