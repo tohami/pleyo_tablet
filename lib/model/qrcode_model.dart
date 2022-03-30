@@ -6,6 +6,7 @@ class QrCodeModel {
   int? createdAt;
   String? createdBy;
   String? customerEmail ;
+  String? isLocked ;
   List<String>? transActionsList;
 
   QrCodeModel(
@@ -16,6 +17,7 @@ class QrCodeModel {
         required this.createdBy,
         required this.players,
         required this.customerEmail,
+        required this.isLocked,
         required this.transActionsList});
 
   QrCodeModel.fromJson(Map<dynamic, dynamic> json) {
@@ -25,6 +27,7 @@ class QrCodeModel {
     createdAt = json['createdAt'];
     createdBy = json['createdBy'];
     customerEmail = json['customerEmail'];
+    isLocked = json['isLocked'];
     if (json['transActionsList'] != null) {
       transActionsList = json['transActionsList'].cast<String>();
     }
@@ -41,6 +44,7 @@ class QrCodeModel {
     data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
     data['customerEmail'] = customerEmail;
+    data['isLocked'] = isLocked;
     data['transActionsList'] = transActionsList;
     data['players'] = players;
     return data;

@@ -103,8 +103,13 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: controller.games[index],isChampion: controller.isChampion.value,onPlayClicked: (game) {
-                              showBottomSheetModal(context) ;
+                            GameWidget(game: controller.games[index],isChampion: controller.isChampion.value,onPlayClicked: (variant) {
+                              print(variant.toJson()) ;
+                              showBottomSheetModal(context , variant , (diff , name) {
+                                controller.startGame(
+                                    controller.games[index] , variant ,name, diff
+                                );
+                              }) ;
                             },) ,
 
                           ],
@@ -125,7 +130,7 @@ class HomeView extends GetView<HomeController> {
   }
 
 
-  showBottomSheetModal(BuildContext context) {
+  showBottomSheetModal(BuildContext context , VariationList variation,Function(int , String) onDifficultSelected) {
     return showModalBottomSheet(
         context: context,
         backgroundColor: const Color(ColorCode.darkGrayBackground),
@@ -143,6 +148,8 @@ class HomeView extends GetView<HomeController> {
             children: [
               StartGameBottomSheet(
                 controller: controller,
+                gameVariation: variation,
+                onDifficultSelected: onDifficultSelected,
               ),
             ],
           );
