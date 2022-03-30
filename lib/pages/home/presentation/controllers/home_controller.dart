@@ -49,11 +49,12 @@ class HomeController extends SuperController<bool> {
         if (machineVariation == null) {
           game.variationList?.clear();
         } else {
-          List<String?> machineVariationIds =
-          machineVariation.variationList!.map((e) => e.idVariation)
+          List<String?> machineVariationIds = machineVariation.variationList!
+              .map((e) => e.idVariation)
               .toList();
           //remove games thats not included in the machine
-          game.variationList?.removeWhere((element) => !machineVariationIds.contains(element.idVariation));
+          game.variationList?.removeWhere(
+              (element) => !machineVariationIds.contains(element.idVariation));
         }
 
         return game;
@@ -177,40 +178,46 @@ class HomeController extends SuperController<bool> {
 
   void startGame(GameModel game, VariationList variant, String playerName,
       int diff) async {
-    var now = DateTime.now();
+    // var now = DateTime.now();
     //check available balance
-    var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
-    var qrCodeEntity = await currentQrCodeRef.get();
-    var qrCode =
-        QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>);
-    if (qrCode.isLocked == "true") {
-      Get.snackbar("Error", "Try Later");
-      return;
-    }
-    await currentQrCodeRef.child("isLocked").set("true");
-    if (qrCode.remainingCredit! < 10) {
-      Get.snackbar("Error", "You don`t have enough points ");
-      return;
-    }
+    // var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
+    // var qrCodeEntity = await currentQrCodeRef.get();
+    // var qrCode =
+    //     QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>);
+    // if (qrCode.isLocked == "true") {
+    //   Get.snackbar("Error", "Try Later");
+    //   return;
+    // }
+    // await currentQrCodeRef.child("isLocked").set("true");
+    // if (qrCode.remainingCredit! < 10) {
+    //   Get.snackbar("Error", "You don`t have enough points ");
+    //   return;
+    // }
+    //
+    // // var currentPoints = codeRef.
+    // var startGameData = StartGameData(
+    //     difficultyPlayed: diff.toString(),
+    //     gameName: game.gameName,
+    //     idGame: game.idGame,
+    //     idMachine: "0",
+    //     idVariation: variant.idVariation,
+    //     isOnPartyMode: (!isChampion.value).toString(),
+    //     partyName: playerName,
+    //     playerNickName: playerName,
+    //     publicHashtag: qrCodeModel.value.publicHashTag,
+    //     globalLeaderboardName: "${now.month}_${now.year}");
+    // var newCommand = messageQueueRef.push();
+    // newCommand
+    //     .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
+    //
+    // await currentQrCodeRef
+    //     .child("remainingCredit")
+    //     .set(qrCode.remainingCredit! - 10);
 
-    // var currentPoints = codeRef.
-    var startGameData = StartGameData(
-        difficultyPlayed: diff.toString(),
-        gameName: game.gameName,
-        idGame: game.idGame,
-        idMachine: "0",
-        idVariation: variant.idVariation,
-        isOnPartyMode: (!isChampion.value).toString(),
-        partyName: playerName,
-        playerNickName: playerName,
-        publicHashtag: qrCodeModel.value.publicHashTag,
-        globalLeaderboardName: "${now.month}_${now.year}");
-    var newCommand = messageQueueRef.push();
-    newCommand
-        .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
-
-    await currentQrCodeRef
-        .child("remainingCredit")
-        .set(qrCode.remainingCredit! - 10);
+    Get.rootDelegate.toNamed(Routes.GAME_STATUS, parameters: {
+      "game_mode": isChampion.value.toString(),
+      "points": qrCodeModel.value.remainingCredit.toString(),
+      "player_name": playerName
+    });
   }
 }

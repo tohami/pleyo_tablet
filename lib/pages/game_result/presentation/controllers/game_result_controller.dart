@@ -1,25 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../routes/app_pages.dart';
 
-class CustomTrialTicketController extends SuperController<bool> {
-  CustomTrialTicketController();
+class GameResultController extends SuperController<bool> {
+  bool isChampion = Get.rootDelegate.parameters["game_mode"] == "true";
 
-  RxBool isValidAmount = false.obs;
-  double points = 0.0;
+  String? points = Get.rootDelegate.parameters["points"];
 
-  bool isTrial = Get.rootDelegate.parameters["is_trial"] == "1";
-
-  TextEditingController amountController = TextEditingController();
+  String? playerName = Get.rootDelegate.parameters["player_name"];
+  GameResultController();
 
   @override
   void onInit() {
     change(null, status: RxStatus.success());
-    amountController.addListener(() {
-      isValidAmount.value = amountController.text.isNotEmpty;
-      update();
-    });
   }
 
   @override
@@ -84,14 +75,5 @@ class CustomTrialTicketController extends SuperController<bool> {
   void onResumed() {
     // ignore: avoid_print
     print('onResumed called');
-  }
-
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.rootDelegate.offNamed(Routes.SPLASH);
-  }
-
-  void onContinueClicked() {
-    Get.rootDelegate.offNamed(Routes.SCAN_QR);
   }
 }
