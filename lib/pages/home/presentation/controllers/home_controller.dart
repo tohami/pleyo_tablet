@@ -1,7 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+
+import '../../../../model/game_model.dart';
 
 class HomeController extends SuperController<bool> {
 
@@ -9,17 +12,30 @@ class HomeController extends SuperController<bool> {
   RxBool isLogoutActive = false.obs ;
   RxBool isAddPlayerActive = false.obs ;
 
-  RxBool isChampionnat = true.obs;
+  RxBool isChampion = true.obs;
+
+  final RxList<GameModel> games = RxList<GameModel>([]) ;
+
   TextEditingController playerNameController = TextEditingController();
 
   HomeController();
 
   String username = "";
 
-  @override
-  void onInit() {
-    change(null, status: RxStatus.success());
+  DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
 
+  @override
+  void onInit() async{
+    super.onInit() ;
+    change(null, status: RxStatus.success());
+    try {
+      var gamesEntity = await gamesRef.get();
+      games.addAll(gamesEntity.children.map((e) {
+        return GameModel.fromJson(e.value as Map<dynamic, dynamic>);
+      })) ;
+    }catch (e) {
+      print(e) ;
+    }
   }
 
   @override
@@ -93,7 +109,7 @@ class HomeController extends SuperController<bool> {
   }
 
   void changeMode(bool val) {
-    isChampionnat.value = val;
+    isChampion.value = val;
   }
 
   void onLogoutClicked () {

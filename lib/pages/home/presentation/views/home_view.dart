@@ -8,6 +8,7 @@ import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
+import 'package:pleyo_tablet_app/widgets/game_widget.dart';
 import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
@@ -60,6 +61,7 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         body: SingleChildScrollView(
+         physics: const ClampingScrollPhysics(),
           child: Container(
             color: const Color(ColorCode.primary),
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
@@ -83,100 +85,33 @@ class HomeView extends GetView<HomeController> {
                     gameModeWidget(),
                   ],
                 ),
-                //end of header
-                const SizedBox(
-                  height: 60,
-                ),
-                CustomText(
-                  'Neon',
-                  textStyle: TextStyles.textLarge.copyWith(
-                    fontSize: 40,
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Container(
-                  width: Get.width,
-                  height: 260,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ObxValue<RxBool>((state) {
-                        return VideoWidget(
-                          GameModel(
-                              id: "10",
-                              name: "Heartbeat Spaces",
-                              description: "Jeu de rythme • Arcade • Casual",
-                              url:
-                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                          buttonColor: state.value
-                              ? ColorCode.customAccent2Background
-                              : ColorCode.yellow3Background,
-                          onTap: () {
-                            showBottomSheetModal(context);
-                          },
-                          key: const ValueKey(1),
-                        );
-                      }, controller.isChampionnat),
-                      ObxValue<RxBool>((state) {
-                        return VideoWidget(
-                          GameModel(
-                              id: "10",
-                              name: "Heartbeat Spaces",
-                              description: "Jeu de rythme • Arcade • Casual",
-                              url:
-                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                          buttonColor: state.value
-                              ? ColorCode.customAccent2Background
-                              : ColorCode.yellow3Background,
-                          onTap: () {
-                            showBottomSheetModal(context);
-                          },
-                          key: const ValueKey(1),
-                        );
-                      }, controller.isChampionnat),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                CustomText(
-                  'Space Invaders',
-                  textStyle: TextStyles.textLarge.copyWith(
-                    fontSize: 40,
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Container(
-                  width: Get.width,
-                  height: 260,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ObxValue<RxBool>((state) {
-                        return VideoWidget(
-                          GameModel(
-                              id: "10",
-                              name: "Heartbeat Spaces",
-                              description: "Jeu de rythme • Arcade • Casual",
-                              url:
-                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                          buttonColor: state.value
-                              ? ColorCode.customAccent2Background
-                              : ColorCode.yellow3Background,
-                          onTap: () {
-                            showBottomSheetModal(context);
-                          },
-                          key: const ValueKey(1),
-                        );
-                      }, controller.isChampionnat),
-                    ],
-                  ),
-                ),
+                GetX<HomeController>(builder: (c) {
+                  if(c.games.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: c.games.length,
+                      shrinkWrap: true,
+                      clipBehavior: Clip.none ,
+                      physics: const NeverScrollableScrollPhysics() ,
+                      itemBuilder: (context , index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 60,
+                            ),
+                            GameWidget(game: c.games[index],isChampion: controller.isChampion.value,onPlayClicked: (game) {
+                              showBottomSheetModal(context) ;
+                            },) ,
+
+                          ],
+                        ) ;
+                      },
+                    ) ;
+                  }else {
+                    return Container() ;
+                  }
+
+                }),
               ],
             ),
           ),
@@ -359,7 +294,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   border: Border.all(
                       width: 3.0,
-                      color: controller.isChampionnat.value
+                      color: controller.isChampion.value
                           ? const Color(
                           ColorCode.accentLightColor)
                           : const Color(
@@ -415,12 +350,12 @@ class HomeView extends GetView<HomeController> {
                   ),
                   border: Border.all(
                       width: 3.0,
-                      color: controller.isChampionnat.value
+                      color: controller.isChampion.value
                           ? const Color(
                           ColorCode.accentLightColor)
                           : const Color(
                           ColorCode.yellowBackground)),
-                  color: controller.isChampionnat.value
+                  color: controller.isChampion.value
                       ? const Color(
                       ColorCode.accentLightColor)
                       : const Color(
@@ -432,7 +367,7 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ) ;
-          }, controller.isChampionnat)
+          }, controller.isChampion)
 
         ],
       ),
@@ -637,6 +572,6 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       );
-    }, controller.isChampionnat) ;
+    }, controller.isChampion) ;
   }
 }

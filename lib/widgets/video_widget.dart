@@ -9,21 +9,21 @@ import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
   final int buttonColor;
-  final GameModel _gameModel;
+  final VariationList variantModel;
   final VoidCallback onTap;
   late VideoPlayerController _controller;
-  RxBool isInitialized = false.obs;
-  VideoWidget(this._gameModel,
+  final RxBool isInitialized = false.obs;
+  VideoWidget(this.variantModel,
       {required this.onTap, required this.buttonColor, Key? key})
       : super(key: key) {
-    _controller = VideoPlayerController.network(_gameModel.url,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
-      ..initialize().then((_) {
-        isInitialized.value = true;
-        _controller.play();
-      });
-    _controller.setLooping(true);
-    _controller.setVolume(0.0);
+    // _controller = VideoPlayerController.network(_gameModel.url,
+    //     videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
+    //   ..initialize().then((_) {
+    //     isInitialized.value = true;
+    //     _controller.play();
+    //   });
+    // _controller.setLooping(true);
+    // _controller.setVolume(0.0);
   }
 
   @override
@@ -42,7 +42,13 @@ class VideoWidget extends StatelessWidget {
               height: 180,
               child: ObxValue<RxBool>((state) {
                 return state.value
-                    ? VideoPlayer(_controller)
+                    ? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Color(buttonColor),
+                    ),
+                  ),
+                )
                     : Container(
                         child: Center(
                           child: CircularProgressIndicator(
@@ -78,7 +84,7 @@ class VideoWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        _gameModel.name,
+                        variantModel.displayedName??"",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         textStyle: TextStyles.textLarge.copyWith(
@@ -90,7 +96,7 @@ class VideoWidget extends StatelessWidget {
                         height: 2,
                       ),
                       CustomText(
-                        _gameModel.description,
+                        variantModel.gameInfoText??"",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         textStyle: TextStyles.textMedium.copyWith(
