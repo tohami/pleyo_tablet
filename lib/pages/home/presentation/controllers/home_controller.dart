@@ -7,14 +7,15 @@ import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import '../../../../model/game_model.dart';
 
 class HomeController extends SuperController<bool> {
+  Rx<QrCodeModel> qrCodeModel = Rx<QrCodeModel>(Get.rootDelegate.arguments());
 
-  Rx<QrCodeModel> qrCodeModel = Rx<QrCodeModel>(Get.rootDelegate.arguments()) ;
-  RxBool isLogoutActive = false.obs ;
-  RxBool isAddPlayerActive = false.obs ;
+  RxBool isLogoutActive = false.obs;
+
+  RxBool isAddPlayerActive = false.obs;
 
   RxBool isChampion = true.obs;
 
-  final RxList<GameModel> games = RxList<GameModel>([]) ;
+  final RxList<GameModel> games = RxList<GameModel>([]);
 
   TextEditingController playerNameController = TextEditingController();
 
@@ -23,18 +24,19 @@ class HomeController extends SuperController<bool> {
   String username = "";
 
   DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
+  DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
 
   @override
-  void onInit() async{
-    super.onInit() ;
+  void onInit() async {
+    super.onInit();
     change(null, status: RxStatus.success());
     try {
       var gamesEntity = await gamesRef.get();
       games.addAll(gamesEntity.children.map((e) {
         return GameModel.fromJson(e.value as Map<dynamic, dynamic>);
-      })) ;
-    }catch (e) {
-      print(e) ;
+      }));
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -112,21 +114,41 @@ class HomeController extends SuperController<bool> {
     isChampion.value = val;
   }
 
-  void onLogoutClicked () {
-    if(isLogoutActive.value){
+  void onLogoutClicked() {
+    if (isLogoutActive.value) {
       //logout the player
       Get.rootDelegate.offNamed(Routes.SPLASH);
-    }else {
-      isLogoutActive.value = true ;
+    } else {
+      isLogoutActive.value = true;
     }
   }
 
-  void onAddPlayerClicked () {
-    if(isAddPlayerActive.value){
+  void onAddPlayerClicked() {
+    if (isAddPlayerActive.value) {
       //logout the player
 
-    }else {
-      isAddPlayerActive.value = true ;
+    } else {
+      isAddPlayerActive.value = true;
+    }
+  }
+
+  void addPlayer(String val) async{
+    var qrCode = qrCodeModel.value;
+    var players = qrCode.players ?? [];
+    if (players.contains(val)) {
+      players.remove(val);
+      players.add(val);
+    }
+    qrCodeModel.value = qrCode;
+    print("add player") ;
+
+    try {
+      await qrCodeRef.child("${qrCode.publicHashTag!}/players").push().set({
+        val
+      });
+      // print(res)
+    }catch (e) {
+      print(e) ;
     }
   }
 }

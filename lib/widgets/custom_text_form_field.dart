@@ -3,7 +3,7 @@ import 'package:pleyo_tablet_app/consts/colors.dart';
 import '../consts/text_styles.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   final bool obscureText;
   final String obscuringCharacter;
@@ -32,7 +32,7 @@ class CustomTextFormField extends StatelessWidget {
 
   const CustomTextFormField(
       {Key? key,
-      required this.controller,
+      this.controller,
       this.obscureText = false,
       this.decoration,
       this.obscuringCharacter = " ",

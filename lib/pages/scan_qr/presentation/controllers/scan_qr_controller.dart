@@ -116,7 +116,7 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
       try {
         var qrCodeEntity = await qrCodeRef.child(scanData.code!).get();
         var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
-        if(qrCode.remainingCredit > 0) {
+        if(qrCode.remainingCredit! > 0) {
           isScanned.value = true ;
           await Future.delayed(const Duration(seconds: 2)) ;
           Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);

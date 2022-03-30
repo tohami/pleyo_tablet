@@ -16,14 +16,14 @@ class VideoWidget extends StatelessWidget {
   VideoWidget(this.variantModel,
       {required this.onTap, required this.buttonColor, Key? key})
       : super(key: key) {
-    // _controller = VideoPlayerController.network(_gameModel.url,
-    //     videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
-    //   ..initialize().then((_) {
-    //     isInitialized.value = true;
-    //     _controller.play();
-    //   });
-    // _controller.setLooping(true);
-    // _controller.setVolume(0.0);
+    _controller = VideoPlayerController.network(variantModel.urlVideoTablet!,
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false));
+      // ..initialize().then((_) {
+      //   isInitialized.value = true;
+      //   _controller.play();
+      // });
+    _controller.setLooping(true);
+    _controller.setVolume(0.0);
   }
 
   @override
@@ -42,13 +42,7 @@ class VideoWidget extends StatelessWidget {
               height: 180,
               child: ObxValue<RxBool>((state) {
                 return state.value
-                    ? Container(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Color(buttonColor),
-                    ),
-                  ),
-                )
+                    ? VideoPlayer(_controller)
                     : Container(
                         child: Center(
                           child: CircularProgressIndicator(

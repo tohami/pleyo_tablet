@@ -266,6 +266,7 @@ class HomeView extends GetView<HomeController> {
         children: [
           Obx(() {
             var isAddPlayerActive = controller.isAddPlayerActive.value ;
+            var players = controller.qrCodeModel.value.players??[] ;
             return Container(
               height: 60,
               padding: const EdgeInsets.all(15),
@@ -300,10 +301,11 @@ class HomeView extends GetView<HomeController> {
                       isAddPlayerActive ? SizedBox(
                         width: 210 ,
                         child: CustomTextFormField(
-                          controller: controller.playerNameController,
                           fontSize:20,
                           onSubmit: (val) {
                             // playerName.value = val;
+                            print("on submit") ;
+                            controller.addPlayer(val) ;
                           },
                           fontColor: const Color(
                               ColorCode.whiteBackground),
@@ -311,7 +313,7 @@ class HomeView extends GetView<HomeController> {
                       ) : SizedBox(
                         width:70,
                         child: CustomText(
-                          'Kévin',
+                          players.isNotEmpty ? players.last : "Add ...",
                           textAlign: TextAlign.start,
                           textStyle: TextStyles.textMedium.copyWith(
                             fontSize: 20,
