@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
@@ -9,12 +11,8 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
   late Animation<double> boxAnimation;
 
   ScanQRController();
-
-  Barcode? result;
   QRViewController? controller;
-  RxBool isValid = false.obs;
-  RxString qrCode = "".obs;
-
+  RxBool isScanned = false.obs ;
   TextEditingController emailController = TextEditingController();
 
   @override
@@ -36,7 +34,9 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
       _boxAnimationController
           .repeat(reverse: true)
           .orCancel;
-    }on TickerCanceled catch (e) {}
+    }on TickerCanceled catch (e) {
+
+    }
     change(null, status: RxStatus.success());
   }
 
@@ -106,18 +106,30 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     print('onResumed called');
   }
 
+  DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
+
+
   void onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
-      qrCode.value = scanData.code ?? "";
-      Future.delayed(const Duration(seconds: 3)).then((value) {
-        if (qrCode.value.isNotEmpty) {
-          Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS);
-        } else {
-          Get.rootDelegate.offNamed(Routes.SPLASH);
+      try {
+        var qrCodeEntity = await qrCodeRef.child(scanData.code!).get();
+        var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
+        if(qrCode.remainingCredit > 0) {
+          isScanned.value = true ;
+          await Future.delayed(const Duration(seconds: 2)) ;
+          Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);
+        }else {
+          Get.snackbar("Error", "You don't have any Credit left in your card");
         }
-      });
+      }catch (e) {
+        Get.snackbar("Error", "Invalid Qr code");
+        print(e) ;
+      } finally {
+        controller.resumeCamera() ;
+        isScanned.value = false ;
+      }
     });
   }
 }

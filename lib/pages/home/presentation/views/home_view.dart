@@ -73,7 +73,7 @@ class HomeView extends GetView<HomeController> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        playerPointsWidget(),
+                        playerPointsWidget(controller.qrCodeModel.value.remainingCredit.toString()),
                         const SizedBox(
                           height: 15,
                         ),
@@ -319,7 +319,7 @@ class HomeView extends GetView<HomeController> {
         });
   }
 
-  Widget playerPointsWidget() {
+  Widget playerPointsWidget(String points) {
     return Container(
       height: 60,
       decoration: const BoxDecoration(
@@ -362,7 +362,7 @@ class HomeView extends GetView<HomeController> {
                       Container(
                         width: state.value ? 210 :70,
                         child: CustomText(
-                          state.value ? 'Voulez-vous quitter ?' : '285',
+                          state.value ? 'Voulez-vous quitter ?' : points,
                           textAlign: TextAlign.start,
                           textStyle: TextStyles.textMedium.copyWith(
                             fontSize: 20,

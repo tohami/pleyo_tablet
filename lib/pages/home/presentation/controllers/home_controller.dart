@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 
 class HomeController extends SuperController<bool> {
+
+  Rx<QrCodeModel> qrCodeModel = Rx<QrCodeModel>(Get.rootDelegate.arguments()) ;
   RxBool isLogoutActive = false.obs ;
   RxBool isAddPlayerActive = false.obs ;
 
@@ -16,6 +19,7 @@ class HomeController extends SuperController<bool> {
   @override
   void onInit() {
     change(null, status: RxStatus.success());
+
   }
 
   @override

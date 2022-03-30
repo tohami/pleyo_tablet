@@ -46,7 +46,7 @@ class AvailablePointsView extends GetView<AvailablePointsController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       NumberSlideAnimation(
-                        number : "259" ,
+                        number : controller.qrCodeModel.remainingCredit.toString() ,
                         duration: const Duration(seconds: 3),
                         curve: Curves.easeOut,
                         textStyle: TextStyles.textXLarge.copyWith(

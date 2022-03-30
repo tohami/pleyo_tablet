@@ -52,9 +52,9 @@ class ScanQRView extends GetView<ScanQRController> {
                             width: 5.0,
                             color: const Color(ColorCode.accentLightColor)),
                       ),
-                      child: ObxValue<RxString>((state) {
+                      child: ObxValue<RxBool>((state) {
                         return Visibility(
-                          visible: state.value.isNotEmpty,
+                          visible: state.value,
                           child: SvgPicture.asset(
                             'assets/images/icon_validation.svg',
                             fit: BoxFit.contain,
@@ -62,7 +62,7 @@ class ScanQRView extends GetView<ScanQRController> {
                             height: 104,
                           ),
                         );
-                      }, controller.qrCode),
+                      }, controller.isScanned),
                     ),
                   ),
                 ],
@@ -72,9 +72,9 @@ class ScanQRView extends GetView<ScanQRController> {
               alignment: Alignment.bottomCenter,
               child: Container(
                   margin: const EdgeInsets.only(bottom: 100),
-                  child: ObxValue<RxString>((state) {
+                  child: ObxValue<RxBool>((state) {
                     return CustomText(
-                      state.value.isNotEmpty
+                      state.value
                           ? 'QRcode valide !'
                           : 'Scannez votre QRcode\npour commencer à jouer',
                       textStyle: TextStyles.textLarge.copyWith(
@@ -82,7 +82,7 @@ class ScanQRView extends GetView<ScanQRController> {
                         height: 1.1666666666666667,
                       ),
                     );
-                  }, controller.qrCode)),
+                  }, controller.isScanned)),
             ),
           ],
         ),

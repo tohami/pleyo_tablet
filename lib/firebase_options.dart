@@ -24,7 +24,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -38,30 +41,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAwyMLztluPfdCM6CvwK316sY335A3uX8Y',
-    appId: '1:525581989538:web:7340cfe4d1cb3b247249fb',
-    messagingSenderId: '525581989538',
-    projectId: 'playo-c1060',
-    authDomain: 'playo-c1060.firebaseapp.com',
-    storageBucket: 'playo-c1060.appspot.com',
-    measurementId: 'G-YD9R4NNVXR',
+    apiKey: 'AIzaSyC0fmdhYlJ78QCWg90QloTnsTqJozaSdFY',
+    appId: '1:906997854220:web:82122d911a93b7f03c7e29',
+    messagingSenderId: '906997854220',
+    projectId: 'pleyo-d54d0',
+    authDomain: 'pleyo-d54d0.firebaseapp.com',
+    databaseURL: 'https://pleyo-d54d0-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'pleyo-d54d0.appspot.com',
+    measurementId: 'G-CR0JP0Y7VS',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBMVU_wiJ5Nc_irBicPN7qRM60sE6sO0NI',
-    appId: '1:525581989538:android:685f4d98e3fe50bc7249fb',
-    messagingSenderId: '525581989538',
-    projectId: 'playo-c1060',
-    storageBucket: 'playo-c1060.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBy_HDA8Nw3JxrDujEgGa_pfzkXVaNRbV8',
-    appId: '1:525581989538:ios:d09b04c63215462a7249fb',
-    messagingSenderId: '525581989538',
-    projectId: 'playo-c1060',
-    storageBucket: 'playo-c1060.appspot.com',
-    iosClientId: '525581989538-b3o399r9vg390g0n2m1of24b7fjeg18h.apps.googleusercontent.com',
-    iosBundleId: 'com.pleyo.pos',
+    apiKey: 'AIzaSyCniVEEjbPwnSmS9rGDGPzoVya914J_-tU',
+    appId: '1:906997854220:android:670d01c653fc18153c7e29',
+    messagingSenderId: '906997854220',
+    projectId: 'pleyo-d54d0',
+    databaseURL: 'https://pleyo-d54d0-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'pleyo-d54d0.appspot.com',
   );
 }
