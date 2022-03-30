@@ -102,30 +102,40 @@ class HomeView extends GetView<HomeController> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      VideoWidget(
-                        GameModel(
-                            id: "10",
-                            name: "Heartbeat Spaces",
-                            description: "Jeu de rythme • Arcade • Casual",
-                            url:
-                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        onTap: () {
-                          showBottomSheetModal(context);
-                        },
-                        key: const ValueKey(1),
-                      ),
-                      VideoWidget(
-                        GameModel(
-                            id: "10",
-                            name: "Heartbeat Spaces",
-                            description: "Jeu de rythme • Arcade • Casual",
-                            url:
-                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        onTap: () {
-                          showBottomSheetModal(context);
-                        },
-                        key: const ValueKey(2),
-                      ),
+                      ObxValue<RxBool>((state) {
+                        return VideoWidget(
+                          GameModel(
+                              id: "10",
+                              name: "Heartbeat Spaces",
+                              description: "Jeu de rythme • Arcade • Casual",
+                              url:
+                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                          buttonColor: state.value
+                              ? ColorCode.customAccent2Background
+                              : ColorCode.yellow3Background,
+                          onTap: () {
+                            showBottomSheetModal(context);
+                          },
+                          key: const ValueKey(1),
+                        );
+                      }, controller.isChampionnat),
+                      ObxValue<RxBool>((state) {
+                        return VideoWidget(
+                          GameModel(
+                              id: "10",
+                              name: "Heartbeat Spaces",
+                              description: "Jeu de rythme • Arcade • Casual",
+                              url:
+                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                          buttonColor: state.value
+                              ? ColorCode.customAccent2Background
+                              : ColorCode.yellow3Background,
+                          onTap: () {
+                            showBottomSheetModal(context);
+                          },
+                          key: const ValueKey(1),
+                        );
+                      }, controller.isChampionnat),
                     ],
                   ),
                 ),
@@ -147,18 +157,23 @@ class HomeView extends GetView<HomeController> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      VideoWidget(
-                        GameModel(
-                            id: "10",
-                            name: "Heartbeat Spaces",
-                            description: "Jeu de rythme • Arcade • Casual",
-                            url:
-                                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-                        onTap: () {
-                          showBottomSheetModal(context);
-                        },
-                        key: const ValueKey(3),
-                      ),
+                      ObxValue<RxBool>((state) {
+                        return VideoWidget(
+                          GameModel(
+                              id: "10",
+                              name: "Heartbeat Spaces",
+                              description: "Jeu de rythme • Arcade • Casual",
+                              url:
+                              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                          buttonColor: state.value
+                              ? ColorCode.customAccent2Background
+                              : ColorCode.yellow3Background,
+                          onTap: () {
+                            showBottomSheetModal(context);
+                          },
+                          key: const ValueKey(1),
+                        );
+                      }, controller.isChampionnat),
                     ],
                   ),
                 ),
@@ -344,8 +359,11 @@ class HomeView extends GetView<HomeController> {
                   ),
                   border: Border.all(
                       width: 3.0,
-                      color: const Color(
-                          ColorCode.accentLightColor)),
+                      color: controller.isChampionnat.value
+                          ? const Color(
+                          ColorCode.accentLightColor)
+                          : const Color(
+                          ColorCode.yellowBackground)),
                 ),
                 child:  AnimatedSize(
                   duration: const Duration(milliseconds:250),
@@ -383,30 +401,39 @@ class HomeView extends GetView<HomeController> {
               ) ;
             } , controller.isLogoutActive),
           ),
-          GestureDetector(
-            onTap: () => controller.onLogoutClicked(),
-            child: Container(
-              width: 60,
-              height: 60,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
+          ObxValue((state){
+            return GestureDetector(
+              onTap: () => controller.onLogoutClicked(),
+              child: Container(
+                width: 60,
+                height: 60,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  ),
+                  border: Border.all(
+                      width: 3.0,
+                      color: controller.isChampionnat.value
+                          ? const Color(
+                          ColorCode.accentLightColor)
+                          : const Color(
+                          ColorCode.yellowBackground)),
+                  color: controller.isChampionnat.value
+                      ? const Color(
+                      ColorCode.accentLightColor)
+                      : const Color(
+                      ColorCode.yellowBackground),
                 ),
-                border: Border.all(
-                    width: 3.0,
-                    color: const Color(
-                        ColorCode.accentLightColor)),
-                color:
-                const Color(ColorCode.accentLightColor),
+                child: SvgPicture.asset(
+                  'assets/images/icon_logout.svg',
+                  fit: BoxFit.fill,
+                ),
               ),
-              child: SvgPicture.asset(
-                'assets/images/icon_logout.svg',
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
+            ) ;
+          }, controller.isChampionnat)
+
         ],
       ),
     ) ;
@@ -610,6 +637,6 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       );
-    }, controller.isParty) ;
+    }, controller.isChampionnat) ;
   }
 }
