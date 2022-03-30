@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/main.dart';
 import 'package:pleyo_tablet_app/model/machine_model.dart';
@@ -49,12 +48,11 @@ class HomeController extends SuperController<bool> {
         if (machineVariation == null) {
           game.variationList?.clear();
         } else {
-          List<String?> machineVariationIds = machineVariation.variationList!
-              .map((e) => e.idVariation)
+          List<String?> machineVariationIds =
+          machineVariation.variationList!.map((e) => e.idVariation)
               .toList();
           //remove games thats not included in the machine
-          game.variationList?.removeWhere(
-              (element) => !machineVariationIds.contains(element.idVariation));
+          game.variationList?.removeWhere((element) => !machineVariationIds.contains(element.idVariation));
         }
 
         return game;
@@ -178,46 +176,75 @@ class HomeController extends SuperController<bool> {
 
   void startGame(GameModel game, VariationList variant, String playerName,
       int diff) async {
-    // var now = DateTime.now();
+    var now = DateTime.now();
     //check available balance
-    // var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
-    // var qrCodeEntity = await currentQrCodeRef.get();
-    // var qrCode =
-    //     QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>);
-    // if (qrCode.isLocked == "true") {
-    //   Get.snackbar("Error", "Try Later");
-    //   return;
-    // }
-    // await currentQrCodeRef.child("isLocked").set("true");
-    // if (qrCode.remainingCredit! < 10) {
-    //   Get.snackbar("Error", "You don`t have enough points ");
-    //   return;
-    // }
-    //
-    // // var currentPoints = codeRef.
-    // var startGameData = StartGameData(
-    //     difficultyPlayed: diff.toString(),
-    //     gameName: game.gameName,
-    //     idGame: game.idGame,
-    //     idMachine: "0",
-    //     idVariation: variant.idVariation,
-    //     isOnPartyMode: (!isChampion.value).toString(),
-    //     partyName: playerName,
-    //     playerNickName: playerName,
-    //     publicHashtag: qrCodeModel.value.publicHashTag,
-    //     globalLeaderboardName: "${now.month}_${now.year}");
-    // var newCommand = messageQueueRef.push();
-    // newCommand
-    //     .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
-    //
-    // await currentQrCodeRef
-    //     .child("remainingCredit")
-    //     .set(qrCode.remainingCredit! - 10);
+    var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
+    try {
+      var transactionResult = await currentQrCodeRef.runTransaction((value) {
+        if(value == null) {
+          return Transaction.abort();
+        }
 
-    Get.rootDelegate.toNamed(Routes.GAME_STATUS, parameters: {
-      "game_mode": isChampion.value.toString(),
-      "points": qrCodeModel.value.remainingCredit.toString(),
-      "player_name": playerName
-    });
+        var qrCode = QrCodeModel.fromJson(value as Map<dynamic, dynamic>) ;
+
+        if(qrCode.isLocked == "true") {
+          Get.snackbar("Error", "Your card currently used to run game on other machine, please try again");
+          return Transaction.abort();
+        }else if((qrCode.remainingCredit??0) < 10){
+          Get.snackbar("Error", "You don't have enough points to run this game ");
+          return Transaction.abort();
+        }
+
+        qrCode.remainingCredit = qrCode.remainingCredit! - 10 ;
+        qrCode.isLocked = "true" ;
+
+        return Transaction.success(
+          qrCode.toJson()
+        ) ;
+      });
+
+      if(!transactionResult.committed){
+        return ;
+      }
+
+      // var currentPoints = codeRef.
+      var startGameData = StartGameData(
+          difficultyPlayed: diff.toString(),
+          gameName: game.gameName,
+          idGame: game.idGame,
+          idMachine: MACHINE_ID,
+          idVariation: variant.idVariation,
+          isOnPartyMode: (!isChampion.value).toString(),
+          partyName: playerName,
+          playerNickName: playerName,
+          publicHashtag: qrCodeModel.value.publicHashTag?.substring(
+              qrCodeModel.value.publicHashTag!.length - 5),
+          globalLeaderboardName: "${now.month}_${now.year}");
+
+      var newCommand = messageQueueRef.push();
+
+      newCommand
+          .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
+
+      throw Error() ;
+    }catch (e){
+      //return the credit if the game not started
+      await currentQrCodeRef.update({
+        "remainingCredit": ServerValue.increment(10),
+      });
+    } finally {
+      await currentQrCodeRef.update({
+        "isLocked": "false",
+      });
+    }
+    // Get.rootDelegate
+    //     .toNamed(Routes.GAME_STATUS, parameters: {
+    //   "game_mode":
+    //   controller.isChampion.value.toString(),
+    //   "points": controller
+    //       .qrCodeModel.value.remainingCredit
+    //       .toString(),
+    //   "player_name": "Michel"
+    // });
   }
 }
