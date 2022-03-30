@@ -10,7 +10,7 @@ abstract class Routes {
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
   static const HOME = _Paths.HOME;
   static const CUSTOM_TRIAL_TICKET = _Paths.CUSTOM_TRIAL_TICKET;
-  static const LOGIN = _Paths.LOGIN;
+  static const GAME_STATUS = _Paths.GAME_STATUS;
 }
 
 abstract class _Paths {
@@ -18,6 +18,6 @@ abstract class _Paths {
   static const SCAN_QR = '/scan_qr';
   static const AVAILABLE_POINTS = '/available_points';
   static const HOME = '/home';
-  static const LOGIN = '/login';
+  static const GAME_STATUS = '/game_status';
   static const CUSTOM_TRIAL_TICKET = '/custom_trial';
 }

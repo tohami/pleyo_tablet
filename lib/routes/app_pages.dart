@@ -9,8 +9,8 @@ import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.d
 import '../middleware/auth_middleware.dart';
 import '../pages/home/bindings/home_binding.dart';
 import '../pages/home/presentation/views/home_view.dart';
-import '../pages/login/bindings/login_binding.dart';
-import '../pages/login/presentation/views/login_view.dart';
+import '../pages/game_status/bindings/game_status_binding.dart';
+import '../pages/game_status/presentation/views/game_status_view.dart';
 import '../pages/splash/bindings/splash_binding.dart';
 import '../pages/splash/presentation/views/splash_view.dart';
 
@@ -42,9 +42,9 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: Routes.LOGIN,
-      page: () => LoginView(),
-      binding: LoginBinding(),
+      name: Routes.GAME_STATUS,
+      page: () => GameStatusView(),
+      binding: GameStatusBinding(),
     ),
     GetPage(
       name: Routes.CUSTOM_TRIAL_TICKET,
