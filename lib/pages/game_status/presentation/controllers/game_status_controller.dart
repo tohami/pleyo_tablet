@@ -15,13 +15,13 @@ class GameStatusController extends SuperController<bool> {
     super.onInit();
     // change(null, status: RxStatus.success());
 
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      Get.rootDelegate.toNamed(Routes.GAME_RESULT, parameters: {
-        "game_mode": isChampion.toString(),
-        "points": points ?? "",
-        "player_name": playerName ?? ""
-      });
-    });
+    // Future.delayed(const Duration(seconds: 2)).then((value) {
+    //   Get.rootDelegate.toNamed(Routes.GAME_RESULT, parameters: {
+    //     "game_mode": isChampion.toString(),
+    //     "points": points ?? "",
+    //     "player_name": playerName ?? ""
+    //   });
+    // });
   }
 
   @override

@@ -71,6 +71,17 @@ class HomeController extends SuperController<bool> {
       qrCodesRef.child(qrCodeModel.value.publicHashTag!).onValue.listen((event) {
         qrCodeModel.value = QrCodeModel.fromJson(event.snapshot.value as Map<dynamic, dynamic>);
       });
+
+
+      messageQueueRef
+          .limitToLast(1)
+          .onChildAdded
+          .timeout(const Duration(seconds: 5))
+          .listen((event) {
+        print("Msg" + event.snapshot.value.toString()) ;
+
+      }).onError((e) {
+      });
     } catch (e) {
       printError(info: e.toString());
     }
@@ -261,7 +272,7 @@ class HomeController extends SuperController<bool> {
       subscription = messageQueueRef
           .limitToLast(1)
           .onChildAdded
-          .timeout(const Duration(seconds: 5))
+          .timeout(const Duration(seconds: 15))
           .listen((event) {
         print(event.snapshot.value) ;
 
@@ -283,11 +294,18 @@ class HomeController extends SuperController<bool> {
           }
           event.snapshot.ref.remove() ;
           subscription?.cancel() ;
+          currentQrCodeRef.update({
+            "isLocked": "false",
+          });
+          gameStatus.value = 0;
         }
       })..onError((e) {
+        print("cancel maybe streem error");
         currentQrCodeRef.update({
           "remainingCredit": ServerValue.increment(10),
+          "isLocked": "false",
         });
+        gameStatus.value = 0;
         subscription?.cancel() ;
       });
 
@@ -299,15 +317,10 @@ class HomeController extends SuperController<bool> {
       print("cancel maybe error") ;
       await currentQrCodeRef.update({
         "remainingCredit": ServerValue.increment(10),
+        "isLocked": "false",
       });
       gameStatus.value = 0;
       subscription?.cancel();
-    } finally {
-      await currentQrCodeRef.update({
-        "isLocked": "false",
-      });
-      await Future.delayed(Duration(seconds: 5));
-      gameStatus.value = 0;
     }
   }
 }
