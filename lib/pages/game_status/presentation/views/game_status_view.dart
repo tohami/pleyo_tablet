@@ -17,67 +17,72 @@ class GameStatusView extends GetView<GameStatusController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          color: const Color(ColorCode.primary),
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  playerPointsWidget(),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  playerNameWidget(),
-                ],
-              ),
-              Expanded(child: Container()),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () => {showLogoutGameDialog(context)},
-                    child: Container(
-                      width: 420,
-                      height: 210,
-                      decoration: BoxDecoration(
-                        color: const Color(ColorCode.darkGrayBackground),
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                            width: 3.0,
-                            color: controller.isChampion
-                                ? const Color(ColorCode.accentLightColor)
-                                : const Color(ColorCode.yellowBackground)),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(ColorCode.shadowBackground),
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: CustomText(
-                          'Quitter',
-                          textStyle: TextStyles.textXLarge.copyWith(
-                            color: controller.isChampion
-                                ? const Color(ColorCode.accentLightColor)
-                                : const Color(ColorCode.yellowBackground),
-                            height: 0.5833333333333334,
-                            fontFamily: 'Parisine Plus Std Clair',
+      child: WillPopScope(
+        onWillPop: () async {
+          return Future.value(false) ;
+        } ,
+        child: Scaffold(
+          body: Container(
+            color: const Color(ColorCode.primary),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    playerPointsWidget(),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    playerNameWidget(),
+                  ],
+                ),
+                Expanded(child: Container()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => {showLogoutGameDialog(context)},
+                      child: Container(
+                        width: 420,
+                        height: 210,
+                        decoration: BoxDecoration(
+                          color: const Color(ColorCode.darkGrayBackground),
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                              width: 3.0,
+                              color: controller.isChampion
+                                  ? const Color(ColorCode.accentLightColor)
+                                  : const Color(ColorCode.yellowBackground)),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(ColorCode.shadowBackground),
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: CustomText(
+                            'Quitter',
+                            textStyle: TextStyles.textXLarge.copyWith(
+                              color: controller.isChampion
+                                  ? const Color(ColorCode.accentLightColor)
+                                  : const Color(ColorCode.yellowBackground),
+                              height: 0.5833333333333334,
+                              fontFamily: 'Parisine Plus Std Clair',
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Expanded(child: Container()),
-            ],
+                  ],
+                ),
+                Expanded(child: Container()),
+              ],
+            ),
           ),
         ),
       ),
@@ -123,7 +128,7 @@ class GameStatusView extends GetView<GameStatusController> {
                 Container(
                   width: 70,
                   child: CustomText(
-                    controller.points ?? "",
+                    controller.points.toString() ?? "",
                     textAlign: TextAlign.start,
                     textStyle: TextStyles.textMedium.copyWith(
                       fontSize: 20,
@@ -317,6 +322,7 @@ class GameStatusView extends GetView<GameStatusController> {
                     textAlign: TextAlign.center,
                   ),
                   () {
+                    controller.stopGame() ;
                     Navigator.of(context).pop();
                   },
                   backGroundColor: const Color(ColorCode.darkGrayBackground),

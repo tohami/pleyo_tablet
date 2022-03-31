@@ -286,9 +286,10 @@ class HomeController extends SuperController<bool> {
               gameStartedData.playerNickName == playerName &&
               gameStartedData.gameDuration == -1 &&
               gameStartedData.score == -1) {
-            Get.rootDelegate.toNamed(Routes.GAME_STATUS, parameters: {
-              "game_mode": isChampoinship.value.toString(),
-              "points": qrCodeModel.value.remainingCredit.toString(),
+            Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
+              "game_data" : gameStartedData.toJson() ,
+              "mode": isChampoinship.value,
+              "points": qrCodeModel.value.remainingCredit,
               "player_name": playerName
             });
           }

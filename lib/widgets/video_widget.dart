@@ -17,11 +17,10 @@ class VideoWidget extends StatelessWidget {
       {required this.onTap, required this.buttonColor, Key? key})
       : super(key: key) {
     _controller = VideoPlayerController.network(variantModel.urlVideoTablet!,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false));
-      // ..initialize().then((_) {
-      //   isInitialized.value = true;
-      //   _controller.play();
-      // });
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false))
+      ..initialize().then((_) {
+        isInitialized.value = true;
+      });
     _controller.setLooping(true);
     _controller.setVolume(0.0);
   }
@@ -29,7 +28,10 @@ class VideoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        _controller.play() ;
+        onTap() ;
+      },
       child: Container(
         width: 315,
         height: 256,
