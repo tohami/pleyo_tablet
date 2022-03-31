@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -41,22 +38,33 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC0fmdhYlJ78QCWg90QloTnsTqJozaSdFY',
-    appId: '1:906997854220:web:82122d911a93b7f03c7e29',
-    messagingSenderId: '906997854220',
-    projectId: 'pleyo-d54d0',
-    authDomain: 'pleyo-d54d0.firebaseapp.com',
-    databaseURL: 'https://pleyo-d54d0-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pleyo-d54d0.appspot.com',
-    measurementId: 'G-CR0JP0Y7VS',
+    apiKey: 'AIzaSyBG2Jxyl1PlQbe4S3IvNlo7cNbPAZmSPJ8',
+    appId: '1:843733599056:web:70f4909b687d5f3577e255',
+    messagingSenderId: '843733599056',
+    projectId: 'spacejumpevreux-4820c',
+    authDomain: 'spacejumpevreux-4820c.firebaseapp.com',
+    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'spacejumpevreux-4820c.appspot.com',
+    measurementId: 'G-786QZ0CP7P',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCniVEEjbPwnSmS9rGDGPzoVya914J_-tU',
-    appId: '1:906997854220:android:670d01c653fc18153c7e29',
-    messagingSenderId: '906997854220',
-    projectId: 'pleyo-d54d0',
-    databaseURL: 'https://pleyo-d54d0-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pleyo-d54d0.appspot.com',
+    apiKey: 'AIzaSyAqAte8mr6VlaLRgB96pgFLslaVpaFhxg8',
+    appId: '1:843733599056:android:5d4fb995376a94cb77e255',
+    messagingSenderId: '843733599056',
+    projectId: 'spacejumpevreux-4820c',
+    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'spacejumpevreux-4820c.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyD2CY_MUVJAYY6K08GSKwv80A6VXiFWxgE',
+    appId: '1:843733599056:ios:d3fa6293b0b314a977e255',
+    messagingSenderId: '843733599056',
+    projectId: 'spacejumpevreux-4820c',
+    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'spacejumpevreux-4820c.appspot.com',
+    iosClientId: '843733599056-djc5lrhefpfjlq96iv68mk3i21ilqlp6.apps.googleusercontent.com',
+    iosBundleId: 'com.pleyo.tablet',
   );
 }

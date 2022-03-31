@@ -9,6 +9,7 @@ class StartGameData {
   String? partyName;
   String? playerNickName;
   String? publicHashtag;
+  String? dateTime;
 
   StartGameData(
       {this.difficultyPlayed,
@@ -20,7 +21,8 @@ class StartGameData {
         this.isOnPartyMode,
         this.partyName,
         this.playerNickName,
-        this.publicHashtag});
+        this.publicHashtag,
+        this.dateTime});
 
   StartGameData.fromJson(Map<String, dynamic> json) {
     difficultyPlayed = json['DifficultyPlayed'];
@@ -33,20 +35,22 @@ class StartGameData {
     partyName = json['PartyName'];
     playerNickName = json['PlayerNickName'];
     publicHashtag = json['PublicHashtag'];
+    dateTime = json['dateTime'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['DifficultyPlayed'] = this.difficultyPlayed;
-    data['GameName'] = this.gameName;
-    data['GlobalLeaderboardName'] = this.globalLeaderboardName;
-    data['IdGame'] = this.idGame;
-    data['IdMachine'] = this.idMachine;
-    data['IdVariation'] = this.idVariation;
-    data['IsOnPartyMode'] = this.isOnPartyMode;
-    data['PartyName'] = this.partyName;
-    data['PlayerNickName'] = this.playerNickName;
-    data['PublicHashtag'] = this.publicHashtag;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['DifficultyPlayed'] = difficultyPlayed;
+    data['GameName'] = gameName;
+    data['GlobalLeaderboardName'] = globalLeaderboardName;
+    data['IdGame'] = idGame;
+    data['IdMachine'] = idMachine;
+    data['IdVariation'] = idVariation;
+    data['IsOnPartyMode'] = isOnPartyMode;
+    data['PartyName'] = partyName;
+    data['PlayerNickName'] = playerNickName;
+    data['PublicHashtag'] = publicHashtag;
+    data['dateTime'] = dateTime;
     return data;
   }
 }

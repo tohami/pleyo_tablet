@@ -87,7 +87,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 Obx(() {
                   // isChampion must be called any where to force rebuild
-                  controller.isParty.value;
+                  controller.isChampoinship.value;
 
                   if(controller.games.isNotEmpty) {
                     return ListView.builder(
@@ -103,7 +103,7 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: controller.games[index],isChampion: controller.isParty.value,onPlayClicked: (variant) {
+                            GameWidget(game: controller.games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
                               showBottomSheetModal(context , variant , (diff , name) {
                                 controller.startGame(
@@ -166,7 +166,7 @@ class HomeView extends GetView<HomeController> {
       ),
       child: Obx(() {
         var isLogout = controller.isLogoutActive.value ;
-        var isChampion = controller.isParty.value ;
+        var isChampion = controller.isChampoinship.value ;
         var points = controller.qrCodeModel.value.remainingCredit.toString() ;
         return Row(
           children: [
@@ -462,6 +462,6 @@ class HomeView extends GetView<HomeController> {
           )
         ],
       );
-    }, controller.isParty) ;
+    }, controller.isChampoinship) ;
   }
 }
