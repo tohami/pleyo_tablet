@@ -16,16 +16,19 @@ class StartGameBottomSheet extends StatelessWidget {
   final HomeController controller;
   final RxString playerIsSelected = "".obs;
   final VariationList gameVariation;
-  final Function(int , String) onDifficultSelected  ;
+  final Function(int, String) onDifficultSelected;
   StartGameBottomSheet(
-      {required this.controller, required this.gameVariation,required this.onDifficultSelected, Key? key})
+      {required this.controller,
+      required this.gameVariation,
+      required this.onDifficultSelected,
+      Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var gameDifficulties =
         gameVariation.difficultyAvailable!.map((e) => e.difficulty ?? "");
-    print(gameDifficulties) ;
+    print(gameDifficulties);
     return Obx(
       () {
         return Container(
@@ -118,7 +121,8 @@ class StartGameBottomSheet extends StatelessWidget {
                                 title: 'Débutant',
                                 color: ColorCode.greenBackground,
                                 onTap: () {
-                                   onDifficultSelected(0, playerIsSelected.value) ;
+                                  onDifficultSelected(
+                                      0, playerIsSelected.value);
                                 },
                               )
                             : Container(),
@@ -127,26 +131,28 @@ class StartGameBottomSheet extends StatelessWidget {
                                 title: 'Initié',
                                 color: ColorCode.yellow2Background,
                                 onTap: () {
-                                  onDifficultSelected(1, playerIsSelected.value) ;
+                                  onDifficultSelected(
+                                      1, playerIsSelected.value);
                                 },
                               )
                             : Container(),
                         gameDifficulties.contains("2")
                             ? GameDifficultyWidget(
-                          title: 'Difficile',
-                          color: Colors.deepOrange.value,
-                          onTap: () {
-                            onDifficultSelected(2, playerIsSelected.value) ;
-
-                          },
-                        )
+                                title: 'Difficile',
+                                color: Colors.deepOrange.value,
+                                onTap: () {
+                                  onDifficultSelected(
+                                      2, playerIsSelected.value);
+                                },
+                              )
                             : Container(),
                         gameDifficulties.contains("3")
                             ? GameDifficultyWidget(
                                 title: 'Très difficile',
                                 color: ColorCode.redBackground,
                                 onTap: () {
-                                  onDifficultSelected(3, playerIsSelected.value) ;
+                                  onDifficultSelected(
+                                      3, playerIsSelected.value);
                                 },
                               )
                             : Container(),

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/pages/available_points/bindings/available_points_binding.dart';
 import 'package:pleyo_tablet_app/pages/available_points/presentation/views/available_points_view.dart';
-import 'package:pleyo_tablet_app/pages/custom_trial_ticket/bindings/custom_trial_ticket_binding.dart';
-import 'package:pleyo_tablet_app/pages/custom_trial_ticket/presentation/views/custom_trial_ticket_view.dart';
+import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.dart';
+import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 
@@ -47,9 +47,9 @@ class AppPages {
       binding: GameStatusBinding(),
     ),
     GetPage(
-      name: Routes.CUSTOM_TRIAL_TICKET,
-      page: () => const CustomTrialTicketView(),
-      binding: CustomTrialTicketBinding(),
+      name: Routes.GAME_RESULT,
+      page: () => const GameResultView(),
+      binding: GameResultBinding(),
     ),
   ];
 }
