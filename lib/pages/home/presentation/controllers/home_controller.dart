@@ -15,7 +15,7 @@ class HomeController extends SuperController<bool> {
 
   RxBool isAddPlayerActive = false.obs;
 
-  RxBool isChampion = true.obs;
+  RxBool isParty = true.obs;
 
   final RxList<GameModel> games = RxList<GameModel>([]);
 
@@ -132,7 +132,7 @@ class HomeController extends SuperController<bool> {
   }
 
   void changeMode(bool val) {
-    isChampion.value = val;
+    isParty.value = val;
   }
 
   void onLogoutClicked() {
@@ -174,9 +174,17 @@ class HomeController extends SuperController<bool> {
     }
   }
 
+  //0 nothing
+  //1 starting
+  //2 started
+  RxInt gameStatus = 0.obs ;
+
   void startGame(GameModel game, VariationList variant, String playerName,
       int diff) async {
     var now = DateTime.now();
+
+    gameStatus.value = 1 ;
+
     //check available balance
     var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
     try {
@@ -206,7 +214,6 @@ class HomeController extends SuperController<bool> {
       if(!transactionResult.committed){
         return ;
       }
-
       // var currentPoints = codeRef.
       var startGameData = StartGameData(
           difficultyPlayed: diff.toString(),
@@ -214,7 +221,7 @@ class HomeController extends SuperController<bool> {
           idGame: game.idGame,
           idMachine: MACHINE_ID,
           idVariation: variant.idVariation,
-          isOnPartyMode: (!isChampion.value).toString(),
+          isOnPartyMode: (isParty.value).toString(),
           partyName: playerName,
           playerNickName: playerName,
           publicHashtag: qrCodeModel.value.publicHashTag?.substring(
@@ -226,16 +233,20 @@ class HomeController extends SuperController<bool> {
       newCommand
           .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
 
-      throw Error() ;
+      gameStatus.value = 2 ;
+      // throw Error() ;
     }catch (e){
       //return the credit if the game not started
       await currentQrCodeRef.update({
         "remainingCredit": ServerValue.increment(10),
       });
+      gameStatus.value = 0 ;
     } finally {
       await currentQrCodeRef.update({
         "isLocked": "false",
       });
+      await Future.delayed(Duration(seconds: 5)) ;
+      // gameStatus.value = 0 ;
     }
     // Get.rootDelegate
     //     .toNamed(Routes.GAME_STATUS, parameters: {
