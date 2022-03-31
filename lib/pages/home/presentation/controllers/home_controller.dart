@@ -21,7 +21,7 @@ class HomeController extends SuperController<bool> {
 
   HomeController();
 
-  String username = "";
+  RxString selectedPlayerName = "".obs;
 
   DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
   DatabaseReference machineRef = FirebaseDatabase.instance.ref("Machine");
@@ -34,6 +34,9 @@ class HomeController extends SuperController<bool> {
     super.onInit();
     change(null, status: RxStatus.success());
     try {
+      if( qrCodeModel.value.players != null && qrCodeModel.value.players!.isNotEmpty) {
+        selectedPlayerName.value = qrCodeModel.value.players!.last ;
+      }
       var machineEntity = await machineRef.child(MACHINE_ID).get();
       var machine =
           MachineModel.fromJson(machineEntity.value as Map<dynamic, dynamic>);
@@ -154,23 +157,28 @@ class HomeController extends SuperController<bool> {
   }
 
   void addPlayer(String val) async {
+    if(val.trim().length < 4) {
+      isAddPlayerActive.value = false ;
+      return ;
+    }
     var qrCode = qrCodeModel.value;
-    var players = qrCode.players ?? [];
-    if (players.contains(val)) {
-      players.remove(val);
+    List<String> players = qrCode.players?.toList() ?? [];
+    if (!players.contains(val)) {
       players.add(val);
     }
+    qrCode.players = players ;
     qrCodeModel.value = qrCode;
     print("add player");
 
     try {
-      await qrCodesRef
-          .child("${qrCode.publicHashTag!}/players")
-          .push()
-          .set({val});
+      await qrCodesRef.child(qrCodeModel.value.publicHashTag!).child("players")
+          .set(players);
+      selectedPlayerName.value = val ;
       // print(res)
     } catch (e) {
       print(e);
+    }finally {
+      isAddPlayerActive.value = false ;
     }
   }
 

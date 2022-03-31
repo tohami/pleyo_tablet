@@ -71,7 +71,7 @@ class StartGameBottomSheet extends StatelessWidget {
                           showAddPlayerDialog(context);
                         },
                       ),
-                      ...controller.qrCodeModel.value.players!.map((e) {
+                      ...(controller.qrCodeModel.value.players??[]).map((e) {
                         return PlayerWidget(
                           playerName: e,
                           isSelected: e == playerIsSelected.value,
@@ -255,6 +255,7 @@ class StartGameBottomSheet extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             () {
+                              controller.addPlayer(playerName.value);
                               Navigator.of(context).pop();
                             },
                             backGroundColor:
