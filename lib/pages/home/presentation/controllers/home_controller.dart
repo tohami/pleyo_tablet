@@ -45,20 +45,13 @@ class HomeController extends SuperController<bool> {
       var machineEntity = await machineRef.child(MACHINE_ID).get();
       var machine =
           MachineModel.fromJson(machineEntity.value as Map<dynamic, dynamic>);
-      print("machine");
-      print(machine.toJson());
 
       var gamesEntity = await gamesRef.get();
       games.addAll(gamesEntity.children.map((e) {
         var game = GameModel.fromJson(e.value as Map<dynamic, dynamic>);
 
-        print("game");
-        print(game.toJson());
-
         GameVariationList? machineVariation = machine.gameVariationList
             ?.firstWhereOrNull((element) => element.idGame == game.idGame);
-        print("GameVariationList");
-        print(machineVariation?.toJson());
 
         if (machineVariation == null ||
             machineVariation.variationList == null) {
@@ -67,8 +60,6 @@ class HomeController extends SuperController<bool> {
           List<String?> machineVariationIds = machineVariation.variationList!
               .map((e) => e.idVariation)
               .toList();
-          print("machineVariationIds");
-          print(machineVariationIds);
           //remove games thats not included in the machine
           game.variationList?.removeWhere(
               (element) => !machineVariationIds.contains(element.idVariation));
@@ -76,8 +67,12 @@ class HomeController extends SuperController<bool> {
 
         return game;
       }));
+
+      qrCodesRef.child(qrCodeModel.value.publicHashTag!).onValue.listen((event) {
+        qrCodeModel.value = QrCodeModel.fromJson(event.snapshot.value as Map<dynamic, dynamic>);
+      });
     } catch (e) {
-      print(e);
+      printError(info: e.toString());
     }
   }
 
@@ -210,6 +205,7 @@ class HomeController extends SuperController<bool> {
     var now = DateTime.now();
     StreamSubscription? subscription;
     gameStatus.value = 1;
+    await Future.delayed(const Duration(seconds: 1));
 
     //check available balance
     var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
@@ -238,6 +234,7 @@ class HomeController extends SuperController<bool> {
       });
 
       if (!transactionResult.committed) {
+        gameStatus.value = 0;
         return;
       }
 
@@ -284,7 +281,14 @@ class HomeController extends SuperController<bool> {
               "player_name": playerName
             });
           }
+          event.snapshot.ref.remove() ;
+          subscription?.cancel() ;
         }
+      })..onError((e) {
+        currentQrCodeRef.update({
+          "remainingCredit": ServerValue.increment(10),
+        });
+        subscription?.cancel() ;
       });
 
       // gameStatus.value = 2 ;
@@ -292,6 +296,7 @@ class HomeController extends SuperController<bool> {
       // throw Error() ;
     } catch (e) {
       //return the credit if the game not started
+      print("cancel maybe error") ;
       await currentQrCodeRef.update({
         "remainingCredit": ServerValue.increment(10),
       });
@@ -302,7 +307,6 @@ class HomeController extends SuperController<bool> {
         "isLocked": "false",
       });
       await Future.delayed(Duration(seconds: 5));
-      subscription?.cancel();
       gameStatus.value = 0;
     }
   }

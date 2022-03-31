@@ -29,9 +29,7 @@ class StartGameBottomSheet extends StatelessWidget {
     var gameDifficulties =
         gameVariation.difficultyAvailable!.map((e) => e.difficulty ?? "");
     print(gameDifficulties);
-    return Obx(
-      () {
-        return Container(
+    return Container(
           margin: const EdgeInsets.symmetric(horizontal: 56, vertical: 66),
           // height: playerIsSelected.value ? 500 : 150,
           child: Column(
@@ -59,113 +57,116 @@ class StartGameBottomSheet extends StatelessWidget {
               const SizedBox(
                 height: 32,
               ),
-              Container(
-                height: 60,
-                child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
-                    children: [
-                      PlayerWidget(
-                        addPlayer: true,
-                        onTap: () {
-                          showAddPlayerDialog(context);
-                        },
-                      ),
-                      ...(controller.qrCodeModel.value.players??[]).map((e) {
-                        return PlayerWidget(
-                          playerName: e,
-                          isSelected: e == playerIsSelected.value,
+              Obx(() {
+                return SizedBox(
+                  height: 60,
+                  child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      children: [
+                        PlayerWidget(
+                          addPlayer: true,
                           onTap: () {
-                            playerIsSelected.value = e;
+                            showAddPlayerDialog(context);
                           },
-                        );
-                      })
-                    ]),
-              ),
+                        ),
+                        ...(controller.qrCodeModel.value.players??[]).map((e) {
+                          return PlayerWidget(
+                            playerName: e,
+                            isSelected: e == playerIsSelected.value,
+                            onTap: () {
+                              playerIsSelected.value = e;
+                            },
+                          );
+                        })
+                      ]),
+                );
+              }),
               AnimatedSize(
                 duration: const Duration(seconds: 1),
                 curve: Curves.fastOutSlowIn,
-                child: SizedBox(
-                  width: double.infinity,
-                  key: ValueKey(playerIsSelected.value),
-                  child: Visibility(
-                    visible: playerIsSelected.value.isNotEmpty,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 50,
+                child: Obx(() {
+                    return SizedBox(
+                      width: double.infinity,
+                      key: ValueKey(playerIsSelected.value),
+                      child: Visibility(
+                        visible: playerIsSelected.value.isNotEmpty,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            CustomText(
+                              'Choix de la difficulté',
+                              textStyle: TextStyles.textMedium.copyWith(
+                                fontFamily: 'Parisine Plus Std Clair',
+                                fontSize: 20,
+                                color: const Color(ColorCode.white3Background),
+                                height: 0.6,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            CustomText(
+                              'Quelle difficulté ?',
+                              textStyle: TextStyles.textLarge.copyWith(
+                                fontSize: 40,
+                                height: 0.3,
+                              ),
+                            ),
+                            gameDifficulties.contains("0")
+                                ? GameDifficultyWidget(
+                                    title: 'Débutant',
+                                    color: ColorCode.greenBackground,
+                                    onTap: () {
+                                      onDifficultSelected(
+                                          0, playerIsSelected.value);
+                                    },
+                                  )
+                                : Container(),
+                            gameDifficulties.contains("1")
+                                ? GameDifficultyWidget(
+                                    title: 'Initié',
+                                    color: ColorCode.yellow2Background,
+                                    onTap: () {
+                                      onDifficultSelected(
+                                          1, playerIsSelected.value);
+                                    },
+                                  )
+                                : Container(),
+                            gameDifficulties.contains("2")
+                                ? GameDifficultyWidget(
+                                    title: 'Difficile',
+                                    color: Colors.deepOrange.value,
+                                    onTap: () {
+                                      onDifficultSelected(
+                                          2, playerIsSelected.value);
+                                    },
+                                  )
+                                : Container(),
+                            gameDifficulties.contains("3")
+                                ? GameDifficultyWidget(
+                                    title: 'Très difficile',
+                                    color: ColorCode.redBackground,
+                                    onTap: () {
+                                      onDifficultSelected(
+                                          3, playerIsSelected.value);
+                                    },
+                                  )
+                                : Container(),
+                          ],
                         ),
-                        CustomText(
-                          'Choix de la difficulté',
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontFamily: 'Parisine Plus Std Clair',
-                            fontSize: 20,
-                            color: const Color(ColorCode.white3Background),
-                            height: 0.6,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        CustomText(
-                          'Quelle difficulté ?',
-                          textStyle: TextStyles.textLarge.copyWith(
-                            fontSize: 40,
-                            height: 0.3,
-                          ),
-                        ),
-                        gameDifficulties.contains("0")
-                            ? GameDifficultyWidget(
-                                title: 'Débutant',
-                                color: ColorCode.greenBackground,
-                                onTap: () {
-                                  onDifficultSelected(
-                                      0, playerIsSelected.value);
-                                },
-                              )
-                            : Container(),
-                        gameDifficulties.contains("1")
-                            ? GameDifficultyWidget(
-                                title: 'Initié',
-                                color: ColorCode.yellow2Background,
-                                onTap: () {
-                                  onDifficultSelected(
-                                      1, playerIsSelected.value);
-                                },
-                              )
-                            : Container(),
-                        gameDifficulties.contains("2")
-                            ? GameDifficultyWidget(
-                                title: 'Difficile',
-                                color: Colors.deepOrange.value,
-                                onTap: () {
-                                  onDifficultSelected(
-                                      2, playerIsSelected.value);
-                                },
-                              )
-                            : Container(),
-                        gameDifficulties.contains("3")
-                            ? GameDifficultyWidget(
-                                title: 'Très difficile',
-                                color: ColorCode.redBackground,
-                                onTap: () {
-                                  onDifficultSelected(
-                                      3, playerIsSelected.value);
-                                },
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  }
                 ),
               )
             ],
           ),
         );
-      },
-    );
   }
 
   void showAddPlayerDialog(BuildContext context) {
