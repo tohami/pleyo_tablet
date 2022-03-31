@@ -232,8 +232,12 @@ class HomeController extends SuperController<bool> {
 
       newCommand
           .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
-
+      messageQueueRef.limitToFirst(1).onChildAdded.listen((event) {
+        print("child added") ;
+        print(event.snapshot.value) ;
+      });
       gameStatus.value = 2 ;
+
       // throw Error() ;
     }catch (e){
       //return the credit if the game not started
