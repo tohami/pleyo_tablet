@@ -4,7 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
+import 'package:pleyo_tablet_app/widgets/custom_button.dart';
+import 'package:pleyo_tablet_app/widgets/custom_button_container.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
+import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 
 import '../controllers/game_status_controller.dart';
 
@@ -37,7 +40,7 @@ class GameStatusView extends GetView<GameStatusController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () => {},
+                    onTap: () => {showLogoutGameDialog(context)},
                     child: Container(
                       width: 420,
                       height: 210,
@@ -243,5 +246,93 @@ class GameStatusView extends GetView<GameStatusController> {
         ],
       ),
     );
+  }
+
+  void showLogoutGameDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color(ColorCode.primary),
+            content: Container(
+              width: 370,
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CustomText(
+                    'Voulez-vous vraiment\nquitter la partie ?',
+                    textStyle: TextStyles.textLarge.copyWith(
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 17,
+                  ),
+                  CustomText(
+                    '(Vos crédits ne vous seront pas remboursés)',
+                    textStyle: TextStyles.textMedium.copyWith(
+                        fontFamily: 'Parisine Plus Std Clair',
+                        fontSize: 18,
+                        color: const Color(ColorCode.white3Background)),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              CustomButtonContainer(
+                CustomButton(
+                  CustomText(
+                    'Non',
+                    textStyle: TextStyles.textMedium.copyWith(
+                        color: const Color(ColorCode.black2Background),
+                        fontSize: 25),
+                    textAlign: TextAlign.center,
+                  ),
+                  () {
+                    Navigator.of(context).pop();
+                  },
+                  backGroundColor: const Color(ColorCode.white3Background),
+                  borderRadius: 4,
+                ),
+                width: 150,
+                height: 60,
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              CustomButtonContainer(
+                CustomButton(
+                  CustomText(
+                    'Oui',
+                    textStyle: TextStyles.textMedium.copyWith(
+                        color: controller.isChampion
+                            ? const Color(ColorCode.accentLightColor)
+                            : const Color(ColorCode.yellowBackground),
+                        fontSize: 25),
+                    textAlign: TextAlign.center,
+                  ),
+                  () {
+                    Navigator.of(context).pop();
+                  },
+                  backGroundColor: const Color(ColorCode.darkGrayBackground),
+                  borderRadius: 4,
+                ),
+                width: 150,
+                height: 60,
+                borderWidth: 2.0,
+                borderColor: controller.isChampion
+                    ? ColorCode.accentLightColor
+                    : ColorCode.yellowBackground,
+              ),
+            ],
+            actionsPadding: const EdgeInsets.only(bottom: 20),
+            actionsAlignment: MainAxisAlignment.center,
+          );
+        });
   }
 }
