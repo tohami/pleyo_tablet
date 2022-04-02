@@ -109,8 +109,13 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
   DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
 
 
-  void onQRViewCreated(QRViewController controller) {
+  void onQRViewCreated(QRViewController controller) async{
     this.controller = controller;
+    //
+    // CameraFacing cameraInfo = await controller.getCameraInfo();
+    // if(cameraInfo == CameraFacing.back){
+    //   await controller.flipCamera();
+    // }
     controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
       try {

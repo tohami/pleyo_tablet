@@ -128,7 +128,7 @@ class GameStatusView extends GetView<GameStatusController> {
                 Container(
                   width: 70,
                   child: CustomText(
-                    controller.points.toString() ?? "",
+                    controller.points.toString(),
                     textAlign: TextAlign.start,
                     textStyle: TextStyles.textMedium.copyWith(
                       fontSize: 20,
