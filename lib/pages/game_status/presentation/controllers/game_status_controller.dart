@@ -33,25 +33,27 @@ class GameStatusController extends SuperController<bool> {
         .listen((event) {
       Map? value = event.snapshot.value as Map?;
 
-      if (value != null && (value["CommandeId"] == "GAME_STOPPED")) {
+      if (value != null && (value["CommandeId"] == "GAME_STOPPED" || value["CommandeId"] == "LEADERBOARD_PUSH")) {
         var gameStartedData =
         GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
         if (gameStartedData.idMachine.toString() == MACHINE_ID &&
             gameStartedData.idGame == gameStartedData.idGame &&
             gameStartedData.idVariation == gameStartedData.idVariation &&
             gameStartedData.playerNickName == playerName) {
-          Get.rootDelegate.popRoute() ;
+          if(value["CommandeId"] == "GAME_STOPPED") {
+            Get.rootDelegate.popRoute();
+          }else {
+            Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
+              "game_mode": isChampion.toString(),
+              "points": gameStartedData.score.toString(),
+              "player_name": gameStartedData.playerNickName??""
+            });
+            messageQueueSubscription.cancel() ;
+          }
         }
       }
     });
 
-    // Future.delayed(const Duration(seconds: 2)).then((value) {
-    //   Get.rootDelegate.toNamed(Routes.GAME_RESULT, parameters: {
-    //     "game_mode": isChampion.toString(),
-    //     "points": points ?? "",
-    //     "player_name": playerName ?? ""
-    //   });
-    // });
   }
 
   @override
