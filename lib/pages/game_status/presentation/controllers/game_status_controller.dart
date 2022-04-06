@@ -19,6 +19,7 @@ class GameStatusController extends SuperController<bool> {
   GameStartedData? gameData = GameStartedData.fromJson(Get.rootDelegate.arguments()["game_data"]);
 
   DatabaseReference messageQueueRef = FirebaseDatabase.instance.ref("MessageQueue");
+  DatabaseReference leaderBoardRef = FirebaseDatabase.instance.ref("GlobalLeaderboard");
 
   late StreamSubscription messageQueueSubscription ;
 
@@ -30,7 +31,7 @@ class GameStatusController extends SuperController<bool> {
     messageQueueSubscription = messageQueueRef
         .limitToLast(1)
         .onChildAdded
-        .listen((event) {
+        .listen((event) async{
       Map? value = event.snapshot.value as Map?;
 
       if (value != null && (value["CommandeId"] == "GAME_STOPPED" || value["CommandeId"] == "LEADERBOARD_PUSH")) {
@@ -43,12 +44,15 @@ class GameStatusController extends SuperController<bool> {
           if(value["CommandeId"] == "GAME_STOPPED") {
             Get.rootDelegate.popRoute();
           }else {
+            messageQueueSubscription.cancel() ;
+            await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).push().set(
+              gameStartedData.toJson()
+            ) ;
             Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
               "game_mode": isChampion.toString(),
               "points": gameStartedData.score.toString(),
               "player_name": gameStartedData.playerNickName??""
             });
-            messageQueueSubscription.cancel() ;
           }
         }
       }

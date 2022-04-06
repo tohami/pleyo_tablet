@@ -111,11 +111,11 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
 
   void onQRViewCreated(QRViewController controller) async{
     this.controller = controller;
-    //
-    // CameraFacing cameraInfo = await controller.getCameraInfo();
-    // if(cameraInfo == CameraFacing.back){
-    //   await controller.flipCamera();
-    // }
+
+    CameraFacing cameraInfo = await controller.getCameraInfo();
+    if(cameraInfo == CameraFacing.back){
+      await controller.flipCamera();
+    }
     controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
       try {

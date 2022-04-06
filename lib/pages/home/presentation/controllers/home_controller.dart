@@ -272,8 +272,8 @@ class HomeController extends SuperController<bool> {
       subscription = messageQueueRef
           .limitToLast(1)
           .onChildAdded
-          .timeout(const Duration(seconds: 15))
-          .listen((event) {
+          .timeout(const Duration(seconds: 30))
+          .listen((event) async {
         print(event.snapshot.value) ;
 
         Map? value = event.snapshot.value as Map?;
@@ -286,6 +286,9 @@ class HomeController extends SuperController<bool> {
               gameStartedData.playerNickName == playerName &&
               gameStartedData.gameDuration == -1 &&
               gameStartedData.score == -1) {
+            if(Navigator.of(Get.context!).canPop()) {
+              Navigator.of(Get.context!).pop();
+            }
             Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
               "game_data" : gameStartedData.toJson() ,
               "mode": isChampoinship.value,

@@ -131,8 +131,17 @@ class HomeView extends GetView<HomeController> {
 
 
   showBottomSheetModal(BuildContext context , VariationList variation,Function(int , String) onDifficultSelected) {
-    return showModalBottomSheet(
-        context: context,
+    return Get.bottomSheet(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            StartGameBottomSheet(
+              controller: controller,
+              gameVariation: variation,
+              onDifficultSelected: onDifficultSelected,
+            ),
+          ],
+        ) ,
         backgroundColor: const Color(ColorCode.darkGrayBackground),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -140,20 +149,7 @@ class HomeView extends GetView<HomeController> {
             topRight: Radius.circular(30.0),
           ),
         ),
-        isScrollControlled: true,
-
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StartGameBottomSheet(
-                controller: controller,
-                gameVariation: variation,
-                onDifficultSelected: onDifficultSelected,
-              ),
-            ],
-          );
-        });
+        isScrollControlled: true) ;
   }
 
   Widget playerPointsWidget() {
@@ -377,6 +373,7 @@ class HomeView extends GetView<HomeController> {
           FlutterSwitch(
             width: 147.0,
             height: 60.0,
+            disabled: true,
             valueFontSize: 25.0,
             toggleSize: 45.0,
             value: state.value,

@@ -29,7 +29,7 @@ class VideoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _controller.play() ;
+        // _controller.play() ;
         onTap() ;
       },
       child: Container(
