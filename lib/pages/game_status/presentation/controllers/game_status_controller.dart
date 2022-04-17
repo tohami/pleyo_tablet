@@ -20,6 +20,7 @@ class GameStatusController extends SuperController<bool> {
 
   DatabaseReference messageQueueRef = FirebaseDatabase.instance.ref("MessageQueue");
   DatabaseReference leaderBoardRef = FirebaseDatabase.instance.ref("GlobalLeaderboard");
+  DatabaseReference gameHistoryRef = FirebaseDatabase.instance.ref("GameHistory");
 
   late StreamSubscription messageQueueSubscription ;
 
@@ -27,7 +28,12 @@ class GameStatusController extends SuperController<bool> {
   void onInit() {
     super.onInit();
     // change(null, status: RxStatus.success());
-
+    Map historyStartDataJson = gameData!.toJson() ;
+    historyStartDataJson.putIfAbsent("CreatedAt", () => DateTime.now().toIso8601String());
+    DatabaseReference gameHistory = gameHistoryRef.push() ;
+    gameHistory.set(
+      historyStartDataJson
+    ) ;
     messageQueueSubscription = messageQueueRef
         .limitToLast(1)
         .onChildAdded
@@ -48,12 +54,20 @@ class GameStatusController extends SuperController<bool> {
             await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).push().set(
               gameStartedData.toJson()
             ) ;
+
             Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
               "game_mode": isChampion.toString(),
-              "points": gameStartedData.score.toString(),
+              "points": points.toString(),
+              "score" :gameStartedData.score.toString() ,
               "player_name": gameStartedData.playerNickName??""
             });
           }
+          Map historyEndDataJson = gameStartedData.toJson() ;
+          historyEndDataJson.putIfAbsent("EndedAt", () => DateTime.now().toIso8601String());
+          historyEndDataJson.putIfAbsent("CreatedAt", () => historyStartDataJson["CreatedAt"]);
+          gameHistory.set(
+              historyEndDataJson
+          ) ;
         }
       }
     });

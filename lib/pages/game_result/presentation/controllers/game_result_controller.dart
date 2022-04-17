@@ -6,11 +6,17 @@ class GameResultController extends SuperController<bool> {
   String? points = Get.rootDelegate.parameters["points"];
 
   String? playerName = Get.rootDelegate.parameters["player_name"];
+
+  String? score = Get.rootDelegate.parameters["score"];
+
   GameResultController();
 
   @override
   void onInit() {
     change(null, status: RxStatus.success());
+    Future.delayed(const Duration(seconds: 10) , () {
+      Get.rootDelegate.popRoute();
+    });
   }
 
   @override

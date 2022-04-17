@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:number_slide_animation/number_slide_animation.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
@@ -70,8 +71,10 @@ class GameResultView extends GetView<GameResultController> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomText(
-                          '1832',
+                        NumberSlideAnimation(
+                          number : controller.score! ,
+                          duration: const Duration(seconds: 3),
+                          curve: Curves.easeOut,
                           textStyle: TextStyles.textXLarge.copyWith(
                             height: 0.5833333333333334,
                             shadows: [
