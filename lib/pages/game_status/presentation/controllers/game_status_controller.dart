@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
@@ -44,16 +45,40 @@ class GameStatusController extends SuperController<bool> {
         var gameStartedData =
         GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
         if (gameStartedData.idMachine.toString() == MACHINE_ID &&
-            gameStartedData.idGame == gameStartedData.idGame &&
-            gameStartedData.idVariation == gameStartedData.idVariation &&
+            gameStartedData.idGame == gameData?.idGame &&
+            gameStartedData.idVariation == gameData?.idVariation &&
             gameStartedData.playerNickName == playerName) {
           if(value["CommandeId"] == "GAME_STOPPED") {
             Get.rootDelegate.popRoute();
           }else {
             messageQueueSubscription.cancel() ;
-            await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).push().set(
-              gameStartedData.toJson()
-            ) ;
+            // gameStartedData.score = Random().nextInt(1000) ;
+            var leaderBoardData = await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).get() ;
+            var leaderBoardItems = leaderBoardData.children.map((e) {
+              var leaderBoardItem =
+              GameStartedData.fromJson(e.value as Map<dynamic, dynamic>);
+              return leaderBoardItem ;
+            }).toList();
+
+            int currentPlayerScoreIndex = leaderBoardItems.indexWhere((element) => element.playerNickName == gameStartedData.playerNickName && element.publicHashtag == gameStartedData.publicHashtag) ;
+            if(currentPlayerScoreIndex != -1){
+              if(leaderBoardItems[currentPlayerScoreIndex].score! < gameStartedData.score!) {
+                leaderBoardItems[currentPlayerScoreIndex] = gameStartedData ;
+              }
+            }else {
+              leaderBoardItems.add(gameStartedData) ;
+            }
+
+            leaderBoardItems.sort((a , b){
+              return b.score!.compareTo(a.score!) ;
+            }) ;
+
+            if(leaderBoardItems.length > 10){
+              leaderBoardItems.removeRange(10, leaderBoardItems.length) ;
+            }
+            await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).set(
+              Map.fromIterable(leaderBoardItems.map((e) => e.toJson()))
+            );
 
             Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
               "game_mode": isChampion.toString(),

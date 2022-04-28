@@ -261,8 +261,8 @@ class HomeController extends SuperController<bool> {
           playerNickName: playerName,
           publicHashtag: qrCodeModel.value.publicHashTag
               ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
-          dateTime: DateTime.now().toIso8601String(),
-          globalLeaderboardName: "${now.month}_${now.year}");
+          dateTime: DateTime.now().millisecondsSinceEpoch,
+          globalLeaderboardName: "${game.gameName}_${now.month}_${now.year}");
 
       var newCommand = messageQueueRef.push();
 

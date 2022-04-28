@@ -9,7 +9,7 @@ class StartGameData {
   String? partyName;
   String? playerNickName;
   String? publicHashtag;
-  String? dateTime;
+  int? dateTime;
 
   StartGameData(
       {this.difficultyPlayed,
