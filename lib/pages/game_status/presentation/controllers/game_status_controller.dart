@@ -45,6 +45,7 @@ class GameStatusController extends SuperController<bool> {
         var gameStartedData =
         GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
         gameStartedData.dateTime = DateTime.now().millisecondsSinceEpoch ;
+        gameStartedData.isPartyMode = !isChampion ;
         if (gameStartedData.idMachine.toString() == MACHINE_ID &&
             gameStartedData.idGame == gameData?.idGame &&
             gameStartedData.idVariation == gameData?.idVariation &&
