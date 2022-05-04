@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/main.dart';
 
 import '../../../../routes/app_pages.dart';
 import '../../data/splash_repository.dart';
@@ -43,6 +44,7 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
     }on TickerCanceled catch (e) {
 
     }
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: MACHINE_USERNAME, password: MACHINE_PASSWORD) ;
   }
 
   @override
@@ -58,6 +60,8 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   void onResumed() {}
 
   onStartClicked() {
-    Get.rootDelegate.offNamed(Routes.SCAN_QR);
+    if(FirebaseAuth.instance.currentUser != null) {
+      Get.rootDelegate.offNamed(Routes.SCAN_QR);
+    }
   }
 }
