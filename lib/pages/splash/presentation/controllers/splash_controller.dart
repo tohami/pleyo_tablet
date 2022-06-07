@@ -44,7 +44,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
     }on TickerCanceled catch (e) {
 
     }
-    FirebaseAuth.instance.signInWithEmailAndPassword(email: MACHINE_USERNAME, password: MACHINE_PASSWORD) ;
   }
 
   @override
@@ -60,8 +59,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   void onResumed() {}
 
   onStartClicked() {
-    if(FirebaseAuth.instance.currentUser != null) {
-      Get.rootDelegate.offNamed(Routes.SCAN_QR);
-    }
+    Get.rootDelegate.offNamed(Routes.SCAN_QR);
   }
 }

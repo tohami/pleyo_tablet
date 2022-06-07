@@ -1,52 +1,60 @@
 class QrCodeModel {
-  String? publicHashTag;
-  int? remainingCredit;
-  List<String>? players;
-  String? parkId;
   int? createdAt;
   String? createdBy;
-  String? customerEmail ;
-  String? isLocked ;
-  List<String>? transActionsList;
+  String? isLocked;
+  String? parkId;
+  List<String>? players;
+  String? publicHashTag;
+  int? remainingCredit;
+  bool? isActivated;
+  String? customerName;
+  String? customerEmail;
+  int? age;
+  String? role;
 
   QrCodeModel(
-      { required this.publicHashTag,
-        required this.remainingCredit,
-        required this.parkId,
-        required this.createdAt,
-        required this.createdBy,
-        required this.players,
-        required this.customerEmail,
-        required this.isLocked,
-        required this.transActionsList});
+      {this.createdAt,
+        this.createdBy,
+        this.isLocked,
+        this.parkId,
+        this.players,
+        this.publicHashTag,
+        this.remainingCredit,
+        this.isActivated,
+        this.customerName,
+        this.customerEmail,
+        this.age,
+        this.role});
 
   QrCodeModel.fromJson(Map<dynamic, dynamic> json) {
-    publicHashTag = json['publicHashTag'];
-    remainingCredit = json['remainingCredit'];
-    parkId = json['parkId'];
     createdAt = json['createdAt'];
     createdBy = json['createdBy'];
-    customerEmail = json['customerEmail'];
     isLocked = json['isLocked'];
-    if (json['transActionsList'] != null) {
-      transActionsList = json['transActionsList'].cast<String>();
-    }
-    if (json['players'] != null) {
-      players = json['players'].cast<String>();
-    }
+    parkId = json['parkId'];
+    players = json['players'].cast<String>();
+    publicHashTag = json['publicHashTag'];
+    remainingCredit = json['remainingCredit'];
+    isActivated = json['isActivated'];
+    customerName = json['customerName'];
+    customerEmail = json['customerEmail'];
+    age = json['age'];
+    role = json['role'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['publicHashTag'] = publicHashTag;
-    data['remainingCredit'] = remainingCredit;
-    data['parkId'] = parkId;
-    data['createdAt'] = createdAt;
-    data['createdBy'] = createdBy;
-    data['customerEmail'] = customerEmail;
-    data['isLocked'] = isLocked;
-    data['transActionsList'] = transActionsList;
-    data['players'] = players;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['createdAt'] = this.createdAt;
+    data['createdBy'] = this.createdBy;
+    data['isLocked'] = this.isLocked;
+    data['parkId'] = this.parkId;
+    data['players'] = this.players;
+    data['publicHashTag'] = this.publicHashTag;
+    data['remainingCredit'] = this.remainingCredit;
+    data['isActivated'] = this.isActivated;
+    data['customerName'] = this.customerName;
+    data['customerEmail'] = this.customerEmail;
+    data['age'] = this.age;
+    data['role'] = this.role;
     return data;
   }
 }

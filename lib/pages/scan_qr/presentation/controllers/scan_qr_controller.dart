@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,22 +110,32 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
 
   void onQRViewCreated(QRViewController controller) async{
     this.controller = controller;
+    controller.resumeCamera();
 
-    CameraFacing cameraInfo = await controller.getCameraInfo();
-    if(cameraInfo == CameraFacing.back){
-      await controller.flipCamera();
-    }
+    // CameraFacing cameraInfo = await controller.getCameraInfo();
+    // if(cameraInfo == CameraFacing.back){
+    //   await controller.flipCamera();
+    // }
     controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
       try {
-        var qrCodeEntity = await qrCodeRef.child(scanData.code!).get();
-        var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
-        if(qrCode.remainingCredit! > 0) {
-          isScanned.value = true ;
-          await Future.delayed(const Duration(seconds: 2)) ;
-          Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);
-        }else {
-          Get.snackbar("Error", "You don't have any Credit left in your card");
+        isScanned.value = true ;
+        final code = scanData.code?.split("?id=").last ;
+        var qrCodeEntity = await qrCodeRef.child(code!).get();
+        if(qrCodeEntity.exists) {
+          var qrCode = QrCodeModel.fromJson(
+              qrCodeEntity.value as Map<dynamic, dynamic>);
+          if(qrCode.isActivated == true) {
+            Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+          }else {
+            await Get.defaultDialog(
+              title: "Error" ,
+              content: Text("Ticket not activated yet, please activate your ticket firs ") ,
+              onConfirm: (){
+                Get.back() ;
+              }
+            ) ;
+          }
         }
       }catch (e) {
         Get.snackbar("Error", "Invalid Qr code");
