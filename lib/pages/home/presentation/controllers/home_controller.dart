@@ -211,8 +211,9 @@ class HomeController extends SuperController<bool> {
   //2 started
   RxInt gameStatus = 0.obs;
 
-  void startGame(GameModel game, VariationList variant, String playerName,
+  void startGame(GameModel game, VariationList variant,
       int diff) async {
+    var playerName = qrCodeModel.value.customerName ;
     var now = DateTime.now();
     StreamSubscription? subscription;
     gameStatus.value = 1;

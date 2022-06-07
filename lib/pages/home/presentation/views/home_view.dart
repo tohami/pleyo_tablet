@@ -9,6 +9,7 @@ import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
+import 'package:pleyo_tablet_app/widgets/player_name.dart';
 import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
@@ -75,14 +76,12 @@ class HomeView extends GetView<HomeController> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        playerPointsWidget(),
                         const SizedBox(
                           height: 15,
                         ),
-                        playerNameWidget(),
+                        playerNameWidget(playerName: controller.qrCodeModel.value.customerName! ,onLogoutClicked:  ()=>controller.onLogoutClicked()),
                       ],
                     ),
-                    gameModeWidget(),
                   ],
                 ),
                 Obx(() {
@@ -105,9 +104,9 @@ class HomeView extends GetView<HomeController> {
                             ),
                             GameWidget(game: controller.games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
-                              showBottomSheetModal(context , variant , (diff , name) {
+                              showBottomSheetModal(context , variant , (diff) {
                                 controller.startGame(
-                                    controller.games[index] , variant ,name, diff
+                                    controller.games[index] , variant, diff
                                 );
                               }) ;
                             },) ,
@@ -130,7 +129,7 @@ class HomeView extends GetView<HomeController> {
   }
 
 
-  showBottomSheetModal(BuildContext context , VariationList variation,Function(int , String) onDifficultSelected) {
+  showBottomSheetModal(BuildContext context , VariationList variation,Function(int) onDifficultSelected) {
     return Get.bottomSheet(
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -152,313 +151,4 @@ class HomeView extends GetView<HomeController> {
         isScrollControlled: true) ;
   }
 
-  Widget playerPointsWidget() {
-    return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        ),
-      ),
-      child: Obx(() {
-        var isLogout = controller.isLogoutActive.value ;
-        var isChampion = controller.isChampoinship.value ;
-        var points = controller.qrCodeModel.value.remainingCredit.toString() ;
-        return Row(
-          children: [
-            GestureDetector(
-              onTap: ()=>controller.isLogoutActive.toggle(),
-              child:  Container(
-                height: 60,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color:
-                  const Color(ColorCode.darkGrayBackground),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    bottomLeft: Radius.circular(10.0),
-                  ),
-                  border: Border.all(
-                      width: 3.0,
-                      color: isChampion
-                          ? const Color(
-                          ColorCode.accentLightColor)
-                          : const Color(
-                          ColorCode.yellowBackground)),
-                ),
-                child:  AnimatedSize(
-                  duration: const Duration(milliseconds:250),
-                  child: Row(
-                    key: ValueKey(isLogout),
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/icon_coins.svg',
-                        fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(width: 16,),
-                      Container(
-                        width: isLogout ? 210 :70,
-                        child: CustomText(
-                          isLogout ? 'Voulez-vous quitter ?' : points,
-                          textAlign: TextAlign.start,
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontSize: 20,
-                            shadows: [
-                              const Shadow(
-                                color: Color(
-                                    ColorCode.textShadowBackground),
-                                offset: Offset(0, 3),
-                                blurRadius: 10,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () => controller.onLogoutClicked(),
-              child: Container(
-                width: 60,
-                height: 60,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0),
-                  ),
-                  border: Border.all(
-                      width: 3.0,
-                      color: isChampion
-                          ? const Color(
-                          ColorCode.accentLightColor)
-                          : const Color(
-                          ColorCode.yellowBackground)),
-                  color: isChampion
-                      ? const Color(
-                      ColorCode.accentLightColor)
-                      : const Color(
-                      ColorCode.yellowBackground),
-                ),
-                child: SvgPicture.asset(
-                  'assets/images/icon_logout.svg',
-                  fit: BoxFit.fill,
-                ),
-              ),
-            )
-          ],
-        ) ;
-      }),
-    ) ;
-  }
-
-  Widget playerNameWidget() {
-   return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        children: [
-          Obx(() {
-            var isAddPlayerActive = controller.isAddPlayerActive.value ;
-            var players = controller.qrCodeModel.value.players??[] ;
-            return Container(
-              height: 60,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  bottomLeft: Radius.circular(10.0),
-                ),
-                border: Border.all(
-                    width: 3.0,
-                    color: const Color(
-                        ColorCode.white2Background)),
-              ),
-              child:  GestureDetector(
-                onTap: isAddPlayerActive ? null : ()=> controller.isAddPlayerActive.toggle(),
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds:250),
-                  child: Row(
-                    key: ValueKey(isAddPlayerActive),
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/icon_person.svg',
-                        fit: BoxFit.fitHeight,
-                        width: 30,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 16,),
-                      isAddPlayerActive ? SizedBox(
-                        width: 210 ,
-                        child: CustomTextFormField(
-                          fontSize:20,
-                          onSubmit: (val) {
-                            // playerName.value = val;
-                            print("on submit") ;
-                            controller.addPlayer(val) ;
-                          },
-                          fontColor: const Color(
-                              ColorCode.whiteBackground),
-                        ),
-                      ) : SizedBox(
-                        width:70,
-                        child: CustomText(
-                          players.isNotEmpty ? players.last : "Add ...",
-                          textAlign: TextAlign.start,
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontSize: 20,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ) ;
-          }),
-          GestureDetector(
-            onTap: ()=> controller.isAddPlayerActive.toggle(),
-            child: Container(
-              width: 60,
-              height: 60,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
-                ),
-                border: Border.all(
-                  width: 3.0,
-                  color:
-                  const Color(ColorCode.grayBackground),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x42000000),
-                    offset: Offset(0, 4),
-                    blurRadius: 4,
-                  ),
-                ],
-                color: const Color(ColorCode.grayBackground),
-              ),
-              child: SvgPicture.asset(
-                'assets/images/icon_add.svg',
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
-        ],
-      ),
-    ) ;
-  }
-
-  Widget gameModeWidget() {
-    return ObxValue<RxBool>((state) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          FlutterSwitch(
-            width: 147.0,
-            height: 60.0,
-            disabled: true,
-            valueFontSize: 25.0,
-            toggleSize: 45.0,
-            value: state.value,
-            borderRadius: 30.0,
-            showOnOff: false,
-            padding: 5,
-            activeColor:
-            const Color(ColorCode.yellowBackground),
-            inactiveColor:
-            const Color(ColorCode.accentLightColor),
-            activeSwitchBorder: Border.all(
-              width: 2.0,
-              color:
-              const Color(ColorCode.darkYellowBackground),
-            ),
-            inactiveSwitchBorder: Border.all(
-              width: 2.0,
-              color:
-              const Color(ColorCode.customAccentBackground),
-            ),
-            activeIcon: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(ColorCode.shadowBackground),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/images/icon_awesome_trophy.svg',
-                  fit: BoxFit.contain,
-                  width: 20,
-                  height: 17.78,
-                ),
-              ),
-            ),
-            inactiveIcon: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(ColorCode.shadowBackground),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/images/icon_cake.svg',
-                  fit: BoxFit.contain,
-                  width: 16.25,
-                  height: 20,
-                ),
-              ),
-            ),
-            toggleColor: Colors.transparent,
-            onToggle: (val) {
-              controller.changeMode(val);
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          CustomText(
-            state.value ? 'Championnat' : 'Party',
-            textStyle: TextStyles.textMedium.copyWith(
-              fontFamily: 'Parisine Plus Std Clair',
-              color: const Color(ColorCode.white3Background),
-            ),
-          )
-        ],
-      );
-    }, controller.isChampoinship) ;
-  }
 }
