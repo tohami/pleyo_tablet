@@ -3,9 +3,7 @@ class QrCodeModel {
   String? createdBy;
   String? isLocked;
   String? parkId;
-  List<String>? players;
   String? publicHashTag;
-  int? remainingCredit;
   bool? isActivated;
   String? customerName;
   String? customerEmail;
@@ -17,9 +15,7 @@ class QrCodeModel {
         this.createdBy,
         this.isLocked,
         this.parkId,
-        this.players,
         this.publicHashTag,
-        this.remainingCredit,
         this.isActivated,
         this.customerName,
         this.customerEmail,
@@ -31,9 +27,7 @@ class QrCodeModel {
     createdBy = json['createdBy'];
     isLocked = json['isLocked'];
     parkId = json['parkId'];
-    players = json['players'].cast<String>();
     publicHashTag = json['publicHashTag'];
-    remainingCredit = json['remainingCredit'];
     isActivated = json['isActivated'];
     customerName = json['customerName'];
     customerEmail = json['customerEmail'];
@@ -47,9 +41,7 @@ class QrCodeModel {
     data['createdBy'] = this.createdBy;
     data['isLocked'] = this.isLocked;
     data['parkId'] = this.parkId;
-    data['players'] = this.players;
     data['publicHashTag'] = this.publicHashTag;
-    data['remainingCredit'] = this.remainingCredit;
     data['isActivated'] = this.isActivated;
     data['customerName'] = this.customerName;
     data['customerEmail'] = this.customerEmail;

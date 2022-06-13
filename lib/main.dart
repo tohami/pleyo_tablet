@@ -8,6 +8,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 
 import 'bindings.dart';
+import 'consts/colors.dart';
 import 'firebase_options.dart';
 import 'lang/translation_service.dart';
 import 'routes/app_pages.dart';

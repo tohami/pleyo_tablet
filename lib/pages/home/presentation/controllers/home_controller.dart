@@ -25,7 +25,6 @@ class HomeController extends SuperController<bool> {
 
   HomeController();
 
-  RxString selectedPlayerName = "".obs;
 
   DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
   DatabaseReference machineRef = FirebaseDatabase.instance.ref("Machine");
@@ -38,10 +37,7 @@ class HomeController extends SuperController<bool> {
     super.onInit();
     change(null, status: RxStatus.success());
     try {
-      if (qrCodeModel.value.players != null &&
-          qrCodeModel.value.players!.isNotEmpty) {
-        selectedPlayerName.value = qrCodeModel.value.players!.last;
-      }
+
       var machineEntity = await machineRef.child(MACHINE_ID).get();
       var machine =
           MachineModel.fromJson(machineEntity.value as Map<dynamic, dynamic>);
@@ -178,33 +174,33 @@ class HomeController extends SuperController<bool> {
     }
   }
 
-  void addPlayer(String val) async {
-    if (val.trim().length < 4) {
-      isAddPlayerActive.value = false;
-      return;
-    }
-    var qrCode = qrCodeModel.value;
-    List<String> players = qrCode.players?.toList() ?? [];
-    if (!players.contains(val)) {
-      players.add(val);
-    }
-    qrCode.players = players;
-    qrCodeModel.value = qrCode;
-    print("add player");
-
-    try {
-      await qrCodesRef
-          .child(qrCodeModel.value.publicHashTag!)
-          .child("players")
-          .set(players);
-      selectedPlayerName.value = val;
-      // print(res)
-    } catch (e) {
-      print(e);
-    } finally {
-      isAddPlayerActive.value = false;
-    }
-  }
+  // void addPlayer(String val) async {
+  //   if (val.trim().length < 4) {
+  //     isAddPlayerActive.value = false;
+  //     return;
+  //   }
+  //   var qrCode = qrCodeModel.value;
+  //   List<String> players = qrCode.players?.toList() ?? [];
+  //   if (!players.contains(val)) {
+  //     players.add(val);
+  //   }
+  //   qrCode.players = players;
+  //   qrCodeModel.value = qrCode;
+  //   print("add player");
+  //
+  //   try {
+  //     await qrCodesRef
+  //         .child(qrCodeModel.value.publicHashTag!)
+  //         .child("players")
+  //         .set(players);
+  //     selectedPlayerName.value = val;
+  //     // print(res)
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     isAddPlayerActive.value = false;
+  //   }
+  // }
 
   //0 nothing
   //1 starting
@@ -222,33 +218,6 @@ class HomeController extends SuperController<bool> {
     //check available balance
     var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
     try {
-      var transactionResult = await currentQrCodeRef.runTransaction((value) {
-        if (value == null) {
-          return Transaction.abort();
-        }
-
-        var qrCode = QrCodeModel.fromJson(value as Map<dynamic, dynamic>);
-
-        if (qrCode.isLocked == "true") {
-          Get.snackbar("Error",
-              "Your card currently used to run game on other machine, please try again");
-          return Transaction.abort();
-        } else if ((qrCode.remainingCredit ?? 0) < 10) {
-          Get.snackbar(
-              "Error", "You don't have enough points to run this game ");
-          return Transaction.abort();
-        }
-
-        qrCode.remainingCredit = qrCode.remainingCredit! - 10;
-        qrCode.isLocked = "true";
-
-        return Transaction.success(qrCode.toJson());
-      });
-
-      if (!transactionResult.committed) {
-        gameStatus.value = 0;
-        return;
-      }
 
       // var currentPoints = codeRef.
       var startGameData = StartGameData(
@@ -263,7 +232,7 @@ class HomeController extends SuperController<bool> {
           publicHashtag: qrCodeModel.value.publicHashTag
               ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
           dateTime: DateTime.now().millisecondsSinceEpoch,
-          globalLeaderboardName: "${game.gameName}_${now.month}_${now.year}");
+          globalLeaderboardName: "${game.gameName}_${now.year}");
 
       var newCommand = messageQueueRef.push();
 
@@ -293,23 +262,17 @@ class HomeController extends SuperController<bool> {
             Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
               "game_data" : gameStartedData.toJson() ,
               "mode": isChampoinship.value,
-              "points": qrCodeModel.value.remainingCredit,
+              // "points": qrCodeModel.value.remainingCredit,
+              "points": 0,
               "player_name": playerName
             });
           }
           event.snapshot.ref.remove() ;
           subscription?.cancel() ;
-          currentQrCodeRef.update({
-            "isLocked": "false",
-          });
           gameStatus.value = 0;
         }
       })..onError((e) {
         print("cancel maybe streem error");
-        currentQrCodeRef.update({
-          "remainingCredit": ServerValue.increment(10),
-          "isLocked": "false",
-        });
         gameStatus.value = 0;
         subscription?.cancel() ;
       });
