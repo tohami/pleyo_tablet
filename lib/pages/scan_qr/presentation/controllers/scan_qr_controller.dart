@@ -116,6 +116,29 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     // if(cameraInfo == CameraFacing.back){
     //   await controller.flipCamera();
     // }
+    try {
+      isScanned.value = true ;
+      final code = "-MzQWdLFUQnEYYNlmrV4" ;
+      var qrCodeEntity = await qrCodeRef.child(code).get();
+      if(qrCodeEntity.exists) {
+        var qrCode = QrCodeModel.fromJson(
+            qrCodeEntity.value as Map<dynamic, dynamic>);
+        if(qrCode.isActivated == true) {
+          Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+        }else {
+          await Get.defaultDialog(
+              title: "Error" ,
+              content: Text("Ticket not activated yet, please activate your ticket firs ") ,
+              onConfirm: (){
+                Get.back() ;
+              }
+          ) ;
+        }
+      }
+    }catch (e) {
+      Get.snackbar("Error", "Invalid Qr code");
+      print(e) ;
+    }
     controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
       try {

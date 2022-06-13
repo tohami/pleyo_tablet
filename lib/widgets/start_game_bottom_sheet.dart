@@ -37,8 +37,7 @@ class StartGameBottomSheet extends StatelessWidget {
               AnimatedSize(
                 duration: const Duration(seconds: 1),
                 curve: Curves.fastOutSlowIn,
-                child: Obx(() {
-                    return SizedBox(
+                child: SizedBox(
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,9 +106,7 @@ class StartGameBottomSheet extends StatelessWidget {
                               : Container(),
                         ],
                       ),
-                    );
-                  }
-                ),
+                    ),
               )
             ],
           ),
