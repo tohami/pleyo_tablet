@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -124,8 +126,9 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
         final code = scanData.code?.split("?id=").last ;
         var qrCodeEntity = await qrCodeRef.child(code!).get();
         if(qrCodeEntity.exists) {
-          var qrCode = QrCodeModel.fromJson(
-              qrCodeEntity.value as Map<dynamic, dynamic>);
+          final qrCodeValue = qrCodeEntity.value is List ? (qrCodeEntity.value as List)[0] : qrCodeEntity.value ;
+
+          var qrCode = QrCodeModel.fromJson(qrCodeValue);
           if(qrCode.isActivated == true) {
             Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
           }else {

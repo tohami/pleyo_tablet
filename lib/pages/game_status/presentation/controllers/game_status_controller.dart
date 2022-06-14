@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -58,8 +59,10 @@ class GameStatusController extends SuperController<bool> {
             try {
               var leaderBoardData = await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).get() ;
               var leaderBoardItems = leaderBoardData.children.map((e) {
+                final leaderBoardItemValue = e.value is List ? (e.value as List)[0] : e.value ;
+
                 var leaderBoardItem =
-                GameStartedData.fromJson(e.value as Map<dynamic, dynamic>);
+                GameStartedData.fromJson(leaderBoardItemValue);
                 return leaderBoardItem ;
               }).toList();
 
@@ -92,9 +95,10 @@ class GameStatusController extends SuperController<bool> {
             var leaderBoardData = await allTimeLeaderboardRef.orderByChild("PublicHashtag").equalTo(gameStartedData.publicHashtag).get() ;
             //qrcode leaderboard
             var leaderBoardItems = leaderBoardData.children.map((e) {
+              final leaderBoardItemValue = e.value is List ? (e.value as List)[0] : e.value ;
 
               var leaderBoardItem =
-              MapEntry(e.key ,  GameStartedData.fromJson(e.value as Map<dynamic, dynamic>));
+              MapEntry(e.key ,  GameStartedData.fromJson(leaderBoardItemValue));
               return leaderBoardItem ;
             }).toList();
 

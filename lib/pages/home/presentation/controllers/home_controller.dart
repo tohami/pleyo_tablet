@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,17 @@ class HomeController extends SuperController<bool> {
     try {
 
       var machineEntity = await machineRef.child(MACHINE_ID).get();
+      print(machineEntity.value) ;
+      final machineValue = machineEntity.value is List ? (machineEntity.value as List)[0] : machineEntity.value ;
       var machine =
-          MachineModel.fromJson(machineEntity.value as Map<dynamic, dynamic>);
+          MachineModel.fromJson(machineValue);
 
       var gamesEntity = await gamesRef.get();
       games.addAll(gamesEntity.children.map((e) {
-        var game = GameModel.fromJson(e.value as Map<dynamic, dynamic>);
+        print(e) ;
+        final gameValue = e.value is List ? (e.value as List)[0] : e.value ;
+
+        var game = GameModel.fromJson(gameValue);
 
         GameVariationList? machineVariation = machine.gameVariationList
             ?.firstWhereOrNull((element) => element.idGame == game.idGame);
@@ -65,7 +71,9 @@ class HomeController extends SuperController<bool> {
       }));
 
       qrCodesRef.child(qrCodeModel.value.publicHashTag!).onValue.listen((event) {
-        qrCodeModel.value = QrCodeModel.fromJson(event.snapshot.value as Map<dynamic, dynamic>);
+        final qrCodeValue = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
+
+        qrCodeModel.value = QrCodeModel.fromJson(qrCodeValue);
       });
 
 
@@ -246,7 +254,8 @@ class HomeController extends SuperController<bool> {
           .listen((event) async {
         print(event.snapshot.value) ;
 
-        Map? value = event.snapshot.value as Map?;
+        final value = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
+
         if (value != null && value["CommandeId"] == "GAME_STARTED") {
           var gameStartedData =
               GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
