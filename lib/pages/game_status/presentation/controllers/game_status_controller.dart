@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/game_started_data.dart';
@@ -40,96 +41,127 @@ class GameStatusController extends SuperController<bool> {
         .limitToLast(1)
         .onChildAdded
         .listen((event) async{
-      Map? value = event.snapshot.value as Map?;
+          try {
+            Map? value = event.snapshot.value as Map?;
 
-      if (value != null && (value["CommandeId"] == "GAME_STOPPED" || value["CommandeId"] == "LEADERBOARD_PUSH")) {
-        var gameStartedData =
-        GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
-        gameStartedData.dateTime = DateTime.now().millisecondsSinceEpoch ;
-        gameStartedData.isPartyMode = !isChampion ;
-        if (gameStartedData.idMachine.toString() == MACHINE_ID &&
-            gameStartedData.idGame == gameData?.idGame &&
-            gameStartedData.idVariation == gameData?.idVariation &&
-            gameStartedData.playerNickName == playerName) {
-          if(value["CommandeId"] == "GAME_STOPPED") {
-            Get.rootDelegate.popRoute();
-          }else {
-            messageQueueSubscription.cancel() ;
-            // gameStartedData.score = Random().nextInt(1000) ;
-            try {
-              var leaderBoardData = await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).get() ;
-              var leaderBoardItems = leaderBoardData.children.map((e) {
-                final leaderBoardItemValue = e.value is List ? (e.value as List)[0] : e.value ;
+            if (value != null && (value["CommandeId"] == "GAME_STOPPED" ||
+                value["CommandeId"] == "LEADERBOARD_PUSH")) {
+              var gameStartedData =
+              GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
+              gameStartedData.dateTime = DateTime
+                  .now()
+                  .millisecondsSinceEpoch;
+              gameStartedData.isPartyMode = !isChampion;
+              if (gameStartedData.idMachine.toString() == MACHINE_ID &&
+                  gameStartedData.idGame == gameData?.idGame &&
+                  gameStartedData.idVariation == gameData?.idVariation &&
+                  gameStartedData.playerNickName == playerName) {
+                if (value["CommandeId"] == "GAME_STOPPED") {
+                  Get.rootDelegate.popRoute();
+                } else {
+                  messageQueueSubscription.cancel();
+                  // gameStartedData.score = Random().nextInt(1000) ;
+                  try {
+                    var leaderBoardData = await leaderBoardRef.child(
+                        gameStartedData.globalLeaderboardName!).get();
+                    var leaderBoardItems = leaderBoardData.children.map((e) {
+                      final leaderBoardItemValue = e.value is List ? (e
+                          .value as List)[0] : e.value;
 
-                var leaderBoardItem =
-                GameStartedData.fromJson(leaderBoardItemValue);
-                return leaderBoardItem ;
-              }).toList();
+                      var leaderBoardItem =
+                      GameStartedData.fromJson(leaderBoardItemValue);
+                      return leaderBoardItem;
+                    }).toList();
 
-              int currentPlayerScoreIndex = leaderBoardItems.indexWhere((element) => element.playerNickName == gameStartedData.playerNickName && element.publicHashtag == gameStartedData.publicHashtag) ;
-              if(currentPlayerScoreIndex != -1){
-                if(leaderBoardItems[currentPlayerScoreIndex].score! < gameStartedData.score!) {
-                  leaderBoardItems[currentPlayerScoreIndex] = gameStartedData ;
+                    int currentPlayerScoreIndex = leaderBoardItems.indexWhere((
+                        element) =>
+                    element.playerNickName == gameStartedData.playerNickName &&
+                        element.publicHashtag == gameStartedData.publicHashtag);
+                    if (currentPlayerScoreIndex != -1) {
+                      if (leaderBoardItems[currentPlayerScoreIndex].score! <
+                          gameStartedData.score!) {
+                        leaderBoardItems[currentPlayerScoreIndex] =
+                            gameStartedData;
+                      }
+                    } else {
+                      leaderBoardItems.add(gameStartedData);
+                    }
+
+                    leaderBoardItems.sort((a, b) {
+                      return b.score!.compareTo(a.score!);
+                    });
+
+                    if (leaderBoardItems.length > 10) {
+                      leaderBoardItems.removeRange(10, leaderBoardItems.length);
+                    }
+                    await leaderBoardRef.child(
+                        gameStartedData.globalLeaderboardName!).set(
+                        leaderBoardItems.map((e) => e.toJson()).toList()
+                    );
+                  } catch (e) {
+                print(e) ;
+                print(gameStartedData.globalLeaderboardName!) ;
+                FirebaseCrashlytics.instance.recordError(e, null) ;
+                    print("could not update leaderBoard");
+                  }
+
+
+                  //update alltime leaderBoard
+                  var allTimeLeaderboardRef = FirebaseDatabase.instance.ref(
+                      "AllTimeLeaderboard").child(gameStartedData.gameName!);
+                  var leaderBoardData = await allTimeLeaderboardRef
+                      .orderByChild("PublicHashtag").equalTo(
+                      gameStartedData.publicHashtag).get();
+                  //qrcode leaderboard
+                  var leaderBoardItems = leaderBoardData.children.map((e) {
+                    final leaderBoardItemValue = e.value is List ? (e
+                        .value as List)[0] : e.value;
+
+                    var leaderBoardItem =
+                    MapEntry(
+                        e.key, GameStartedData.fromJson(leaderBoardItemValue));
+                    return leaderBoardItem;
+                  }).toList();
+
+                  int currentPlayerScoreIndex = leaderBoardItems.indexWhere((
+                      element) =>
+                  element.value.playerNickName ==
+                      gameStartedData.playerNickName);
+                  if (currentPlayerScoreIndex != -1) {
+                    if (leaderBoardItems[currentPlayerScoreIndex].value.score! <
+                        gameStartedData.score!) {
+                      await allTimeLeaderboardRef.child(
+                          leaderBoardItems[currentPlayerScoreIndex].key!).set(
+                          gameStartedData.toJson()
+                      );
+                    }
+                  } else {
+                    allTimeLeaderboardRef.push().set(
+                        gameStartedData.toJson()
+                    );
+                  }
+
+                  Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
+                    "game_mode": isChampion.toString(),
+                    "points": points.toString(),
+                    "score": gameStartedData.score.toString(),
+                    "player_name": gameStartedData.playerNickName ?? ""
+                  });
                 }
-              }else {
-                leaderBoardItems.add(gameStartedData) ;
+                Map historyEndDataJson = gameStartedData.toJson();
+                historyEndDataJson.putIfAbsent(
+                    "EndedAt", () => DateTime.now().toIso8601String());
+                historyEndDataJson.putIfAbsent(
+                    "CreatedAt", () => historyStartDataJson["CreatedAt"]);
+                gameHistory.set(
+                    historyEndDataJson
+                );
               }
-
-              leaderBoardItems.sort((a , b){
-                return b.score!.compareTo(a.score!) ;
-              }) ;
-
-              if(leaderBoardItems.length > 10){
-                leaderBoardItems.removeRange(10, leaderBoardItems.length) ;
-              }
-              await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).set(
-                  Map.fromIterable(leaderBoardItems.map((e) => e.toJson()))
-              );
-            }catch (e) {
-              print("could not update leaderBoard") ;
             }
-
-
-            //update alltime leaderBoard
-            var allTimeLeaderboardRef = FirebaseDatabase.instance.ref("AllTimeLeaderboard").child(gameStartedData.gameName!) ;
-            var leaderBoardData = await allTimeLeaderboardRef.orderByChild("PublicHashtag").equalTo(gameStartedData.publicHashtag).get() ;
-            //qrcode leaderboard
-            var leaderBoardItems = leaderBoardData.children.map((e) {
-              final leaderBoardItemValue = e.value is List ? (e.value as List)[0] : e.value ;
-
-              var leaderBoardItem =
-              MapEntry(e.key ,  GameStartedData.fromJson(leaderBoardItemValue));
-              return leaderBoardItem ;
-            }).toList();
-
-            int currentPlayerScoreIndex = leaderBoardItems.indexWhere((element) => element.value.playerNickName == gameStartedData.playerNickName) ;
-            if(currentPlayerScoreIndex != -1){
-              if(leaderBoardItems[currentPlayerScoreIndex].value.score! < gameStartedData.score!) {
-                await allTimeLeaderboardRef.child(leaderBoardItems[currentPlayerScoreIndex].key!).set(
-                    gameStartedData.toJson()
-                ) ;
-              }
-            }else {
-              allTimeLeaderboardRef.push().set(
-                  gameStartedData.toJson()
-              ) ;
-            }
-
-            Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
-              "game_mode": isChampion.toString(),
-              "points": points.toString(),
-              "score" :gameStartedData.score.toString() ,
-              "player_name": gameStartedData.playerNickName??""
-            });
+          }catch (e){
+            print(e);
+            FirebaseCrashlytics.instance.recordError(e, null);
           }
-          Map historyEndDataJson = gameStartedData.toJson() ;
-          historyEndDataJson.putIfAbsent("EndedAt", () => DateTime.now().toIso8601String());
-          historyEndDataJson.putIfAbsent("CreatedAt", () => historyStartDataJson["CreatedAt"]);
-          gameHistory.set(
-              historyEndDataJson
-          ) ;
-        }
-      }
     });
 
   }
