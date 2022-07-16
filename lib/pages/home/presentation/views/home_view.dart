@@ -24,43 +24,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 45,
-          elevation: 1,
-          backgroundColor: const Color(ColorCode.darkGrayBackground),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'assets/images/icon_crown.svg',
-                fit: BoxFit.fill,
-              ),
-              const SizedBox(
-                width: 2,
-              ),
-              CustomText(
-                'Inscrivez le meilleur score pour gagner une récompense d\'une valeur de 200€',
-                textStyle: TextStyles.textSmall.copyWith(
-                  fontFamily: 'Parisine Plus Std Clair',
-                  fontSize: 14,
-                  color: const Color(ColorCode.white3Background),
-                  height: 0.8571428571428571,
-                ),
-              )
-            ],
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(4.0),
-                bottomLeft: Radius.circular(4.0),
-              ),
-              border: Border.all(
-                  width: 2.0,
-                  color: const Color(ColorCode.lightGrayBackground)),
-            ),
-          ),
-        ),
+        backgroundColor: const Color(ColorCode.primary),
         body: SingleChildScrollView(
          physics: const ClampingScrollPhysics(),
           child: Container(
