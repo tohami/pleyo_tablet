@@ -1,6 +1,6 @@
 class GameStartedData {
   int? difficultyPlayed;
-  int? gameDuration;
+  double? gameDuration;
   String? gameName;
   String? globalLeaderboardName;
   int? idGame;
@@ -30,7 +30,11 @@ class GameStartedData {
 
   GameStartedData.fromJson(Map<dynamic, dynamic> json) {
     difficultyPlayed = json['DifficultyPlayed'];
-    gameDuration = json['GameDuration'];
+    try {
+      gameDuration = double.parse(json['GameDuration'].toString());
+    }catch(e){
+      print(e);
+    }
     gameName = json['GameName'];
     globalLeaderboardName = json['GlobalLeaderboardName'];
     idGame = json['IdGame'];

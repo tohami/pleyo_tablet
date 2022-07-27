@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/game_started_data.dart';
@@ -39,6 +41,7 @@ class GameStatusController extends SuperController<bool> {
         .limitToLast(1)
         .onChildAdded
         .listen((event) async{
+          try {
       Map? value = event.snapshot.value as Map?;
 
       if (value != null && (value["CommandeId"] == "GAME_STOPPED" || value["CommandeId"] == "LEADERBOARD_PUSH")) {
@@ -58,8 +61,11 @@ class GameStatusController extends SuperController<bool> {
             try {
               var leaderBoardData = await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).get() ;
               var leaderBoardItems = leaderBoardData.children.map((e) {
+                      final leaderBoardItemValue = e.value is List ? (e
+                          .value as List)[0] : e.value;
+
                 var leaderBoardItem =
-                GameStartedData.fromJson(e.value as Map<dynamic, dynamic>);
+                      GameStartedData.fromJson(leaderBoardItemValue);
                 return leaderBoardItem ;
               }).toList();
 
@@ -80,9 +86,12 @@ class GameStatusController extends SuperController<bool> {
                 leaderBoardItems.removeRange(10, leaderBoardItems.length) ;
               }
               await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).set(
-                  Map.fromIterable(leaderBoardItems.map((e) => e.toJson()))
+                        leaderBoardItems.map((e) => e.toJson()).toList()
               );
             }catch (e) {
+                print(e) ;
+                print(gameStartedData.globalLeaderboardName!) ;
+                FirebaseCrashlytics.instance.recordError(e, null) ;
               print("could not update leaderBoard") ;
             }
 
@@ -92,9 +101,12 @@ class GameStatusController extends SuperController<bool> {
             var leaderBoardData = await allTimeLeaderboardRef.orderByChild("PublicHashtag").equalTo(gameStartedData.publicHashtag).get() ;
             //qrcode leaderboard
             var leaderBoardItems = leaderBoardData.children.map((e) {
+                    final leaderBoardItemValue = e.value is List ? (e
+                        .value as List)[0] : e.value;
 
               var leaderBoardItem =
-              MapEntry(e.key ,  GameStartedData.fromJson(e.value as Map<dynamic, dynamic>));
+                    MapEntry(
+                        e.key, GameStartedData.fromJson(leaderBoardItemValue));
               return leaderBoardItem ;
             }).toList();
 
@@ -126,6 +138,10 @@ class GameStatusController extends SuperController<bool> {
           ) ;
         }
       }
+          }catch (e){
+            print(e);
+            FirebaseCrashlytics.instance.recordError(e, null);
+          }
     });
 
   }

@@ -3,34 +3,20 @@ class QrCodeModel {
   int? remainingCredit;
   List<String>? players;
   String? parkId;
-  int? createdAt;
-  String? createdBy;
-  String? customerEmail ;
   String? isLocked ;
-  List<String>? transActionsList;
 
   QrCodeModel(
       { required this.publicHashTag,
         required this.remainingCredit,
         required this.parkId,
-        required this.createdAt,
-        required this.createdBy,
         required this.players,
-        required this.customerEmail,
-        required this.isLocked,
-        required this.transActionsList});
+        required this.isLocked});
 
   QrCodeModel.fromJson(Map<dynamic, dynamic> json) {
     publicHashTag = json['publicHashTag'];
     remainingCredit = json['remainingCredit'];
     parkId = json['parkId'];
-    createdAt = json['createdAt'];
-    createdBy = json['createdBy'];
-    customerEmail = json['customerEmail'];
     isLocked = json['isLocked'];
-    if (json['transActionsList'] != null) {
-      transActionsList = json['transActionsList'].cast<String>();
-    }
     if (json['players'] != null) {
       players = json['players'].cast<String>();
     }
@@ -41,11 +27,7 @@ class QrCodeModel {
     data['publicHashTag'] = publicHashTag;
     data['remainingCredit'] = remainingCredit;
     data['parkId'] = parkId;
-    data['createdAt'] = createdAt;
-    data['createdBy'] = createdBy;
-    data['customerEmail'] = customerEmail;
     data['isLocked'] = isLocked;
-    data['transActionsList'] = transActionsList;
     data['players'] = players;
     return data;
   }

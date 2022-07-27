@@ -1,14 +1,9 @@
 import 'game_model.dart';
 
 class MachineModel {
-  String? ethernetMacAdress;
   List<GameVariationList>? gameVariationList;
   String? idMachine;
   String? name;
-  String? teamviewerId;
-  String? wifiMacAdress;
-  String? windowsKey;
-  String? windowsName;
 
   MachineModel(
       {ethernetMacAdress,
@@ -21,7 +16,6 @@ class MachineModel {
         windowsName});
 
   MachineModel.fromJson(Map<dynamic, dynamic> json) {
-    ethernetMacAdress = json['EthernetMacAdress'];
     if (json['GameVariationList'] != null) {
       gameVariationList = <GameVariationList>[];
       json['GameVariationList'].forEach((v) {
@@ -30,25 +24,16 @@ class MachineModel {
     }
     idMachine = json['IdMachine'];
     name = json['Name'];
-    teamviewerId = json['TeamviewerId'];
-    wifiMacAdress = json['WifiMacAdress'];
-    windowsKey = json['WindowsKey'];
-    windowsName = json['WindowsName'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['EthernetMacAdress'] = ethernetMacAdress;
     if (gameVariationList != null) {
       data['GameVariationList'] =
           gameVariationList!.map((v) => v.toJson()).toList();
     }
     data['IdMachine'] = idMachine;
     data['Name'] = name;
-    data['TeamviewerId'] = teamviewerId;
-    data['WifiMacAdress'] = wifiMacAdress;
-    data['WindowsKey'] = windowsKey;
-    data['WindowsName'] = windowsName;
     return data;
   }
 }

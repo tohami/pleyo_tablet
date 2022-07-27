@@ -112,6 +112,15 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
   void onQRViewCreated(QRViewController controller) async{
     this.controller = controller;
 
+    var qrCodeEntity = await qrCodeRef.child("-MzQWdLFUQnEYYNlmrV4").get();
+    var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
+    if(qrCode.remainingCredit! > 0) {
+      isScanned.value = true ;
+      await Future.delayed(const Duration(seconds: 2)) ;
+      Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);
+    }else {
+      Get.snackbar("Error", "You don't have any Credit left in your card");
+    }
     CameraFacing cameraInfo = await controller.getCameraInfo();
     if(cameraInfo == CameraFacing.back){
       await controller.flipCamera();
