@@ -223,6 +223,13 @@ class HomeController extends SuperController<bool> {
     gameStatus.value = 1;
     await Future.delayed(const Duration(seconds: 1));
 
+    var newCommand = messageQueueRef.push();
+
+    newCommand
+        .set({"CommandeId": "GAME_STOP", "Data": GameStartedData(idMachine: int.parse(MACHINE_ID)).toJson()});
+
+    await Future.delayed(const Duration(seconds: 2));
+
     //check available balance
     var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
     try {

@@ -81,10 +81,10 @@ class GameStatusController extends SuperController<bool> {
               leaderBoardItems.sort((a , b){
                 return b.score!.compareTo(a.score!) ;
               }) ;
-
-              if(leaderBoardItems.length > 10){
-                leaderBoardItems.removeRange(10, leaderBoardItems.length) ;
-              }
+              //stop removing the players list
+              // if(leaderBoardItems.length > 10){
+              //   leaderBoardItems.removeRange(10, leaderBoardItems.length) ;
+              // }
               await leaderBoardRef.child(gameStartedData.globalLeaderboardName!).set(
                         leaderBoardItems.map((e) => e.toJson()).toList()
               );
