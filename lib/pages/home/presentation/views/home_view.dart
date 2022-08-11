@@ -107,7 +107,7 @@ class HomeView extends GetView<HomeController> {
                               print(variant.toJson()) ;
                               showBottomSheetModal(context , variant , (diff , name) {
                                 controller.startGame(
-                                    controller.games[index] , variant ,name, diff
+                                    controller.games[index] , variant ,name.toLowerCase(), diff
                                 );
                               }) ;
                             },) ,
