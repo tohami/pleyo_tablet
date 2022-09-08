@@ -15,7 +15,7 @@ import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-const MACHINE_ID = String.fromEnvironment('ID');
+const MACHINE_ID = String.fromEnvironment('ID' , defaultValue: "1");
 const MACHINE_USERNAME = String.fromEnvironment('U');
 const MACHINE_PASSWORD = String.fromEnvironment('P');
 

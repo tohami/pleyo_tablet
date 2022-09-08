@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/qrcode_model.dart';
@@ -119,6 +120,18 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
       await controller.flipCamera();
     }
 
+    if(kDebugMode) {
+      final code = "-NAe1J8g4REZtvDhYklm";
+      var qrCodeEntity = await qrCodeRef.child(code).get();
+      final qrCodeValue = qrCodeEntity.value is List ? (qrCodeEntity
+          .value as List)[0] : qrCodeEntity.value;
+
+      var qrCode = QrCodeModel.fromJson(qrCodeValue);
+      if (qrCode.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+        return;
+      }
+    }
     controller.scannedDataStream.listen((scanData)async {
       controller.stopCamera();
       try {

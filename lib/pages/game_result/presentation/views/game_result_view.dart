@@ -73,10 +73,9 @@ class GameResultView extends GetView<GameResultController> {
                       children: [
                         NumberSlideAnimation(
                           number : controller.score! ,
-                          duration: const Duration(seconds: 3),
+                          duration: const Duration(seconds: 2),
                           curve: Curves.easeOut,
                           textStyle: TextStyles.textXLarge.copyWith(
-                            height: 0.5833333333333334,
                             shadows: [
                               const Shadow(
                                 color: Color(0x4dfeff40),

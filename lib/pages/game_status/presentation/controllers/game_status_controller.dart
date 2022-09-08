@@ -57,7 +57,7 @@ class GameStatusController extends SuperController<bool> {
                   gameStartedData.idVariation == gameData?.idVariation &&
                   gameStartedData.playerNickName == playerName) {
                 if (value["CommandeId"] == "GAME_STOPPED") {
-                  Get.rootDelegate.popRoute();
+                  Get.back();
                 } else {
                   messageQueueSubscription.cancel();
                   // gameStartedData.score = Random().nextInt(1000) ;
