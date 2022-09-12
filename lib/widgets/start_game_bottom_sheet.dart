@@ -47,7 +47,7 @@ class StartGameBottomSheet extends StatelessWidget {
                             height: 50,
                           ),
                           CustomText(
-                            'Choix de la difficulté',
+                            'Choose your level',
                             textStyle: TextStyles.textMedium.copyWith(
                               fontFamily: 'Parisine Plus Std Clair',
                               fontSize: 20,
@@ -59,7 +59,7 @@ class StartGameBottomSheet extends StatelessWidget {
                             height: 25,
                           ),
                           CustomText(
-                            'Quelle difficulté ?',
+                            'Which level?',
                             textStyle: TextStyles.textLarge.copyWith(
                               fontSize: 40,
                               height: 0.3,
@@ -67,7 +67,7 @@ class StartGameBottomSheet extends StatelessWidget {
                           ),
                           gameDifficulties.contains("0")
                               ? GameDifficultyWidget(
-                                  title: 'Débutant',
+                                  title: 'Easy',
                                   color: ColorCode.greenBackground,
                                   onTap: () {
                                     onDifficultSelected(0);
@@ -76,7 +76,7 @@ class StartGameBottomSheet extends StatelessWidget {
                               : Container(),
                           gameDifficulties.contains("1")
                               ? GameDifficultyWidget(
-                                  title: 'Initié',
+                                  title: 'Medium',
                                   color: ColorCode.yellow2Background,
                                   onTap: () {
                                     onDifficultSelected(
@@ -86,7 +86,7 @@ class StartGameBottomSheet extends StatelessWidget {
                               : Container(),
                           gameDifficulties.contains("2")
                               ? GameDifficultyWidget(
-                                  title: 'Difficile',
+                                  title: 'Hard',
                                   color: Colors.deepOrange.value,
                                   onTap: () {
                                     onDifficultSelected(
@@ -96,7 +96,7 @@ class StartGameBottomSheet extends StatelessWidget {
                               : Container(),
                           gameDifficulties.contains("3")
                               ? GameDifficultyWidget(
-                                  title: 'Très difficile',
+                                  title: 'Very hard',
                                   color: ColorCode.redBackground,
                                   onTap: () {
                                     onDifficultSelected(
