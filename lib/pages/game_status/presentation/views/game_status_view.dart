@@ -66,7 +66,7 @@ class GameStatusView extends GetView<GameStatusController> {
                         ),
                         child: Center(
                           child: CustomText(
-                            'Quitter',
+                            'Quit',
                             textStyle: TextStyles.textXLarge.copyWith(
                               color: controller.isChampion
                                   ? const Color(ColorCode.accentLightColor)
@@ -106,7 +106,7 @@ class GameStatusView extends GetView<GameStatusController> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomText(
-                    'Voulez-vous vraiment\nquitter la partie ?',
+                    'Are you sure you want to\nquit the game?',
                     textStyle: TextStyles.textLarge.copyWith(
                       fontSize: 24,
                     ),
@@ -115,7 +115,7 @@ class GameStatusView extends GetView<GameStatusController> {
                     height: 17,
                   ),
                   CustomText(
-                    '(Vos crédits ne vous seront pas remboursés)',
+                    '(Your score will not be added)',
                     textStyle: TextStyles.textMedium.copyWith(
                         fontFamily: 'Parisine Plus Std Clair',
                         fontSize: 18,
@@ -128,7 +128,7 @@ class GameStatusView extends GetView<GameStatusController> {
               CustomButtonContainer(
                 CustomButton(
                   CustomText(
-                    'Non',
+                    'No',
                     textStyle: TextStyles.textMedium.copyWith(
                         color: const Color(ColorCode.black2Background),
                         fontSize: 25),
@@ -149,7 +149,7 @@ class GameStatusView extends GetView<GameStatusController> {
               CustomButtonContainer(
                 CustomButton(
                   CustomText(
-                    'Oui',
+                    'Yes',
                     textStyle: TextStyles.textMedium.copyWith(
                         color: controller.isChampion
                             ? const Color(ColorCode.accentLightColor)

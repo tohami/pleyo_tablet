@@ -1,42 +1,35 @@
 {
   "project_info": {
-    "project_number": "520696379920",
-    "firebase_url": "https://iaapa-4acac-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "iaapa-4acac",
-    "storage_bucket": "iaapa-4acac.appspot.com"
+    "project_number": "847769623655",
+    "firebase_url": "https://pleyo-event-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pleyo-event",
+    "storage_bucket": "pleyo-event.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:520696379920:android:514e667eb5e3e21cade895",
+        "mobilesdk_app_id": "1:847769623655:android:f5f5610b8bfdfe20a0c8c2",
         "android_client_info": {
           "package_name": "com.pleyo_tablet_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "520696379920-b4p62cd3qpvjlj0r8kgshlu8danu1mvr.apps.googleusercontent.com",
+          "client_id": "847769623655-kvdf3anpbpd4s1or280m7ne5kts2u6c7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCM0uUZg-_Gzi4YX3P7jrw90X1v8M10aF8"
+          "current_key": "AIzaSyA9HETa4HyvSypit14slBtm70YgLP5Qp6k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "520696379920-b4p62cd3qpvjlj0r8kgshlu8danu1mvr.apps.googleusercontent.com",
+              "client_id": "847769623655-kvdf3anpbpd4s1or280m7ne5kts2u6c7.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "520696379920-gir02n2ii2k6qa15ruf8kk0hl470e29q.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.pleyo.tablet"
-              }
             }
           ]
         }

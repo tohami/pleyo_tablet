@@ -72,7 +72,7 @@ class SplashView extends GetView<SplashController> {
                 height: 30,
               ),
               CustomText(
-                'Appuyez sur le bouton start\npour scanner votre QRcode',
+                'Press the start\nButton to scan your QRcode',
                 textStyle: TextStyles.textLarge.copyWith(
                   fontFamily: 'Parisine Plus Std Clair',
                   color: Color(ColorCode.white2Background),

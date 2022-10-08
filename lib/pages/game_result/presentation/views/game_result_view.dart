@@ -39,7 +39,7 @@ class GameResultView extends GetView<GameResultController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    'Votre score :',
+                    'Your score :',
                     textStyle: TextStyles.textLarge.copyWith(
                       fontFamily: 'Parisine Plus Std Clair',
                       color: const Color(ColorCode.white3Background),

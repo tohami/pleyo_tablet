@@ -27,7 +27,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -41,22 +44,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCM0uUZg-_Gzi4YX3P7jrw90X1v8M10aF8',
-    appId: '1:520696379920:android:514e667eb5e3e21cade895',
-    messagingSenderId: '520696379920',
-    projectId: 'iaapa-4acac',
-    databaseURL: 'https://iaapa-4acac-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'iaapa-4acac.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDoOqGr3fP84w3logmTQ4bu_4nR7YzyClE',
-    appId: '1:520696379920:ios:6ff77cc24473cea8ade895',
-    messagingSenderId: '520696379920',
-    projectId: 'iaapa-4acac',
-    databaseURL: 'https://iaapa-4acac-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'iaapa-4acac.appspot.com',
-    iosClientId: '520696379920-gir02n2ii2k6qa15ruf8kk0hl470e29q.apps.googleusercontent.com',
-    iosBundleId: 'com.pleyo.tablet',
+    apiKey: 'AIzaSyA9HETa4HyvSypit14slBtm70YgLP5Qp6k',
+    appId: '1:847769623655:android:f5f5610b8bfdfe20a0c8c2',
+    messagingSenderId: '847769623655',
+    projectId: 'pleyo-event',
+    databaseURL: 'https://pleyo-event-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'pleyo-event.appspot.com',
   );
 }

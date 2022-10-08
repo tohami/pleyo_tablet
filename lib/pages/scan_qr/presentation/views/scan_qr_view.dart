@@ -75,8 +75,8 @@ class ScanQRView extends GetView<ScanQRController> {
                   child: ObxValue<RxBool>((state) {
                     return CustomText(
                       state.value
-                          ? 'QRcode valide !'
-                          : 'Scannez votre QRcode\npour commencer à jouer',
+                          ? 'QRcode is valid!'
+                          : 'Scan your QRcode\nTo start playing',
                       textStyle: TextStyles.textLarge.copyWith(
                         fontFamily: 'Parisine Plus Std Clair',
                         height: 1.1666666666666667,
