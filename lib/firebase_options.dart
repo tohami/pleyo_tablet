@@ -44,11 +44,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA9HETa4HyvSypit14slBtm70YgLP5Qp6k',
-    appId: '1:847769623655:android:f5f5610b8bfdfe20a0c8c2',
-    messagingSenderId: '847769623655',
-    projectId: 'pleyo-event',
-    databaseURL: 'https://pleyo-event-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pleyo-event.appspot.com',
+    apiKey: 'AIzaSyC3RhGLIQZUMb9dATBAxu9YIF83iigjrLg',
+    appId: '1:511370810920:android:ba09defaddbb441341871d',
+    messagingSenderId: '511370810920',
+    projectId: 'feno-365911',
+    databaseURL: 'https://feno-365911-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'feno-365911.appspot.com',
   );
 }
