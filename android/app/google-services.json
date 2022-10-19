@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "847769623655",
-    "firebase_url": "https://pleyo-event-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "pleyo-event",
-    "storage_bucket": "pleyo-event.appspot.com"
+    "project_number": "511370810920",
+    "firebase_url": "https://feno-365911-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "feno-365911",
+    "storage_bucket": "feno-365911.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:847769623655:android:f5f5610b8bfdfe20a0c8c2",
+        "mobilesdk_app_id": "1:511370810920:android:ba09defaddbb441341871d",
         "android_client_info": {
           "package_name": "com.pleyo_tablet_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "847769623655-kvdf3anpbpd4s1or280m7ne5kts2u6c7.apps.googleusercontent.com",
+          "client_id": "511370810920-liocalcqu1nc3iv6cura70a81i2ufc43.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA9HETa4HyvSypit14slBtm70YgLP5Qp6k"
+          "current_key": "AIzaSyC3RhGLIQZUMb9dATBAxu9YIF83iigjrLg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "847769623655-kvdf3anpbpd4s1or280m7ne5kts2u6c7.apps.googleusercontent.com",
+              "client_id": "511370810920-liocalcqu1nc3iv6cura70a81i2ufc43.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
