@@ -4,6 +4,7 @@ import 'package:pleyo_tablet_app/pages/available_points/presentation/views/avail
 import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.dart';
 import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
+import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/activate_ticket_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 
 import '../middleware/auth_middleware.dart';
@@ -29,6 +30,11 @@ class AppPages {
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),
+      binding: ScanQRBinding(),
+    ),
+    GetPage(
+      name: Routes.ACTIVATE,
+      page: () => ActivateTicketView(),
       binding: ScanQRBinding(),
     ),
     GetPage(

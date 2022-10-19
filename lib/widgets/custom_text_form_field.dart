@@ -29,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
   final double fontSize;
 
   final Function(String)? onSubmit;
+  final Function(String)? onChange;
 
   const CustomTextFormField(
       {Key? key,
@@ -46,7 +47,9 @@ class CustomTextFormField extends StatelessWidget {
       this.borderWidth = 1,
       this.fontColor = const Color(ColorCode.blackBackground),
       this.fontSize = 30,
-      this.onSubmit})
+      this.onSubmit,
+      this.onChange
+      })
       : super(key: key);
 
   @override
@@ -63,6 +66,7 @@ class CustomTextFormField extends StatelessWidget {
         color: fontColor, fontWeight: FontWeight.w500, fontSize: fontSize,
         // height: 2.066666666666667,
       ),
+
       decoration: InputDecoration(
         enabledBorder: hasBorder
             ? OutlineInputBorder(
@@ -94,6 +98,7 @@ class CustomTextFormField extends StatelessWidget {
             hint.isNotEmpty ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : null,
       ),
       onFieldSubmitted: onSubmit,
+      onChanged: onChange,
     );
   }
 }

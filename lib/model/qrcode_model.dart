@@ -1,34 +1,38 @@
 class QrCodeModel {
   String? publicHashTag;
   int? remainingCredit;
-  List<String>? players;
+  String? isLocked;
   String? parkId;
-  String? isLocked ;
+  bool? isActivated;
+  String? customerName;
 
   QrCodeModel(
-      { required this.publicHashTag,
-        required this.remainingCredit,
-        required this.parkId,
-        required this.players,
-        required this.isLocked});
+      {
+        this.isLocked,
+        this.parkId,
+        this.publicHashTag,
+        this.isActivated,
+        this.customerName,
+        this.remainingCredit,
+      });
 
   QrCodeModel.fromJson(Map<dynamic, dynamic> json) {
-    publicHashTag = json['publicHashTag'];
-    remainingCredit = json['remainingCredit'];
-    parkId = json['parkId'];
     isLocked = json['isLocked'];
-    if (json['players'] != null) {
-      players = json['players'].cast<String>();
-    }
+    parkId = json['parkId'];
+    remainingCredit = json['remainingCredit'];
+    publicHashTag = json['publicHashTag'];
+    isActivated = json['isActivated'];
+    customerName = json['customerName'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['publicHashTag'] = publicHashTag;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['remainingCredit'] = remainingCredit;
-    data['parkId'] = parkId;
-    data['isLocked'] = isLocked;
-    data['players'] = players;
+    data['isLocked'] = this.isLocked;
+    data['parkId'] = this.parkId;
+    data['publicHashTag'] = this.publicHashTag;
+    data['isActivated'] = this.isActivated;
+    data['customerName'] = this.customerName;
     return data;
   }
 }

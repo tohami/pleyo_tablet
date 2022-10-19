@@ -25,7 +25,6 @@ class HomeController extends SuperController<bool> {
 
   HomeController();
 
-  RxString selectedPlayerName = "".obs;
 
   DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
   DatabaseReference machineRef = FirebaseDatabase.instance.ref("Machine");
@@ -38,10 +37,7 @@ class HomeController extends SuperController<bool> {
     super.onInit();
     change(null, status: RxStatus.success());
     try {
-      if (qrCodeModel.value.players != null &&
-          qrCodeModel.value.players!.isNotEmpty) {
-        selectedPlayerName.value = qrCodeModel.value.players!.last;
-      }
+
       var machineEntity = await machineRef.child(MACHINE_ID).get();
       final machineValue = machineEntity.value is List ? (machineEntity.value as List)[0] : machineEntity.value ;
       var machine =
@@ -183,41 +179,42 @@ class HomeController extends SuperController<bool> {
     }
   }
 
-  void addPlayer(String val) async {
-    if (val.trim().length < 4) {
-      isAddPlayerActive.value = false;
-      return;
-    }
-    var qrCode = qrCodeModel.value;
-    List<String> players = qrCode.players?.toList() ?? [];
-    if (!players.contains(val)) {
-      players.add(val);
-    }
-    qrCode.players = players;
-    qrCodeModel.value = qrCode;
-    print("add player");
-
-    try {
-      await qrCodesRef
-          .child(qrCodeModel.value.publicHashTag!)
-          .child("players")
-          .set(players);
-      selectedPlayerName.value = val;
-      // print(res)
-    } catch (e) {
-      print(e);
-    } finally {
-      isAddPlayerActive.value = false;
-    }
-  }
+  // void addPlayer(String val) async {
+  //   if (val.trim().length < 4) {
+  //     isAddPlayerActive.value = false;
+  //     return;
+  //   }
+  //   var qrCode = qrCodeModel.value;
+  //   List<String> players = qrCode.players?.toList() ?? [];
+  //   if (!players.contains(val)) {
+  //     players.add(val);
+  //   }
+  //   qrCode.players = players;
+  //   qrCodeModel.value = qrCode;
+  //   print("add player");
+  //
+  //   try {
+  //     await qrCodesRef
+  //         .child(qrCodeModel.value.publicHashTag!)
+  //         .child("players")
+  //         .set(players);
+  //     selectedPlayerName.value = val;
+  //     // print(res)
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     isAddPlayerActive.value = false;
+  //   }
+  // }
 
   //0 nothing
   //1 starting
   //2 started
   RxInt gameStatus = 0.obs;
 
-  void startGame(GameModel game, VariationList variant, String playerName,
+  void startGame(GameModel game, VariationList variant,
       int diff) async {
+    var playerName = qrCodeModel.value.customerName ;
     var now = DateTime.now();
     StreamSubscription? subscription;
     gameStatus.value = 1;

@@ -8,6 +8,7 @@ import 'package:pleyo_tablet_app/widgets/custom_button.dart';
 import 'package:pleyo_tablet_app/widgets/custom_button_container.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
+import 'package:pleyo_tablet_app/widgets/player_name.dart';
 
 import '../controllers/game_status_controller.dart';
 
@@ -35,7 +36,9 @@ class GameStatusView extends GetView<GameStatusController> {
                     const SizedBox(
                       height: 15,
                     ),
-                    playerNameWidget(),
+                    playerNameWidget(playerName: controller.playerName! , onLogoutClicked: ()=>{
+                      showLogoutGameDialog(context)
+                    }),
                   ],
                 ),
                 Expanded(child: Container()),
@@ -172,87 +175,6 @@ class GameStatusView extends GetView<GameStatusController> {
       ),
     );
   }
-
-  Widget playerNameWidget() {
-    return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 60,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: const Color(ColorCode.darkGrayBackground),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-              ),
-              border: Border.all(
-                  width: 3.0, color: const Color(ColorCode.white2Background)),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  'assets/images/icon_person.svg',
-                  fit: BoxFit.fitHeight,
-                  width: 30,
-                  height: 30,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                SizedBox(
-                  width: 70,
-                  child: CustomText(
-                    controller.playerName ?? "",
-                    textAlign: TextAlign.start,
-                    textStyle: TextStyles.textMedium.copyWith(
-                      fontSize: 20,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
-              ),
-              border: Border.all(
-                width: 3.0,
-                color: const Color(ColorCode.grayBackground),
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x42000000),
-                  offset: Offset(0, 4),
-                  blurRadius: 4,
-                ),
-              ],
-              color: const Color(ColorCode.grayBackground),
-            ),
-            child: SvgPicture.asset(
-              'assets/images/icon_add.svg',
-              fit: BoxFit.fill,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   void showLogoutGameDialog(BuildContext context) {
     showDialog(
         context: context,

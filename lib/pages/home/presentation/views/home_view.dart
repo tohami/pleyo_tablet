@@ -9,6 +9,7 @@ import 'package:pleyo_tablet_app/model/game_model.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
+import 'package:pleyo_tablet_app/widgets/player_name.dart';
 import 'package:pleyo_tablet_app/widgets/start_game_bottom_sheet.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
@@ -79,7 +80,7 @@ class HomeView extends GetView<HomeController> {
                         const SizedBox(
                           height: 15,
                         ),
-                        playerNameWidget(),
+                        playerNameWidget(playerName: controller.qrCodeModel.value.customerName! ,onLogoutClicked:  ()=>controller.onLogoutClicked()),
                       ],
                     ),
                     gameModeWidget(),
@@ -105,9 +106,9 @@ class HomeView extends GetView<HomeController> {
                             ),
                             GameWidget(game: controller.games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
-                              showBottomSheetModal(context , variant , (diff , name) {
+                              showBottomSheetModal(context , variant , (diff) {
                                 controller.startGame(
-                                    controller.games[index] , variant ,name.toLowerCase(), diff
+                                    controller.games[index] , variant, diff
                                 );
                               }) ;
                             },) ,
@@ -130,7 +131,7 @@ class HomeView extends GetView<HomeController> {
   }
 
 
-  showBottomSheetModal(BuildContext context , VariationList variation,Function(int , String) onDifficultSelected) {
+  showBottomSheetModal(BuildContext context , VariationList variation,Function(int) onDifficultSelected) {
     return Get.bottomSheet(
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -257,113 +258,6 @@ class HomeView extends GetView<HomeController> {
     ) ;
   }
 
-  Widget playerNameWidget() {
-   return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        children: [
-          Obx(() {
-            var isAddPlayerActive = controller.isAddPlayerActive.value ;
-            var players = controller.qrCodeModel.value.players??[] ;
-            return Container(
-              height: 60,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color:
-                const Color(ColorCode.darkGrayBackground),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  bottomLeft: Radius.circular(10.0),
-                ),
-                border: Border.all(
-                    width: 3.0,
-                    color: const Color(
-                        ColorCode.white2Background)),
-              ),
-              child:  GestureDetector(
-                onTap: isAddPlayerActive ? null : ()=> controller.isAddPlayerActive.toggle(),
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds:250),
-                  child: Row(
-                    key: ValueKey(isAddPlayerActive),
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/icon_person.svg',
-                        fit: BoxFit.fitHeight,
-                        width: 30,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 16,),
-                      isAddPlayerActive ? SizedBox(
-                        width: 210 ,
-                        child: CustomTextFormField(
-                          fontSize:20,
-                          onSubmit: (val) {
-                            // playerName.value = val;
-                            print("on submit") ;
-                            controller.addPlayer(val) ;
-                          },
-                          fontColor: const Color(
-                              ColorCode.whiteBackground),
-                        ),
-                      ) : SizedBox(
-                        width:70,
-                        child: CustomText(
-                          players.isNotEmpty ? players.last : "Add ...",
-                          textAlign: TextAlign.start,
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontSize: 20,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ) ;
-          }),
-          GestureDetector(
-            onTap: ()=> controller.isAddPlayerActive.toggle(),
-            child: Container(
-              width: 60,
-              height: 60,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
-                ),
-                border: Border.all(
-                  width: 3.0,
-                  color:
-                  const Color(ColorCode.grayBackground),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x42000000),
-                    offset: Offset(0, 4),
-                    blurRadius: 4,
-                  ),
-                ],
-                color: const Color(ColorCode.grayBackground),
-              ),
-              child: SvgPicture.asset(
-                'assets/images/icon_add.svg',
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
-        ],
-      ),
-    ) ;
-  }
 
   Widget gameModeWidget() {
     return ObxValue<RxBool>((state) {

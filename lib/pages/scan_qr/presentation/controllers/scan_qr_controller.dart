@@ -1,23 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
-class ScanQRController extends SuperController<bool> with GetSingleTickerProviderStateMixin{
+class ScanQRController extends SuperController<bool>
+    with GetSingleTickerProviderStateMixin {
   late AnimationController _boxAnimationController;
   late Animation<double> boxAnimation;
 
+  String username = "";
+
   ScanQRController();
+
   QRViewController? controller;
-  RxBool isScanned = false.obs ;
+  RxBool isScanned = false.obs;
+
   TextEditingController emailController = TextEditingController();
 
   @override
   void onInit() {
-    super.onInit() ;
+    super.onInit();
     _boxAnimationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
@@ -31,12 +37,8 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
       ),
     );
     try {
-      _boxAnimationController
-          .repeat(reverse: true)
-          .orCancel;
-    }on TickerCanceled catch (e) {
-
-    }
+      _boxAnimationController.repeat(reverse: true).orCancel;
+    } on TickerCanceled catch (e) {}
     change(null, status: RxStatus.success());
   }
 
@@ -50,7 +52,7 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     // ignore: avoid_print
     print('onClose called');
     controller?.dispose();
-    _boxAnimationController.dispose() ;
+    _boxAnimationController.dispose();
     super.onClose();
   }
 
@@ -108,42 +110,79 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
 
   DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
 
-
-  void onQRViewCreated(QRViewController controller) async{
+  void onQRViewCreated(QRViewController controller) async {
     this.controller = controller;
+    controller.resumeCamera();
 
-    var qrCodeEntity = await qrCodeRef.child("-MzQWdLFUQnEYYNlmrV4").get();
-    var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
-    if(qrCode.remainingCredit! > 0) {
-      isScanned.value = true ;
-      await Future.delayed(const Duration(seconds: 2)) ;
-      Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);
-    }else {
-      Get.snackbar("Error", "You don't have any Credit left in your card");
-    }
     CameraFacing cameraInfo = await controller.getCameraInfo();
-    if(cameraInfo == CameraFacing.back){
+    if (cameraInfo == CameraFacing.back) {
       await controller.flipCamera();
     }
-    controller.scannedDataStream.listen((scanData)async {
+
+    if (kDebugMode) {
+      print("reading qr coe ");
+      final code = "-MzQWdLFUQnEYYNlmrV4";
+      var qrCodeEntity = await qrCodeRef.child(code).get();
+      final qrCodeValue = qrCodeEntity.value is List
+          ? (qrCodeEntity.value as List)[0]
+          : qrCodeEntity.value;
+
+      print(qrCodeValue);
+      var qrCode = QrCodeModel.fromJson(qrCodeValue);
+      print(qrCode.isActivated);
+      if (qrCode.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+        return;
+      }else {
+        Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: qrCode);
+      }
+    }
+    controller.scannedDataStream.listen((scanData) async {
       controller.stopCamera();
       try {
-        var qrCodeEntity = await qrCodeRef.child(scanData.code!).get();
-        var qrCode = QrCodeModel.fromJson(qrCodeEntity.value as Map<dynamic, dynamic>) ;
-        if(qrCode.remainingCredit! > 0) {
-          isScanned.value = true ;
-          await Future.delayed(const Duration(seconds: 2)) ;
-          Get.rootDelegate.offNamed(Routes.AVAILABLE_POINTS , arguments: qrCode);
-        }else {
-          Get.snackbar("Error", "You don't have any Credit left in your card");
+        isScanned.value = true;
+        final code = scanData.code?.split("?id=").last;
+        var qrCodeEntity = await qrCodeRef.child(code!).get();
+        if (qrCodeEntity.exists) {
+          final qrCodeValue = qrCodeEntity.value is List
+              ? (qrCodeEntity.value as List)[0]
+              : qrCodeEntity.value;
+
+          var qrCode = QrCodeModel.fromJson(qrCodeValue);
+          if (qrCode.isActivated == true) {
+            Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+          } else {
+            Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: qrCode);
+            // await Get.defaultDialog(
+            //     title: "Error",
+            //     content: Text(
+            //         "Ticket not activated yet, please activate your ticket first "),
+            //     onConfirm: () {
+            //       Get.back();
+            //     });
+          }
         }
-      }catch (e) {
+      } catch (e) {
         Get.snackbar("Error", "Invalid Qr code");
-        print(e) ;
+        print(e);
       } finally {
-        controller.resumeCamera() ;
-        isScanned.value = false ;
+        controller.resumeCamera();
+        isScanned.value = false;
       }
     });
+  }
+
+  void activateTicket(String val) async{
+    if(val.trim().length < 4 ) {
+      Get.snackbar("Error", "Nickname must be more than 4 characters") ;
+      return ;
+    }
+    QrCodeModel qrCodeModel = Get.rootDelegate.arguments() ;
+    qrCodeModel.isActivated = true ;
+    qrCodeModel.customerName = val ;
+    var currentQrCodeRef = qrCodeRef.child(qrCodeModel.publicHashTag!);
+
+    await currentQrCodeRef.set(qrCodeModel.toJson());
+    Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCodeModel);
   }
 }
