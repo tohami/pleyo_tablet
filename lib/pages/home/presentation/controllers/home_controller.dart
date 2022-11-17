@@ -275,6 +275,8 @@ class HomeController extends SuperController<bool> {
             if(Navigator.of(Get.context!).canPop()) {
               Navigator.of(Get.context!).pop();
             }
+            gameStartedData.teamName = qrCodeModel.value.teamName ;
+            gameStartedData.teamColor = qrCodeModel.value.teamColor ;
             Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
               "game_data" : gameStartedData.toJson() ,
               "mode": isChampoinship.value,

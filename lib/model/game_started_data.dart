@@ -12,6 +12,8 @@ class GameStartedData {
   String? publicHashtag;
   int? score;
   int? dateTime;
+  String? teamName ;
+  int? teamColor ;
 
   GameStartedData(
       {this.difficultyPlayed,
@@ -26,7 +28,9 @@ class GameStartedData {
         this.playerNickName,
         this.publicHashtag,
         this.score ,
-        this.dateTime});
+        this.dateTime,
+        this.teamName,
+        this.teamColor});
 
   GameStartedData.fromJson(Map<dynamic, dynamic> json) {
     difficultyPlayed = json['DifficultyPlayed'];
@@ -46,6 +50,8 @@ class GameStartedData {
     publicHashtag = json['PublicHashtag'];
     score = json['Score'];
     dateTime = json['DateTime'];
+    teamName = json['teamName'];
+    teamColor = json['teamColor'];
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +69,8 @@ class GameStartedData {
     data['PublicHashtag'] = this.publicHashtag;
     data['Score'] = this.score;
     data['DateTime'] = this.dateTime;
+    data['teamName'] = this.teamName;
+    data['teamColor'] = this.teamColor;
     return data;
   }
 }

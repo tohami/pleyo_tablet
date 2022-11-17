@@ -9,6 +9,8 @@ class QrCodeModel {
   String? customerEmail;
   int? age;
   String? role;
+  String? teamName ;
+  int? teamColor ;
 
   QrCodeModel(
       {this.createdAt,
@@ -20,7 +22,9 @@ class QrCodeModel {
         this.customerName,
         this.customerEmail,
         this.age,
-        this.role});
+        this.role,
+        this.teamName,
+        this.teamColor});
 
   QrCodeModel.fromJson(Map<dynamic, dynamic> json) {
     createdAt = json['createdAt'];
@@ -33,6 +37,8 @@ class QrCodeModel {
     customerEmail = json['customerEmail'];
     age = json['age'];
     role = json['role'];
+    teamName = json['teamName'];
+    teamColor = json['teamColor'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +53,8 @@ class QrCodeModel {
     data['customerEmail'] = this.customerEmail;
     data['age'] = this.age;
     data['role'] = this.role;
+    data['teamName'] = this.teamName;
+    data['teamColor'] = this.teamColor;
     return data;
   }
 }

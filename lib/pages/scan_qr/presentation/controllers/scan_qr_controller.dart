@@ -121,7 +121,7 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     }
 
     if(kDebugMode) {
-      final code = "-NAe1J8g4REZtvDhYklm";
+      final code = "-NGIqNREwRrYNwbTrxUM";
       var qrCodeEntity = await qrCodeRef.child(code).get();
       final qrCodeValue = qrCodeEntity.value is List ? (qrCodeEntity
           .value as List)[0] : qrCodeEntity.value;
