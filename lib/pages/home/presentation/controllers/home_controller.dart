@@ -39,7 +39,7 @@ class HomeController extends SuperController<bool> {
     change(null, status: RxStatus.success());
     try {
 
-      var machineEntity = await machineRef.child(MACHINE_ID).get();
+      var machineEntity = await machineRef.child(STATION_ID).get();
       print(machineEntity.value) ;
       final machineValue = machineEntity.value is List ? (machineEntity.value as List)[0] : machineEntity.value ;
       var machine =
@@ -226,7 +226,7 @@ class HomeController extends SuperController<bool> {
     var newCommand = messageQueueRef.push();
 
     newCommand
-        .set({"CommandeId": "GAME_STOP", "Data": GameStartedData(idMachine: int.parse(MACHINE_ID)).toJson()});
+        .set({"CommandeId": "GAME_STOP", "Data": GameStartedData(idMachine: int.parse(STATION_ID)).toJson()});
 
     await Future.delayed(const Duration(seconds: 2));
 
@@ -239,7 +239,7 @@ class HomeController extends SuperController<bool> {
           difficultyPlayed: diff.toString(),
           gameName: game.gameName,
           idGame: game.idGame,
-          idMachine: MACHINE_ID,
+          idMachine: STATION_ID,
           idVariation: variant.idVariation,
           isOnPartyMode: (!(isChampoinship.value)).toString(),
           partyName: playerName,
@@ -266,7 +266,7 @@ class HomeController extends SuperController<bool> {
         if (value != null && value["CommandeId"] == "GAME_STARTED") {
           var gameStartedData =
               GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
-          if (gameStartedData.idMachine.toString() == MACHINE_ID &&
+          if (gameStartedData.idMachine.toString() == STATION_ID &&
               gameStartedData.idGame.toString() == game.idGame &&
               gameStartedData.idVariation.toString() == variant.idVariation &&
               gameStartedData.playerNickName == playerName &&

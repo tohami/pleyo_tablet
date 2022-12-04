@@ -15,28 +15,26 @@ import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-const MACHINE_ID = String.fromEnvironment('ID' , defaultValue: "1");
-const MACHINE_USERNAME = String.fromEnvironment('U');
-const MACHINE_PASSWORD = String.fromEnvironment('P');
+const STATION_ID = String.fromEnvironment('ID' , defaultValue: "3");
 
 Future main() async {
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  // runZonedGuarded<Future<void>>(() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  //   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
     runApp(const MyApp());
-  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
-
-  Isolate.current.addErrorListener(RawReceivePort((pair) async {
-    final List<dynamic> errorAndStacktrace = pair;
-    await FirebaseCrashlytics.instance.recordError(
-      errorAndStacktrace.first,
-      errorAndStacktrace.last,
-    );
-  }).sendPort);
+  // }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  //
+  // Isolate.current.addErrorListener(RawReceivePort((pair) async {
+  //   final List<dynamic> errorAndStacktrace = pair;
+  //   await FirebaseCrashlytics.instance.recordError(
+  //     errorAndStacktrace.first,
+  //     errorAndStacktrace.last,
+  //   );
+  // }).sendPort);
 }
 
 class MyApp extends StatelessWidget {

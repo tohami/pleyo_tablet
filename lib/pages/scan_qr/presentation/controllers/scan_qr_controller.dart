@@ -5,21 +5,27 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/qrcode_model.dart';
+import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_repository.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
-class ScanQRController extends SuperController<bool> with GetSingleTickerProviderStateMixin{
+class TicketController extends SuperController<bool>
+    with GetSingleTickerProviderStateMixin {
   late AnimationController _boxAnimationController;
   late Animation<double> boxAnimation;
 
-  ScanQRController();
+  TicketController({required this.repository});
+
+  final ITicketRepository repository;
+
   QRViewController? controller;
-  RxBool isScanned = false.obs ;
+  RxBool isScanned = false.obs;
+
   TextEditingController emailController = TextEditingController();
 
   @override
-  void onInit() {
-    super.onInit() ;
+  void onInit() async {
+    super.onInit();
     _boxAnimationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
@@ -33,13 +39,35 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
       ),
     );
     try {
-      _boxAnimationController
-          .repeat(reverse: true)
-          .orCancel;
-    }on TickerCanceled catch (e) {
-
-    }
+      _boxAnimationController.repeat(reverse: true).orCancel;
+    } on TickerCanceled catch (e) {}
     change(null, status: RxStatus.success());
+
+    if (kDebugMode) {
+      onTicketScanned(
+          "https://pleyo-operator-frontend.vercel.app/activate/372/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
+    }
+  }
+
+  Future onTicketScanned(String url) async {
+    try {
+      var data = url.split("/") ;
+      if(data.length != 6) {
+        Get.snackbar("Error", "Invalid ticket");
+        return ;
+      }
+      var ticket = await repository.checkTicket(int.parse(data[4]), data[5]);
+      if (ticket.attributes?.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME, arguments: ticket);
+      } else {
+        print("ticket ticket" + ticket.id.toString()) ;
+        Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: ticket);
+        Get.snackbar("Error", "Qr code is not active ");
+      }
+    } catch (e) {
+      printError(info: e.toString()) ;
+      Get.snackbar("Error", e.toString());
+    }
   }
 
   @override
@@ -52,9 +80,10 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     // ignore: avoid_print
     print('onClose called');
     controller?.dispose();
-    _boxAnimationController.dispose() ;
+    _boxAnimationController.dispose();
     super.onClose();
   }
+
 
   @override
   void didChangeMetrics() {
@@ -108,59 +137,32 @@ class ScanQRController extends SuperController<bool> with GetSingleTickerProvide
     print('onResumed called');
   }
 
-  DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
+  void onQRViewCreated(QRViewController controller) async {
+    if (kDebugMode) {
+      await onTicketScanned(
+          "https://pleyo-operator-frontend.vercel.app/activate/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
+      return;
+    }
 
-
-  void onQRViewCreated(QRViewController controller) async{
     this.controller = controller;
     controller.resumeCamera();
 
     CameraFacing cameraInfo = await controller.getCameraInfo();
-    if(cameraInfo == CameraFacing.back){
+    if (cameraInfo == CameraFacing.back) {
       await controller.flipCamera();
     }
 
-    if(kDebugMode) {
-      final code = "-NGIqNREwRrYNwbTrxUM";
-      var qrCodeEntity = await qrCodeRef.child(code).get();
-      final qrCodeValue = qrCodeEntity.value is List ? (qrCodeEntity
-          .value as List)[0] : qrCodeEntity.value;
-
-      var qrCode = QrCodeModel.fromJson(qrCodeValue);
-      if (qrCode.isActivated == true) {
-        Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
+    var loading = false;
+    controller.scannedDataStream.listen((scanData) async {
+      if (loading) {
         return;
       }
-    }
-    controller.scannedDataStream.listen((scanData)async {
-      controller.stopCamera();
-      try {
-        isScanned.value = true ;
-        final code = scanData.code?.split("?id=").last ;
-        var qrCodeEntity = await qrCodeRef.child(code!).get();
-        if(qrCodeEntity.exists) {
-          final qrCodeValue = qrCodeEntity.value is List ? (qrCodeEntity.value as List)[0] : qrCodeEntity.value ;
-
-          var qrCode = QrCodeModel.fromJson(qrCodeValue);
-          if(qrCode.isActivated == true) {
-            Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
-          }else {
-            await Get.defaultDialog(
-              title: "Error" ,
-              content: Text("Ticket not activated yet, please activate your ticket firs ") ,
-              onConfirm: (){
-                Get.back() ;
-              }
-            ) ;
-          }
-        }
-      }catch (e) {
-        Get.snackbar("Error", "Invalid Qr code");
-        print(e) ;
-      } finally {
-        controller.resumeCamera() ;
-        isScanned.value = false ;
-      }
+      loading = true;
+      isScanned.value = true;
+      final data = scanData.code;
+      await onTicketScanned(data!);
+      loading = false;
+      isScanned.value = false;
     });
   }
 }

@@ -7,6 +7,7 @@ abstract class Routes {
 
   static const SPLASH = _Paths.SPLASH;
   static const SCAN_QR = _Paths.SCAN_QR;
+  static const ACTIVATE = _Paths.ACTIVATE;
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
   static const HOME = _Paths.HOME;
   static const GAME_STATUS = _Paths.GAME_STATUS;
@@ -16,6 +17,7 @@ abstract class Routes {
 abstract class _Paths {
   static const SPLASH = '/splash';
   static const SCAN_QR = '/scan_qr';
+  static const ACTIVATE = '/activate';
   static const AVAILABLE_POINTS = '/available_points';
   static const HOME = '/home';
   static const GAME_STATUS = '/game_status';

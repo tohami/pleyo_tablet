@@ -54,7 +54,7 @@ class GameStatusController extends SuperController<bool> {
               gameStartedData.isPartyMode = !isChampion;
               gameStartedData.teamColor = gameData!.teamColor ;
               gameStartedData.teamName = gameData!.teamName ;
-              if (gameStartedData.idMachine.toString() == MACHINE_ID &&
+              if (gameStartedData.idMachine.toString() == STATION_ID &&
                   gameStartedData.idGame == gameData?.idGame &&
                   gameStartedData.idVariation == gameData?.idVariation &&
                   gameStartedData.playerNickName == playerName) {

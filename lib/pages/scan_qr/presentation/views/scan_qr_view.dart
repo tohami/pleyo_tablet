@@ -10,7 +10,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../controllers/scan_qr_controller.dart';
 
 // ignore: must_be_immutable
-class ScanQRView extends GetView<ScanQRController> {
+class ScanQRView extends GetView<TicketController> {
   ScanQRView({Key? key}) : super(key: key);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -20,12 +20,12 @@ class ScanQRView extends GetView<ScanQRController> {
       child: Scaffold(
         body: Stack(
           children: [
-            SizedBox(
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: controller.onQRViewCreated,
-              ),
-            ),
+            // SizedBox(
+            //   child: QRView(
+            //     key: qrKey,
+            //     onQRViewCreated: controller.onQRViewCreated,
+            //   ),
+            // ),
             AnimatedBuilder(
               animation: controller.boxAnimation,
               builder: (context, child) {
