@@ -66,9 +66,11 @@ class StartGameBottomSheet extends StatelessWidget {
                             ),
                           ),
                           ...gameDifficulties!.map((e)  {
+                            String color = e.attributes!.color!.replaceAll('#', '0xff');
+
                             return GameDifficultyWidget(
                                 title: e.attributes!.name!,
-                                color: ColorCode.greenBackground,
+                                color:  int.parse(color),
                                 onTap: () {
                                 onDifficultSelected(e.id!);
                                 }) ;

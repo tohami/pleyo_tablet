@@ -21,14 +21,16 @@ class GameDifficulty {
 
 class _Attributes {
   String? name;
+  String? color;
   int? difficulty;
   String? createdAt;
   String? updatedAt;
 
-  _Attributes({this.name, this.difficulty, this.createdAt, this.updatedAt});
+  _Attributes({this.name,this.color, this.difficulty, this.createdAt, this.updatedAt});
 
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    color = json['color'];
     difficulty = json['difficulty'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -37,6 +39,7 @@ class _Attributes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
+    data['color'] = this.color;
     data['difficulty'] = this.difficulty;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;

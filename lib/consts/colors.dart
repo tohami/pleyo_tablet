@@ -22,7 +22,7 @@ class ColorCode {
   static const greenBackground = 0xff71f231;
   static const yellow2Background = 0xffebdc0d;
   static const yellow3Background = 0xfffeff66;
-  static const redBackground = 0xffef1212;
+  static const redBackground = Colors.deepOrange;
 
   static const customGrayBackground = 0xffbfbfbf;
   static const lightBlackBackground = 0xff404040;
