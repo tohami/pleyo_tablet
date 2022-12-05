@@ -3,26 +3,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/model/game_model.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
   final int buttonColor;
-  final VariationList variantModel;
+  final GameVariant variantModel;
   final VoidCallback onTap;
   late VideoPlayerController _controller;
   final RxBool isInitialized = false.obs;
   VideoWidget(this.variantModel,
       {required this.onTap, required this.buttonColor, Key? key})
       : super(key: key) {
-    _controller = VideoPlayerController.network(variantModel.urlVideoTablet!,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false))
-      ..initialize().then((_) {
-        isInitialized.value = true;
-      });
-    _controller.setLooping(true);
-    _controller.setVolume(0.0);
+    // _controller = VideoPlayerController.network(variantModel.urlVideoTablet!,
+    //     videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false))
+    //   ..initialize().then((_) {
+    //     isInitialized.value = true;
+    //   });
+    // _controller.setLooping(true);
+    // _controller.setVolume(0.0);
   }
 
   @override
@@ -46,8 +46,8 @@ class VideoWidget extends StatelessWidget {
                 return state.value
                     ? VideoPlayer(_controller)
                     : Container(
-                        child: variantModel.urlImage != null ? Image.network(
-                          variantModel.urlImage!,
+                        child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
+                          "https://pleyo-operator.herokuapp.com" + variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
                         ):CircularProgressIndicator(
                           color: Color(buttonColor),
                         ),
@@ -80,7 +80,7 @@ class VideoWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        variantModel.displayedName??"",
+                        variantModel.attributes?.name??"",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         textStyle: TextStyles.textLarge.copyWith(
@@ -92,7 +92,7 @@ class VideoWidget extends StatelessWidget {
                         height: 2,
                       ),
                       CustomText(
-                        variantModel.gameInfoText??"",
+                        variantModel.attributes?.description??"",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         textStyle: TextStyles.textMedium.copyWith(

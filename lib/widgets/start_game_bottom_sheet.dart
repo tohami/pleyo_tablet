@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/model/game_model.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/pages/home/presentation/controllers/home_controller.dart';
 import 'package:pleyo_tablet_app/widgets/custom_button.dart';
 import 'package:pleyo_tablet_app/widgets/custom_button_container.dart';
@@ -14,7 +14,7 @@ import 'package:pleyo_tablet_app/widgets/player_widget.dart';
 
 class StartGameBottomSheet extends StatelessWidget {
   final HomeController controller;
-  final VariationList gameVariation;
+  final GameVariant gameVariation;
   final Function(int) onDifficultSelected;
   StartGameBottomSheet(
       {required this.controller,
@@ -26,7 +26,7 @@ class StartGameBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var gameDifficulties =
-        gameVariation.difficultyAvailable!.map((e) => e.difficulty ?? "");
+        gameVariation.attributes?.gameDifficulties?.data;
     print(gameDifficulties);
     return Container(
           margin: const EdgeInsets.symmetric(horizontal: 56, vertical: 66),
@@ -65,45 +65,14 @@ class StartGameBottomSheet extends StatelessWidget {
                               height: 0.3,
                             ),
                           ),
-                          gameDifficulties.contains("0")
-                              ? GameDifficultyWidget(
-                                  title: 'Easy',
-                                  color: ColorCode.greenBackground,
-                                  onTap: () {
-                                    onDifficultSelected(0);
-                                  },
-                                )
-                              : Container(),
-                          gameDifficulties.contains("1")
-                              ? GameDifficultyWidget(
-                                  title: 'Medium',
-                                  color: ColorCode.yellow2Background,
-                                  onTap: () {
-                                    onDifficultSelected(
-                                        1);
-                                  },
-                                )
-                              : Container(),
-                          gameDifficulties.contains("2")
-                              ? GameDifficultyWidget(
-                                  title: 'Hard',
-                                  color: Colors.deepOrange.value,
-                                  onTap: () {
-                                    onDifficultSelected(
-                                        2);
-                                  },
-                                )
-                              : Container(),
-                          gameDifficulties.contains("3")
-                              ? GameDifficultyWidget(
-                                  title: 'Very hard',
-                                  color: ColorCode.redBackground,
-                                  onTap: () {
-                                    onDifficultSelected(
-                                        3);
-                                  },
-                                )
-                              : Container(),
+                          ...gameDifficulties!.map((e)  {
+                            return GameDifficultyWidget(
+                                title: e.attributes!.name!,
+                                color: ColorCode.greenBackground,
+                                onTap: () {
+                                onDifficultSelected(e.id!);
+                                }) ;
+                          }).toList() ,
                         ],
                       ),
                     ),

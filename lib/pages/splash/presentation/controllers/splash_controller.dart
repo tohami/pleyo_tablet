@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/main.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../routes/app_pages.dart';
 import '../../data/splash_repository.dart';
@@ -58,7 +59,13 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onResumed() {}
 
-  onStartClicked() {
-    Get.rootDelegate.offNamed(Routes.SCAN_QR);
+  onStartClicked() async {
+    try {
+      var station = await splashRepository.getStationData();
+      StationService.to.currentStation = station ;
+      Get.rootDelegate.offNamed(Routes.SCAN_QR);
+    } catch (e) {
+      Get.snackbar("Error", "Unable to load station data ") ;
+    }
   }
 }

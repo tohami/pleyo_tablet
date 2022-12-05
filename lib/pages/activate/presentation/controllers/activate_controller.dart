@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 

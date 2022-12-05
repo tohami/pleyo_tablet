@@ -5,7 +5,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/model/game_model.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
@@ -43,7 +43,7 @@ class HomeView extends GetView<HomeController> {
                         const SizedBox(
                           height: 15,
                         ),
-                        playerNameWidget(playerName: controller.qrCodeModel.value.customerName! ,onLogoutClicked:  ()=>controller.onLogoutClicked()),
+                        playerNameWidget(playerName: controller.ticket.attributes!.nickname! ,onLogoutClicked:  ()=>controller.onLogoutClicked()),
                       ],
                     ),
                   ],
@@ -66,12 +66,10 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: controller.games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
+                            GameWidget(game: controller.games.entries.toList()[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
                               showBottomSheetModal(context , variant , (diff) {
-                                controller.startGame(
-                                    controller.games[index] , variant, diff
-                                );
+                                controller.startGame(variant.id!, diff);
                               }) ;
                             },) ,
 
@@ -93,7 +91,7 @@ class HomeView extends GetView<HomeController> {
   }
 
 
-  showBottomSheetModal(BuildContext context , VariationList variation,Function(int) onDifficultSelected) {
+  showBottomSheetModal(BuildContext context , GameVariant variation,Function(int) onDifficultSelected) {
     return Get.bottomSheet(
         Column(
           mainAxisSize: MainAxisSize.min,

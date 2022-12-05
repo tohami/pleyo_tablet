@@ -7,7 +7,7 @@ import '../presentation/controllers/splash_controller.dart';
 class SplashBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<ISplashProvider>(SplashProvider());
+    Get.lazyPut<ISplashProvider>(()=> SplashProvider());
     Get.put<ISplashRepository>(SplashRepository(provider: Get.find()));
     Get.put(SplashController(splashRepository: Get.find()));
   }

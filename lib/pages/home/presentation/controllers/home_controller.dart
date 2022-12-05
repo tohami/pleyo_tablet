@@ -5,16 +5,19 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/main.dart';
-import 'package:pleyo_tablet_app/model/game_started_data.dart';
-import 'package:pleyo_tablet_app/model/machine_model.dart';
-import 'package:pleyo_tablet_app/model/qrcode_model.dart';
-import 'package:pleyo_tablet_app/model/start_game_data.dart';
+import 'package:pleyo_tablet_app/model/strapi/game.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
+import "package:collection/collection.dart";
 
-import '../../../../model/game_model.dart';
+import '../../../../model/strapi/station.dart';
+import '../../../../model/strapi/ticket.dart';
+import '../../data/games_repository.dart';
 
 class HomeController extends SuperController<bool> {
-  Rx<QrCodeModel> qrCodeModel = Rx<QrCodeModel>(Get.rootDelegate.arguments());
+  Ticket ticket = StationService.to.currentTicket;
+  Station station = StationService.to.currentStation;
 
   RxBool isLogoutActive = false.obs;
 
@@ -22,73 +25,21 @@ class HomeController extends SuperController<bool> {
 
   RxBool isChampoinship = true.obs;
 
-  final RxList<GameModel> games = RxList<GameModel>([]);
+  late Map<Game , List<GameVariant>> games =  groupBy(station.attributes!.gameVariants!.data! , (GameVariant item) => item.attributes!.game!.data!) ;
+  final IGamesRepository repository ;
+  HomeController({required this.repository});
 
-  HomeController();
-
-
-  DatabaseReference gamesRef = FirebaseDatabase.instance.ref("Game");
-  DatabaseReference machineRef = FirebaseDatabase.instance.ref("Machine");
-  DatabaseReference qrCodesRef = FirebaseDatabase.instance.ref("QRCode");
-  DatabaseReference messageQueueRef =
-      FirebaseDatabase.instance.ref("MessageQueue");
 
   @override
   void onInit() async {
     super.onInit();
-    change(null, status: RxStatus.success());
     try {
+      change(null, status: RxStatus.success());
 
-      var machineEntity = await machineRef.child(STATION_ID).get();
-      print(machineEntity.value) ;
-      final machineValue = machineEntity.value is List ? (machineEntity.value as List)[0] : machineEntity.value ;
-      var machine =
-          MachineModel.fromJson(machineValue);
-
-      var gamesEntity = await gamesRef.get();
-      games.addAll(gamesEntity.children.map((e) {
-        print(e) ;
-        final gameValue = e.value is List ? (e.value as List)[0] : e.value ;
-
-        var game = GameModel.fromJson(gameValue);
-
-        GameVariationList? machineVariation = machine.gameVariationList
-            ?.firstWhereOrNull((element) => element.idGame == game.idGame);
-
-        if (machineVariation == null ||
-            machineVariation.variationList == null) {
-          game.variationList?.clear();
-        } else {
-          List<String?> machineVariationIds = machineVariation.variationList!
-              .map((e) => e.idVariation)
-              .toList();
-          //remove games thats not included in the machine
-          game.variationList?.removeWhere(
-              (element) => !machineVariationIds.contains(element.idVariation));
-        }
-
-        return game;
-      }));
-
-      qrCodesRef.child(qrCodeModel.value.publicHashTag!).onValue.listen((event) {
-        final qrCodeValue = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
-
-        qrCodeModel.value = QrCodeModel.fromJson(qrCodeValue);
-      });
-
-
-      messageQueueRef
-          .limitToLast(1)
-          .onChildAdded
-          .timeout(const Duration(seconds: 5))
-          .listen((event) {
-        print("Msg" + event.snapshot.value.toString()) ;
-
-      }).onError((e) {
-      });
     } catch (e) {
       printError(info: e.toString());
     }
+
   }
 
   @override
@@ -215,98 +166,86 @@ class HomeController extends SuperController<bool> {
   //2 started
   RxInt gameStatus = 0.obs;
 
-  void startGame(GameModel game, VariationList variant,
+  void startGame(int variant,
       int diff) async {
-    var playerName = qrCodeModel.value.customerName ;
+
     var now = DateTime.now();
-    StreamSubscription? subscription;
     gameStatus.value = 1;
     await Future.delayed(const Duration(seconds: 1));
 
-    var newCommand = messageQueueRef.push();
-
-    newCommand
-        .set({"CommandeId": "GAME_STOP", "Data": GameStartedData(idMachine: int.parse(STATION_ID)).toJson()});
-
-    await Future.delayed(const Duration(seconds: 2));
-
     //check available balance
-    var currentQrCodeRef = qrCodesRef.child(qrCodeModel.value.publicHashTag!);
     try {
-
+      var result = await repository.startGame(diff, variant, ticket.id!) ;
       // var currentPoints = codeRef.
-      var startGameData = StartGameData(
-          difficultyPlayed: diff.toString(),
-          gameName: game.gameName,
-          idGame: game.idGame,
-          idMachine: STATION_ID,
-          idVariation: variant.idVariation,
-          isOnPartyMode: (!(isChampoinship.value)).toString(),
-          partyName: playerName,
-          playerNickName: playerName,
-          publicHashtag: qrCodeModel.value.publicHashTag
-              ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
-          dateTime: DateTime.now().millisecondsSinceEpoch,
-          globalLeaderboardName: "${game.gameName}_${now.year}");
+      // var startGameData = StartGameData(
+      //     difficultyPlayed: diff.toString(),
+      //     gameName: game.gameName,
+      //     idGame: game.idGame,
+      //     idMachine: STATION_ID,
+      //     idVariation: variant.idVariation,
+      //     isOnPartyMode: (!(isChampoinship.value)).toString(),
+      //     partyName: playerName,
+      //     playerNickName: playerName,
+      //     publicHashtag: qrCodeModel.value.publicHashTag
+      //         ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
+      //     dateTime: DateTime.now().millisecondsSinceEpoch,
+      //     globalLeaderboardName: "${game.gameName}_${now.year}");
 
-      var newCommand = messageQueueRef.push();
 
-      newCommand
-          .set({"CommandeId": "GAME_START", "Data": startGameData.toJson()});
-
-      subscription = messageQueueRef
-          .limitToLast(1)
-          .onChildAdded
-          .timeout(const Duration(seconds: 30))
-          .listen((event) async {
-        print(event.snapshot.value) ;
-
-        final value = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
-
-        if (value != null && value["CommandeId"] == "GAME_STARTED") {
-          var gameStartedData =
-              GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
-          if (gameStartedData.idMachine.toString() == STATION_ID &&
-              gameStartedData.idGame.toString() == game.idGame &&
-              gameStartedData.idVariation.toString() == variant.idVariation &&
-              gameStartedData.playerNickName == playerName &&
-              gameStartedData.gameDuration == -1 &&
-              gameStartedData.score == -1) {
-            if(Navigator.of(Get.context!).canPop()) {
-              Navigator.of(Get.context!).pop();
-            }
-            gameStartedData.teamName = qrCodeModel.value.teamName ;
-            gameStartedData.teamColor = qrCodeModel.value.teamColor ;
-            Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
-              "game_data" : gameStartedData.toJson() ,
-              "mode": isChampoinship.value,
-              // "points": qrCodeModel.value.remainingCredit,
-              "points": 0,
-              "player_name": playerName
-            });
-          }
-          event.snapshot.ref.remove() ;
-          subscription?.cancel() ;
-          gameStatus.value = 0;
-        }
-      })..onError((e) {
-        print("cancel maybe streem error");
-        gameStatus.value = 0;
-        subscription?.cancel() ;
-      });
-
-      // gameStatus.value = 2 ;
+      // subscription = messageQueueRef
+      //     .limitToLast(1)
+      //     .onChildAdded
+      //     .timeout(const Duration(seconds: 30))
+      //     .listen((event) async {
+      //   print(event.snapshot.value) ;
+      //
+      //   final value = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
+      //
+      //   if (value != null && value["CommandeId"] == "GAME_STARTED") {
+      //     var gameStartedData =
+      //         GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
+      //     if (gameStartedData.idMachine.toString() == STATION_ID &&
+      //         gameStartedData.idGame.toString() == game.idGame &&
+      //         gameStartedData.idVariation.toString() == variant.idVariation &&
+      //         gameStartedData.playerNickName == playerName &&
+      //         gameStartedData.gameDuration == -1 &&
+      //         gameStartedData.score == -1) {
+      //       if(Navigator.of(Get.context!).canPop()) {
+      //         Navigator.of(Get.context!).pop();
+      //       }
+      //       gameStartedData.teamName = qrCodeModel.value.teamName ;
+      //       gameStartedData.teamColor = qrCodeModel.value.teamColor ;
+      //       Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
+      //         "game_data" : gameStartedData.toJson() ,
+      //         "mode": isChampoinship.value,
+      //         // "points": qrCodeModel.value.remainingCredit,
+      //         "points": 0,
+      //         "player_name": playerName
+      //       });
+      //     }
+      //     event.snapshot.ref.remove() ;
+      //     subscription?.cancel() ;
+      //     gameStatus.value = 0;
+      //   }
+      // })..onError((e) {
+      //   print("cancel maybe streem error");
+      //   gameStatus.value = 0;
+      //   subscription?.cancel() ;
+      // });
+      //
+      // // gameStatus.value = 2 ;
 
       // throw Error() ;
     } catch (e) {
-      //return the credit if the game not started
-      print("cancel maybe error") ;
-      await currentQrCodeRef.update({
-        "remainingCredit": ServerValue.increment(10),
-        "isLocked": "false",
-      });
-      gameStatus.value = 0;
-      subscription?.cancel();
+      print(e) ;
+      // //return the credit if the game not started
+      // print("cancel maybe error") ;
+      // await currentQrCodeRef.update({
+      //   "remainingCredit": ServerValue.increment(10),
+      //   "isLocked": "false",
+      // });
+      // gameStatus.value = 0;
+      // subscription?.cancel();
     }
   }
 }

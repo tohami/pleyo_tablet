@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 
@@ -19,13 +20,13 @@ const STATION_ID = String.fromEnvironment('ID' , defaultValue: "3");
 
 Future main() async {
   // runZonedGuarded<Future<void>>(() async {
-  //   WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
   //   await Firebase.initializeApp(
   //     options: DefaultFirebaseOptions.currentPlatform,
   //   );
   //   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
-    runApp(const MyApp());
+  Get.put(StationService());
+  runApp(const MyApp());
   // }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
   //
   // Isolate.current.addErrorListener(RawReceivePort((pair) async {

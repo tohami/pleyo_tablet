@@ -4,8 +4,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_repository.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../../routes/app_pages.dart';
 
@@ -57,11 +57,12 @@ class TicketController extends SuperController<bool>
         return ;
       }
       var ticket = await repository.checkTicket(int.parse(data[4]), data[5]);
+      StationService.to.currentTicket = ticket ;
       if (ticket.attributes?.isActivated == true) {
-        Get.rootDelegate.offNamed(Routes.HOME, arguments: ticket);
+        Get.rootDelegate.offNamed(Routes.HOME);
       } else {
         print("ticket ticket" + ticket.id.toString()) ;
-        Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: ticket);
+        Get.rootDelegate.offNamed(Routes.ACTIVATE);
         Get.snackbar("Error", "Qr code is not active ");
       }
     } catch (e) {

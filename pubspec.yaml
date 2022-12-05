@@ -45,6 +45,7 @@ dependencies:
   adobe_xd: ^2.0.1
   video_player: ^2.3.0
   firebase_crashlytics: ^2.6.1
+  basic_utils: ^5.4.2
 
 
 dev_dependencies:
