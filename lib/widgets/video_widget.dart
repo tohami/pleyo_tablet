@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
+import 'package:pleyo_tablet_app/main.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:video_player/video_player.dart';
@@ -47,7 +48,7 @@ class VideoWidget extends StatelessWidget {
                     ? VideoPlayer(_controller)
                     : Container(
                         child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
-                          "https://pleyo-operator.herokuapp.com" + variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
+                          BASE_URL + variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
                         ):CircularProgressIndicator(
                           color: Color(buttonColor),
                         ),

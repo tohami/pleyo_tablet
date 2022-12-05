@@ -72,7 +72,7 @@ class StartGameBottomSheet extends StatelessWidget {
                                 title: e.attributes!.name!,
                                 color:  int.parse(color),
                                 onTap: () {
-                                onDifficultSelected(e.id!);
+                                  onDifficultSelected(e.id!);
                                 }) ;
                           }).toList() ,
                         ],

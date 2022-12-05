@@ -11,6 +11,7 @@ import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import "package:collection/collection.dart";
 
+import '../../../../model/start_game.dart';
 import '../../../../model/strapi/station.dart';
 import '../../../../model/strapi/ticket.dart';
 import '../../data/games_repository.dart';
@@ -28,13 +29,37 @@ class HomeController extends SuperController<bool> {
   late Map<Game , List<GameVariant>> games =  groupBy(station.attributes!.gameVariants!.data! , (GameVariant item) => item.attributes!.game!.data!) ;
   final IGamesRepository repository ;
   HomeController({required this.repository});
-
-
+  late StreamSubscription subscription ;
   @override
   void onInit() async {
     super.onInit();
     try {
       change(null, status: RxStatus.success());
+
+      subscription = StationService.to.gameStatus.listen((status) {
+        print(status.type) ;
+        switch(status.type) {
+
+          case GameStatusType.IDLE:
+            gameStatus.value = 0 ;
+            break;
+          case GameStatusType.STARTING:
+            gameStatus.value = 1 ;
+            break;
+          case GameStatusType.STARTED:
+            if(Navigator.of(Get.context!).canPop()) {
+              Navigator.of(Get.context!).pop();
+            }
+            Get.rootDelegate.toNamed(Routes.GAME_STATUS);
+            gameStatus.value = 0 ;
+            break;
+          case GameStatusType.FINISHED:
+          case GameStatusType.CLOSED:
+          case GameStatusType.CRASHED:
+            gameStatus.value = 0 ;
+            break;
+        }
+      });
 
     } catch (e) {
       printError(info: e.toString());
@@ -50,6 +75,7 @@ class HomeController extends SuperController<bool> {
   @override
   void onClose() {
     // ignore: avoid_print
+    subscription.cancel() ;
     print('onClose called');
     super.onClose();
   }
@@ -176,76 +202,10 @@ class HomeController extends SuperController<bool> {
     //check available balance
     try {
       var result = await repository.startGame(diff, variant, ticket.id!) ;
-      // var currentPoints = codeRef.
-      // var startGameData = StartGameData(
-      //     difficultyPlayed: diff.toString(),
-      //     gameName: game.gameName,
-      //     idGame: game.idGame,
-      //     idMachine: STATION_ID,
-      //     idVariation: variant.idVariation,
-      //     isOnPartyMode: (!(isChampoinship.value)).toString(),
-      //     partyName: playerName,
-      //     playerNickName: playerName,
-      //     publicHashtag: qrCodeModel.value.publicHashTag
-      //         ?.substring(qrCodeModel.value.publicHashTag!.length - 5),
-      //     dateTime: DateTime.now().millisecondsSinceEpoch,
-      //     globalLeaderboardName: "${game.gameName}_${now.year}");
 
-
-      // subscription = messageQueueRef
-      //     .limitToLast(1)
-      //     .onChildAdded
-      //     .timeout(const Duration(seconds: 30))
-      //     .listen((event) async {
-      //   print(event.snapshot.value) ;
-      //
-      //   final value = event.snapshot.value is List ? (event.snapshot.value as List)[0] : event.snapshot.value ;
-      //
-      //   if (value != null && value["CommandeId"] == "GAME_STARTED") {
-      //     var gameStartedData =
-      //         GameStartedData.fromJson(value["Data"] as Map<dynamic, dynamic>);
-      //     if (gameStartedData.idMachine.toString() == STATION_ID &&
-      //         gameStartedData.idGame.toString() == game.idGame &&
-      //         gameStartedData.idVariation.toString() == variant.idVariation &&
-      //         gameStartedData.playerNickName == playerName &&
-      //         gameStartedData.gameDuration == -1 &&
-      //         gameStartedData.score == -1) {
-      //       if(Navigator.of(Get.context!).canPop()) {
-      //         Navigator.of(Get.context!).pop();
-      //       }
-      //       gameStartedData.teamName = qrCodeModel.value.teamName ;
-      //       gameStartedData.teamColor = qrCodeModel.value.teamColor ;
-      //       Get.rootDelegate.toNamed(Routes.GAME_STATUS, arguments: {
-      //         "game_data" : gameStartedData.toJson() ,
-      //         "mode": isChampoinship.value,
-      //         // "points": qrCodeModel.value.remainingCredit,
-      //         "points": 0,
-      //         "player_name": playerName
-      //       });
-      //     }
-      //     event.snapshot.ref.remove() ;
-      //     subscription?.cancel() ;
-      //     gameStatus.value = 0;
-      //   }
-      // })..onError((e) {
-      //   print("cancel maybe streem error");
-      //   gameStatus.value = 0;
-      //   subscription?.cancel() ;
-      // });
-      //
-      // // gameStatus.value = 2 ;
-
-      // throw Error() ;
     } catch (e) {
       print(e) ;
-      // //return the credit if the game not started
-      // print("cancel maybe error") ;
-      // await currentQrCodeRef.update({
-      //   "remainingCredit": ServerValue.increment(10),
-      //   "isLocked": "false",
-      // });
-      // gameStatus.value = 0;
-      // subscription?.cancel();
+      gameStatus.value = 0;
     }
   }
 }

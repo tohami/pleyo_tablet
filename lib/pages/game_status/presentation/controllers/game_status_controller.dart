@@ -6,23 +6,17 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../main.dart';
+import '../../../../model/strapi/ticket.dart';
 
 class GameStatusController extends SuperController<bool> {
+  final isChampion = true;
+
   GameStatusController();
 
-  bool isChampion = Get.rootDelegate.arguments()["mode"];
-
-  int? points = Get.rootDelegate.arguments()["points"];
-
-  String? playerName = Get.rootDelegate.arguments()["player_name"];
-
-  // GameStartedData? gameData = GameStartedData.fromJson(Get.rootDelegate.arguments()["game_data"]);
-
-  DatabaseReference messageQueueRef = FirebaseDatabase.instance.ref("MessageQueue");
-  DatabaseReference leaderBoardRef = FirebaseDatabase.instance.ref("GlobalLeaderboard");
-  DatabaseReference gameHistoryRef = FirebaseDatabase.instance.ref("GameHistory");
+  final Ticket currentTicket = StationService.to.currentTicket ;
 
   late StreamSubscription messageQueueSubscription ;
 
@@ -187,7 +181,7 @@ class GameStatusController extends SuperController<bool> {
   void onResumed() {}
 
   void stopGame() {
-    var newCommand = messageQueueRef.push();
+    // var newCommand = messageQueueRef.push();
     //
     // newCommand
     //     .set({"CommandeId": "GAME_STOP", "Data": gameData?.toJson()});

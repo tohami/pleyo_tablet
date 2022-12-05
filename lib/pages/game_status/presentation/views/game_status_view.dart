@@ -35,7 +35,7 @@ class GameStatusView extends GetView<GameStatusController> {
                     const SizedBox(
                       height: 15,
                     ),
-                    playerNameWidget(playerName: controller.playerName! , onLogoutClicked: ()=>{}),
+                    playerNameWidget(playerName: controller.currentTicket.attributes!.nickname! , onLogoutClicked: ()=>{}),
                   ],
                 ),
                 Expanded(child: Container()),

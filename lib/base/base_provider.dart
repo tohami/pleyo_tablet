@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
+import 'package:pleyo_tablet_app/main.dart';
 // import 'package:loyalty/services/auth_service.dart';
 
 class BaseProvider extends GetConnect {
   @override
   void onInit() {
-    httpClient.baseUrl = "https://pleyo-operator.herokuapp.com/api/" ;
+    httpClient.baseUrl = "$BASE_URL/api/" ;
 
     httpClient.timeout = Duration(minutes: 1) ;
     // httpClient.addRequestModifier<dynamic>((request) {
