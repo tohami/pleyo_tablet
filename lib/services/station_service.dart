@@ -30,14 +30,19 @@ class StationService extends GetxService {
     socket.on('StartGame', (data) => print(data));
 
     socket.onAny((event, args) {
+      // if(event == "MessageQueue" && args.CommandeId == "GAME_START"){
+      //   Future.delayed(Duration(seconds: 120)).then((value) => {
+      //     if(gameStatus.value.type != GameStatusType.STARTED)
+      //   })
+      // }
       print("new event -----------") ;
       print(event);
       print(args) ;
       print("---------------------") ;
 
     });
-    socket.on('startGame',
-            (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTING, data));
+    // socket.on('startGame',
+    //         (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTING, data));
     socket.on('gameStarted',
             (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTED, data));
     socket.on('gameFinished',

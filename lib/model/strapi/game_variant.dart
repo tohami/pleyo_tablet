@@ -37,6 +37,7 @@ class GameVariant {
 class _Attributes {
   String? name;
   int? effort;
+  int? gamehubId;
   String? description;
   String? subtitle;
   String? createdAt;
@@ -50,6 +51,7 @@ class _Attributes {
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     effort = json['effort'];
+    gamehubId = json['gamehubId'];
     description = json['description'];
     subtitle = json['subtitle'];
     createdAt = json['createdAt'];
@@ -63,6 +65,7 @@ class _Attributes {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['effort'] = this.effort;
+    data['gamehubId'] = this.gamehubId;
     data['description'] = this.description;
     data['subtitle'] = this.subtitle;
     data['createdAt'] = this.createdAt;

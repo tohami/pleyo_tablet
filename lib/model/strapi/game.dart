@@ -34,14 +34,16 @@ class _Attributes {
   String? location;
   String? createdAt;
   String? updatedAt;
+  int? gamehubId ;
 
-  _Attributes({this.name, this.location, this.createdAt, this.updatedAt});
+  _Attributes({this.name, this.location, this.createdAt, this.updatedAt , this.gamehubId});
 
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     location = json['location'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    gamehubId = json['gamehubId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +52,7 @@ class _Attributes {
     data['location'] = this.location;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['gamehubId'] = this.gamehubId;
     return data;
   }
 }

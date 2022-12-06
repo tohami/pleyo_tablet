@@ -9,20 +9,46 @@ import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../main.dart';
+import '../../../../model/start_game.dart';
 import '../../../../model/strapi/ticket.dart';
+import '../../../home/data/games_repository.dart';
 
 class GameStatusController extends SuperController<bool> {
   final isChampion = true;
 
-  GameStatusController();
+  final IGamesRepository repository ;
+  GameStatusController({required this.repository});
 
   final Ticket currentTicket = StationService.to.currentTicket ;
 
-  late StreamSubscription messageQueueSubscription ;
+  late StreamSubscription subscription ;
 
   @override
   void onInit() {
     super.onInit();
+
+    subscription = StationService.to.gameStatus.listen((status) {
+      print(status.type) ;
+      switch(status.type) {
+        case GameStatusType.FINISHED:
+            Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {
+              "game_mode": isChampion.toString(),
+              "points": "0",
+              "score": status.data["score"].toString(),
+              "player_name": currentTicket.attributes!.nickname!
+            });
+            break;
+        case GameStatusType.CLOSED:
+        case GameStatusType.CRASHED:
+          Get.back() ;
+          break;
+        case GameStatusType.IDLE:
+        case GameStatusType.STARTING:
+        case GameStatusType.STARTED:
+          break;
+      }
+    });
+
     // change(null, status: RxStatus.success());
     // Map historyStartDataJson = gameData!.toJson() ;
     // historyStartDataJson.putIfAbsent("CreatedAt", () => DateTime.now().toIso8601String());
@@ -165,7 +191,7 @@ class GameStatusController extends SuperController<bool> {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    messageQueueSubscription.cancel() ;
+    subscription.cancel() ;
   }
 
   @override
@@ -180,7 +206,16 @@ class GameStatusController extends SuperController<bool> {
   @override
   void onResumed() {}
 
-  void stopGame() {
+  void stopGame()async {
+    try {
+      await repository.updateScoreStatus("GAME_STOP",
+          StationService.to.gameStatus.value.data["id"]);
+      Get.back();
+
+    }catch (e){
+      print(e) ;
+
+    }
     // var newCommand = messageQueueRef.push();
     //
     // newCommand

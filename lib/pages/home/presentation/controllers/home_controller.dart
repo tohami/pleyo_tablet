@@ -202,7 +202,10 @@ class HomeController extends SuperController<bool> {
     //check available balance
     try {
       var result = await repository.startGame(diff, variant, ticket.id!) ;
-
+      await Future.delayed(Duration(seconds: 60)) ;
+      if(gameStatus.value == 1) {
+        gameStatus.value = 0 ;
+      }
     } catch (e) {
       print(e) ;
       gameStatus.value = 0;

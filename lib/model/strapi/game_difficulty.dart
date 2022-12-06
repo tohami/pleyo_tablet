@@ -23,6 +23,7 @@ class _Attributes {
   String? name;
   String? color;
   int? difficulty;
+  int? gamehubId;
   String? createdAt;
   String? updatedAt;
 
@@ -32,6 +33,7 @@ class _Attributes {
     name = json['name'];
     color = json['color'];
     difficulty = json['difficulty'];
+    gamehubId = json['gamehubId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -41,6 +43,7 @@ class _Attributes {
     data['name'] = this.name;
     data['color'] = this.color;
     data['difficulty'] = this.difficulty;
+    data['gamehubId'] = this.gamehubId;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;
