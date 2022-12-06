@@ -42,11 +42,6 @@ class TicketController extends SuperController<bool>
       _boxAnimationController.repeat(reverse: true).orCancel;
     } on TickerCanceled catch (e) {}
     change(null, status: RxStatus.success());
-
-    if (kDebugMode) {
-      onTicketScanned(
-          "https://pleyo-operator-frontend.vercel.app/activate/372/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
-    }
   }
 
   Future onTicketScanned(String url) async {
