@@ -75,7 +75,7 @@ class HomeController extends SuperController<bool> {
   @override
   void onClose() {
     // ignore: avoid_print
-    subscription.cancel() ;
+      subscription.cancel() ;
     print('onClose called');
     super.onClose();
   }
@@ -202,7 +202,7 @@ class HomeController extends SuperController<bool> {
     //check available balance
     try {
       var result = await repository.startGame(diff, variant, ticket.id!) ;
-      await Future.delayed(Duration(seconds: 60)) ;
+      await Future.delayed(Duration(seconds: 20)) ;
       if(gameStatus.value == 1) {
         gameStatus.value = 0 ;
       }

@@ -57,7 +57,7 @@ class TicketController extends SuperController<bool>
         Get.rootDelegate.offNamed(Routes.HOME);
       } else {
         print("ticket ticket" + ticket.id.toString()) ;
-        Get.rootDelegate.offNamed(Routes.ACTIVATE);
+        Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
         Get.snackbar("Error", "Qr code is not active ");
       }
     } catch (e) {
@@ -134,17 +134,17 @@ class TicketController extends SuperController<bool>
   }
 
   void onQRViewCreated(QRViewController controller) async {
-    if (kDebugMode) {
-      await onTicketScanned(
-          "https://pleyo-operator-frontend.vercel.app/activate/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
-      return;
-    }
+    // if (kDebugMode) {
+    //   await onTicketScanned(
+    //       "https://pleyo-operator-frontend.vercel.app/activate/372/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
+    //   return;
+    // }
 
     this.controller = controller;
     controller.resumeCamera();
 
     CameraFacing cameraInfo = await controller.getCameraInfo();
-    if (cameraInfo == CameraFacing.back) {
+    if (!kDebugMode && cameraInfo == CameraFacing.back) {
       await controller.flipCamera();
     }
 

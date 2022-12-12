@@ -20,12 +20,12 @@ class ScanQRView extends GetView<TicketController> {
       child: Scaffold(
         body: Stack(
           children: [
-            // SizedBox(
-            //   child: QRView(
-            //     key: qrKey,
-            //     onQRViewCreated: controller.onQRViewCreated,
-            //   ),
-            // ),
+            SizedBox(
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: controller.onQRViewCreated,
+              ),
+            ),
             AnimatedBuilder(
               animation: controller.boxAnimation,
               builder: (context, child) {

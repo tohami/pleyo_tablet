@@ -63,7 +63,7 @@ class ActivateView extends GetView<ActivateController> {
                         width: 12.5,
                       ),
                       SvgPicture.asset(
-                        'assets/images/icon_coins.svg',
+                        'assets/images/icon_add_person.svg',
                         fit: BoxFit.fill,
                       ),
                     ],

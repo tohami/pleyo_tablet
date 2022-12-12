@@ -30,7 +30,7 @@ class GamesProvider extends BaseProvider
         'stations/$STATION_ID/updateScoreStatus',
         {
           "CommandeId": status,
-          "data": {"ScoreId": scoreId}
+          "ScoreId": scoreId,
         },
         decoder: ScoreResponse.fromJson);
   }

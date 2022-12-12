@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../data/activate_repository.dart';
 
@@ -45,6 +46,15 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
   }
 
   @override
+  void onClose() {
+    // ignore: avoid_print
+    print('onClose called');
+    _buttonAnimationController.dispose();
+    super.onClose();
+  }
+
+
+  @override
   void onDetached() {}
 
   @override
@@ -62,6 +72,7 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
 
       var newTicket = await repository.activateTicket(ticket.id! , ticket.attributes!.secret! , nickname);
       if (newTicket.attributes?.isActivated == true) {
+        StationService.to.currentTicket = newTicket ;
         Get.rootDelegate.offNamed(Routes.HOME, arguments: ticket);
       } else {
         Get.snackbar("Error", "Failed to activate ticket ");
