@@ -52,7 +52,7 @@ class StationService extends GetxService {
     socket.on('gameCrashed',
             (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.CRASHED, data));
 
-    socket.onConnectError((data) => print("onConnectError"+ data)) ;
+    socket.onConnectError((data) => print("onConnectError")) ;
     socket.onConnectTimeout((data) => print("onConnectTimeout"+data)) ;
     socket.onConnecting((data) => print("onConnecting"+data)) ;
     socket.onDisconnect((_) => print('disconnect'));

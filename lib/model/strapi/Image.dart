@@ -126,18 +126,18 @@ class _Attributes {
 }
 
 class Formats {
-  Small? small;
-  Medium? medium;
-  Small? thumbnail;
+  ImageVariant? small;
+  ImageVariant? medium;
+  ImageVariant? thumbnail;
 
   Formats({this.small, this.medium, this.thumbnail});
 
   Formats.fromJson(Map<String, dynamic> json) {
-    small = json['small'] != null ? new Small.fromJson(json['small']) : null;
+    small = json['small'] != null ? new ImageVariant.fromJson(json['small']) : null;
     medium =
-    json['medium'] != null ? new Medium.fromJson(json['medium']) : null;
+    json['medium'] != null ? new ImageVariant.fromJson(json['medium']) : null;
     thumbnail = json['thumbnail'] != null
-        ? new Small.fromJson(json['thumbnail'])
+        ? new ImageVariant.fromJson(json['thumbnail'])
         : null;
   }
 
@@ -156,38 +156,29 @@ class Formats {
   }
 }
 
-class Small {
+class ImageVariant {
   String? ext;
   String? url;
   String? hash;
   String? mime;
   String? name;
-  Null? path;
-  double? size;
-  int? width;
-  int? height;
+  String? path;
 
-  Small(
+  ImageVariant(
       {this.ext,
         this.url,
         this.hash,
         this.mime,
         this.name,
-        this.path,
-        this.size,
-        this.width,
-        this.height});
+        this.path});
 
-  Small.fromJson(Map<String, dynamic> json) {
+  ImageVariant.fromJson(Map<String, dynamic> json) {
     ext = json['ext'];
     url = json['url'];
     hash = json['hash'];
     mime = json['mime'];
     name = json['name'];
     path = json['path'];
-    size = json['size'];
-    width = json['width'];
-    height = json['height'];
   }
 
   Map<String, dynamic> toJson() {
@@ -198,58 +189,6 @@ class Small {
     data['mime'] = this.mime;
     data['name'] = this.name;
     data['path'] = this.path;
-    data['size'] = this.size;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    return data;
-  }
-}
-
-class Medium {
-  String? ext;
-  String? url;
-  String? hash;
-  String? mime;
-  String? name;
-  Null? path;
-  int? size;
-  int? width;
-  int? height;
-
-  Medium(
-      {this.ext,
-        this.url,
-        this.hash,
-        this.mime,
-        this.name,
-        this.path,
-        this.size,
-        this.width,
-        this.height});
-
-  Medium.fromJson(Map<String, dynamic> json) {
-    ext = json['ext'];
-    url = json['url'];
-    hash = json['hash'];
-    mime = json['mime'];
-    name = json['name'];
-    path = json['path'];
-    size = json['size'];
-    width = json['width'];
-    height = json['height'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ext'] = this.ext;
-    data['url'] = this.url;
-    data['hash'] = this.hash;
-    data['mime'] = this.mime;
-    data['name'] = this.name;
-    data['path'] = this.path;
-    data['size'] = this.size;
-    data['width'] = this.width;
-    data['height'] = this.height;
     return data;
   }
 }

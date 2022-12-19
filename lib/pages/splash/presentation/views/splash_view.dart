@@ -57,12 +57,14 @@ class SplashView extends GetView<SplashController> {
                         );
                       },
                       child: Center(
-                        child: CustomText(
-                          'START',
-                          textStyle: TextStyles.textXLarge.copyWith(
-                            color: const Color(ColorCode.lightGrayBackground),
-                          ),
-                        ),
+                        child: ObxValue<RxBool>((state) {
+                          return !state.value ? CustomText(
+                            'START',
+                            textStyle: TextStyles.textXLarge.copyWith(
+                              color: const Color(ColorCode.lightGrayBackground),
+                            ),
+                          ) : CircularProgressIndicator(color: const Color(ColorCode.lightGrayBackground),) ;
+                        } , controller.isLoading),
                       ),
                     ),
                   ),
