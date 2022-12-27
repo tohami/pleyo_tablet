@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
+import 'package:pleyo_tablet_app/widgets/alert.dart';
 
 import '../../data/activate_repository.dart';
 
@@ -75,11 +76,16 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
         StationService.to.currentTicket = newTicket ;
         Get.rootDelegate.offNamed(Routes.HOME, arguments: ticket);
       } else {
-        Get.snackbar("Error", "Failed to activate ticket ");
+
+        showAlert("Error", "Failed to activate ticket ");
       }
     } catch (e) {
       printError(info: e.toString()) ;
-      Get.snackbar("Error", e.toString());
+      if(e is MapEntry){
+        var result = await showAlert(e.key, e.value) ;
+      }else {
+        var result = await showAlert("Error", "Unable to activate the ticket, try again") ;
+      }
     }
   }
 }

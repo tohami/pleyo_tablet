@@ -8,7 +8,7 @@ class BaseProvider extends GetConnect {
   void onInit() {
     httpClient.baseUrl = "$BASE_URL/api/" ;
 
-    httpClient.timeout = Duration(minutes: 1) ;
+    httpClient.timeout = Duration(minutes: 2) ;
     // httpClient.addRequestModifier<dynamic>((request) {
     //   final userInfo = AuthService.to.userInfo ;
     //   print(userInfo?.authenticationToken);

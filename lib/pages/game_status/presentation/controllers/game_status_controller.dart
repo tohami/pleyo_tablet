@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
@@ -37,9 +36,12 @@ class GameStatusController extends SuperController<bool> {
               "score": status.data["score"].toString(),
               "player_name": currentTicket.attributes!.nickname!
             });
+            FirebaseCrashlytics.instance
+                .log("Game ended with data n:${currentTicket.attributes!.nickname} s:${status.data["score"]}");
             break;
         case GameStatusType.CLOSED:
         case GameStatusType.CRASHED:
+          FirebaseCrashlytics.instance.log("game stopped by gamehub in game status") ;
           Get.back() ;
           break;
         case GameStatusType.IDLE:
@@ -208,13 +210,21 @@ class GameStatusController extends SuperController<bool> {
 
   void stopGame()async {
     try {
+      FirebaseCrashlytics.instance.log("Stopping the game by tablet") ;
       await repository.updateScoreStatus("GAME_STOP",
           StationService.to.gameStatus.value.data["id"]);
       Get.back();
 
     }catch (e){
       print(e) ;
-
+      FirebaseCrashlytics.instance.log("Stopping game Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
     }
     // var newCommand = messageQueueRef.push();
     //

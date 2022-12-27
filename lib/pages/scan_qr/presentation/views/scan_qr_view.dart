@@ -16,6 +16,7 @@ class ScanQRView extends GetView<TicketController> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -38,6 +39,7 @@ class ScanQRView extends GetView<TicketController> {
                     opacity: 0.9,
                     child: SvgPicture.asset(
                       'assets/images/scan_qr_bg.svg',
+                      color: Colors.white,
                       fit: BoxFit.cover,
                     ),
                   ),

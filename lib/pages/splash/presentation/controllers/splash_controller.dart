@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/main.dart';
@@ -69,8 +69,15 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
       StationService.to.currentStation = station;
       Get.rootDelegate.offNamed(Routes.SCAN_QR);
     } catch (e) {
-      print(e) ;
-      showAlert("Error", "Unable to load station data", "Retry", ()=> onStartClicked()) ;
+      showAlert("Error", "Unable to load station data", secondActionTitle: "Retry",onSecondActionClick:  ()=> onStartClicked()) ;
+      FirebaseCrashlytics.instance.log("Get station Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
     }finally {
       isLoading.value = false ;
     }

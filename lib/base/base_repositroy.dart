@@ -5,13 +5,13 @@ import 'package:pleyo_tablet_app/model/strapi_error.dart';
 
 class BaseRepository  {
 
-  String getErrorMessage(String apiResponse) {
+  MapEntry<String , String> getErrorMessage(String apiResponse) {
     final responseJson = const JsonDecoder().convert(apiResponse);
     StrapiError errorResponse = StrapiError.fromJson(responseJson);
     if(errorResponse.error != null) {
-      return errorResponse.error!.message! ;
+      return MapEntry( errorResponse.error!.message! , errorResponse.error!.details!.error??"Something went wrong please try again later") ;
     } else {
-      return "Something went wrong please try again later" ;
+      return MapEntry("Error","Something went wrong please try again later" );
     }
   }
 }

@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_repository.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
+import 'package:pleyo_tablet_app/widgets/alert.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 import '../../../../routes/app_pages.dart';
 
 class TicketController extends SuperController<bool>
@@ -25,6 +27,7 @@ class TicketController extends SuperController<bool>
 
   @override
   void onInit() async {
+    ScreenBrightness().setScreenBrightness(1);
     super.onInit();
     _boxAnimationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
@@ -46,23 +49,37 @@ class TicketController extends SuperController<bool>
 
   Future onTicketScanned(String url) async {
     try {
+      controller?.pauseCamera() ;
       var data = url.split("/") ;
       if(data.length != 6) {
-        Get.snackbar("Error", "Invalid ticket");
+        var result = await showAlert("Error", "Invalid QrCode") ;
+        controller?.resumeCamera() ;
         return ;
       }
       var ticket = await repository.checkTicket(int.parse(data[4]), data[5]);
       StationService.to.currentTicket = ticket ;
       if (ticket.attributes?.isActivated == true) {
         Get.rootDelegate.offNamed(Routes.HOME);
+        FirebaseCrashlytics.instance.setUserIdentifier(ticket.id.toString()) ;
       } else {
         print("ticket ticket" + ticket.id.toString()) ;
         Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
-        Get.snackbar("Error", "Qr code is not active ");
       }
     } catch (e) {
-      printError(info: e.toString()) ;
-      Get.snackbar("Error", e.toString());
+      if(e is MapEntry){
+        var result = await showAlert(e.key, e.value) ;
+      }else {
+        var result = await showAlert("Error", "Unable to ready Ticket") ;
+      }
+      controller?.resumeCamera() ;
+      FirebaseCrashlytics.instance.log("Get ticket Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
     }
   }
 
@@ -73,6 +90,7 @@ class TicketController extends SuperController<bool>
 
   @override
   void onClose() {
+    ScreenBrightness().resetScreenBrightness();
     // ignore: avoid_print
     print('onClose called');
     controller?.dispose();
