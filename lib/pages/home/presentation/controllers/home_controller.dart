@@ -219,7 +219,11 @@ class HomeController extends SuperController<bool> {
         FirebaseCrashlytics.instance.log("Start game timeout") ;
       }
     } catch (e) {
-      showAlert("Error", "Connection error") ;
+      if(e is MapEntry){
+        showAlert("Error", e.value) ;
+      }else {
+        showAlert("Error", "Connection error");
+      }
       gameStatus.value = 0;
       FirebaseCrashlytics.instance.log("Start game error") ;
       await FirebaseCrashlytics.instance.recordError(

@@ -48,7 +48,7 @@ class VideoWidget extends StatelessWidget {
                     ? VideoPlayer(_controller)
                     : Container(
                         child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
-                          BASE_URL + variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
+                          variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
                         ):CircularProgressIndicator(
                           color: Color(buttonColor),
                         ),
