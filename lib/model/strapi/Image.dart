@@ -54,7 +54,6 @@ class _Attributes {
   String? hash;
   String? ext;
   String? mime;
-  double? size;
   String? url;
   String? previewUrl;
   String? provider;
@@ -73,7 +72,6 @@ class _Attributes {
         this.hash,
         this.ext,
         this.mime,
-        this.size,
         this.url,
         this.previewUrl,
         this.provider,
@@ -92,7 +90,6 @@ class _Attributes {
     hash = json['hash'];
     ext = json['ext'];
     mime = json['mime'];
-    size = json['size'];
     url = json['url'];
     previewUrl = json['previewUrl'];
     provider = json['provider'];
@@ -114,7 +111,6 @@ class _Attributes {
     data['hash'] = this.hash;
     data['ext'] = this.ext;
     data['mime'] = this.mime;
-    data['size'] = this.size;
     data['url'] = this.url;
     data['previewUrl'] = this.previewUrl;
     data['provider'] = this.provider;
