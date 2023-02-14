@@ -44,13 +44,13 @@ class StationService extends GetxService {
     // socket.on('startGame',
     //         (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTING, data));
     socket.on('gameStarted',
-            (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTED, data));
+            (data) => gameStatus.value = GameStatus(GameStatusType.STARTED, data));
     socket.on('gameFinished',
-            (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.FINISHED, data));
+            (data) => gameStatus.value = GameStatus(GameStatusType.FINISHED, data));
     socket.on('gameClosed',
-            (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.CLOSED, data));
+            (data) => gameStatus.value = GameStatus(GameStatusType.CLOSED, data));
     socket.on('gameCrashed',
-            (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.CRASHED, data));
+            (data) => gameStatus.value = GameStatus(GameStatusType.CRASHED, data));
 
     socket.onConnectError((data) => print("onConnectError")) ;
     socket.onConnectTimeout((data) => print("onConnectTimeout"+data)) ;

@@ -546,6 +546,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
+  virtual_keyboard_multi_language:
+    dependency: "direct main"
+    description:
+      name: virtual_keyboard_multi_language
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   xml:
     dependency: transitive
     description:

@@ -22,6 +22,7 @@ class TicketController extends SuperController<bool>
 
   QRViewController? controller;
   RxBool isScanned = false.obs;
+  RxBool isLoading = false.obs ;
 
   TextEditingController emailController = TextEditingController();
 
@@ -47,6 +48,39 @@ class TicketController extends SuperController<bool>
     change(null, status: RxStatus.success());
   }
 
+  Future checkTicketWithPinCode(String code) async{
+    print("Scan") ;
+    try {
+      isLoading.value = true ;
+      var ticket = await repository.checkTicket(int.parse(code), "");
+      StationService.to.currentTicket = ticket ;
+      if (ticket.attributes?.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME);
+        FirebaseCrashlytics.instance.setUserIdentifier(ticket.id.toString()) ;
+      } else {
+        print("ticket ticket" + ticket.id.toString()) ;
+        Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
+      }
+    } catch (e) {
+      print(e) ;
+      if(e is MapEntry){
+        var result = await showAlert(e.key, e.value) ;
+      }else {
+        var result = await showAlert("Error", "Invalid ticket") ;
+      }
+      FirebaseCrashlytics.instance.log("Get ticket Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
+    } finally {
+      isLoading.value = false ;
+    }
+  }
+
   Future onTicketScanned(String url) async {
     try {
       controller?.pauseCamera() ;
@@ -69,7 +103,7 @@ class TicketController extends SuperController<bool>
       if(e is MapEntry){
         var result = await showAlert(e.key, e.value) ;
       }else {
-        var result = await showAlert("Error", "Unable to ready Ticket") ;
+        var result = await showAlert("Error", "Invalid ticket") ;
       }
       controller?.resumeCamera() ;
       FirebaseCrashlytics.instance.log("Get ticket Error") ;
