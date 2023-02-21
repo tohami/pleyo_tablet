@@ -71,7 +71,7 @@ android {
             signingConfig signingConfigs.debug
 
             applicationVariants.all { variant ->
-                variant.outputs.all {
+                variant.outputs.each { output ->
                     def appName = "Pleyo_controller"
                     def buildType = variant.buildType.name
                     def newName
@@ -80,7 +80,7 @@ android {
                     } else {
                         newName = "${appName}_${buildType}_${flutterVersionName}_S${dartEnvironmentVariables.STATION_ID}.apk"
                     }
-                    outputFileName = newName
+                    output.outputFileName = newName
                 }
             }
         }
