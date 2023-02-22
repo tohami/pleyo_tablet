@@ -4,7 +4,7 @@ import '../../../base/base_repositroy.dart';
 import 'activate_api_provider.dart';
 
 abstract class IActivateRepository {
-  Future<Ticket> activateTicket(int ticketId , String secret , String nickname);
+  Future<Ticket> activateTicket(int ticketId , String secret , String nickname, Map<String, String> activationExtras);
 }
 class ActivateRepository extends BaseRepository
     implements IActivateRepository {
@@ -13,9 +13,9 @@ class ActivateRepository extends BaseRepository
   ActivateRepository({required this.provider});
 
   @override
-  Future<Ticket> activateTicket(int ticketId , String secret , String nickname) async{
+  Future<Ticket> activateTicket(int ticketId , String secret , String nickname , Map<String, String> activationExtras) async{
     // TODO: implement getAllMerchants
-    final apiResponse = await provider.activateTicket(ticketId, secret , nickname) ;
+    final apiResponse = await provider.activateTicket(ticketId, secret , nickname , activationExtras) ;
     if(apiResponse.isOk && apiResponse.body?.data != null){
       return apiResponse.body!.data!;
     }else {

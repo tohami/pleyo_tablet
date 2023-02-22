@@ -1,3 +1,5 @@
+import 'activation_screen.dart';
+
 class Competition {
   int? id;
   String? name;
@@ -12,6 +14,7 @@ class Competition {
   bool? startWithFirstGame;
   bool? isStarted;
   List<Games>? games;
+  ActivationScreen? activationScreen ;
 
   Competition(
       {this.id,
@@ -26,7 +29,8 @@ class Competition {
         this.playerCredit,
         this.startWithFirstGame,
         this.isStarted,
-        this.games});
+        this.games,
+        this.activationScreen});
 
   Competition.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -47,6 +51,7 @@ class Competition {
         games!.add(new Games.fromJson(v));
       });
     }
+    activationScreen = json['activation_screen'] != null ? new ActivationScreen.fromJson(json['activation_screen']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +70,9 @@ class Competition {
     data['isStarted'] = this.isStarted;
     if (this.games != null) {
       data['games'] = this.games!.map((v) => v.toJson()).toList();
+    }
+    if (this.activationScreen != null) {
+      data['activation_screen'] = this.activationScreen!.toJson();
     }
     return data;
   }

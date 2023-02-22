@@ -30,6 +30,10 @@ class CustomTextFormField extends StatelessWidget {
 
   final Function(String)? onSubmit;
 
+  final Function(String?)? onChanged;
+
+  final String? initialValue ;
+
   const CustomTextFormField(
       {Key? key,
       this.controller,
@@ -46,7 +50,9 @@ class CustomTextFormField extends StatelessWidget {
       this.borderWidth = 1,
       this.fontColor = const Color(ColorCode.blackBackground),
       this.fontSize = 30,
-      this.onSubmit})
+      this.onSubmit,
+      this.onChanged,
+      this.initialValue})
       : super(key: key);
 
   @override
@@ -89,11 +95,16 @@ class CustomTextFormField extends StatelessWidget {
         prefixIcon: prefix,
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         hintText: hint,
-        hintStyle: TextStyles.textMedium,
+        hintStyle: TextStyles.textLarge.copyWith(
+          color: fontColor, fontWeight: FontWeight.w500, fontSize: fontSize,
+          // height: 2.066666666666667,
+        ),
         contentPadding:
             hint.isNotEmpty ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : null,
       ),
       onFieldSubmitted: onSubmit,
+      onChanged: onChanged,
+      initialValue: initialValue,
     );
   }
 }

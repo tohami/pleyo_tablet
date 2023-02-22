@@ -27,3 +27,15 @@ class ColorCode {
   static const customGrayBackground = 0xffbfbfbf;
   static const lightBlackBackground = 0xff404040;
 }
+
+extension ColorExtension on String {
+  Color? toColor() {
+    var hexColor = this.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse("0x$hexColor"));
+    }
+  }
+}

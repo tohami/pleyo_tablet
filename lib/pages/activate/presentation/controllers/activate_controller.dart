@@ -19,6 +19,8 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
 
   final IActivateRepository repository ;
 
+  RxMap<String , String> activationFormValue = RxMap();
+
 
   ActivateController({required this.repository});
 
@@ -69,9 +71,19 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
 
   onStartClicked() async{
     try {
-      final nickname = nickNameController.text ;
+      //validate form
 
-      var newTicket = await repository.activateTicket(ticket.id! , ticket.attributes!.secret! , nickname);
+      final nickname = nickNameController.text ;
+      bool validForm = true ;
+      ticket.attributes?.competition?.activationScreen?.fields?.forEach((element) {
+        if(element.required == true && activationFormValue[element.key!]?.isBlank != false){
+          validForm = false ;
+        }
+      });
+      if(nickname.length < 2 || !validForm){
+        return ;
+      }
+      var newTicket = await repository.activateTicket(ticket.id! , ticket.attributes!.secret! , nickname , activationFormValue.value);
       if (newTicket.attributes?.isActivated == true) {
         StationService.to.currentTicket = newTicket ;
         Get.rootDelegate.offNamed(Routes.HOME, arguments: ticket);
