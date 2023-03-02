@@ -214,6 +214,10 @@ class ActivateView extends GetView<ActivateController> {
                                   child: Center(
                                     child: DropdownButton<String>(
                                       value: controller.activationFormValue[field.key!],
+                                      hint: CustomText(field.title! , textStyle: TextStyles.textLarge.copyWith(
+                                        fontSize: 32,
+                                        // height: 2.066666666666667,
+                                      ),),
                                       items: field.options!
                                           .map((e) => DropdownMenuItem<String>(
                                               value: e.value!,

@@ -52,9 +52,13 @@ class HomeView extends GetView<HomeController> {
                   // isChampion must be called any where to force rebuild
                   controller.isChampoinship.value;
 
+
                   if(controller.games.isNotEmpty) {
+                    var games = controller.games.entries.toList();
+
+                    games.sort(((a, b) => a.key.attributes!.gamehubId! - b.key.attributes!.gamehubId!)) ;
                     return ListView.builder(
-                      itemCount: controller.games.length,
+                      itemCount: games.length,
                       shrinkWrap: true,
                       clipBehavior: Clip.none ,
                       physics: const NeverScrollableScrollPhysics() ,
@@ -66,7 +70,7 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: controller.games.entries.toList()[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
+                            GameWidget(game: games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
                               showBottomSheetModal(context , variant , (diff) {
                                 controller.startGame(variant.id!, diff);
