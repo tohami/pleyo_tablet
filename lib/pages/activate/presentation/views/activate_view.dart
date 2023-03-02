@@ -23,14 +23,14 @@ class ActivateView extends GetView<ActivateController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     width: 420,
-                    height: 120,
+                    height: 90,
                     decoration: BoxDecoration(
                       color: const Color(ColorCode.darkGrayBackground),
                       borderRadius: BorderRadius.circular(20.0),
@@ -51,7 +51,7 @@ class ActivateView extends GetView<ActivateController> {
                       children: [
                         Container(
                           width: 300,
-                          height: 100,
+                          height: 67,
                           padding: EdgeInsets.only(left: 16),
                           child: Center(
                             child: CustomTextFormField(
@@ -86,7 +86,7 @@ class ActivateView extends GetView<ActivateController> {
                           case "number":
                             return Container(
                               width: 420,
-                              height: 120,
+                              height: 90,
                               margin: EdgeInsets.only(top: 30),
                               decoration: BoxDecoration(
                                 color: const Color(ColorCode.darkGrayBackground),
@@ -109,7 +109,7 @@ class ActivateView extends GetView<ActivateController> {
                                 children: [
                                   Container(
                                     width: 350,
-                                    height: 100,
+                                    height: 67,
                                     padding: EdgeInsets.only(left: 16),
                                     child: Center(
                                       child: CustomTextFormField(
@@ -189,7 +189,7 @@ class ActivateView extends GetView<ActivateController> {
                           case "dropdown":
                             return Container(
                               width: 420,
-                              height: 120,
+                              height: 90,
                               margin: EdgeInsets.only(top: 30),
                               decoration: BoxDecoration(
                                 color: const Color(ColorCode.darkGrayBackground),
@@ -212,7 +212,7 @@ class ActivateView extends GetView<ActivateController> {
                                 children: [
                                   Container(
                                     width: 350,
-                                    height: 100,
+                                    height: 67,
                                     child: Center(
                                       child: DropdownButton<String>(
                                         value: controller.activationFormValue[field.key!],
@@ -252,7 +252,7 @@ class ActivateView extends GetView<ActivateController> {
                               width: 420,
                               margin: EdgeInsets.only(top: 30),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Transform.scale(
@@ -271,7 +271,7 @@ class ActivateView extends GetView<ActivateController> {
                                   CustomText(
                                     field.title!,
                                     textStyle: TextStyles.textLarge.copyWith(
-                                      fontSize: 32,
+                                      fontSize: 24,
                                       // height: 2.066666666666667,
                                     ),
                                   )
@@ -287,13 +287,13 @@ class ActivateView extends GetView<ActivateController> {
                 return Container();
               }),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    height: 120,
+                    height: 90,
                     width: 420,
                     child: GestureDetector(
                       onTap: () => controller.onStartClicked(),
