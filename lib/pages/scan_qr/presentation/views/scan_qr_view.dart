@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -17,128 +16,237 @@ import '../controllers/scan_qr_controller.dart';
 class ScanQRView extends GetView<TicketController> {
   ScanQRView({Key? key}) : super(key: key);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final RxString text = "".obs;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Stack(
+          body: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            gradient: const LinearGradient(
+              begin: Alignment(0.0, -1.0),
+              end: Alignment(0.0, 1.0),
+              colors: [Color(0xff050505), Color(0xff78797b)],
+              stops: [0.0, 1.0],
+            )),
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: controller.onQRViewCreated,
+            CustomText(
+              'Enter your ticket pin code ',
+              textStyle: TextStyles.textLarge.copyWith(
+                fontSize: 24,
               ),
             ),
-            AnimatedBuilder(
-              animation: controller.boxAnimation,
-              builder: (context, child) {
-                return Transform.scale(
-                    scale: controller.boxAnimation.value, child: child);
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    child: Opacity(
-                      opacity: 0.9,
-                      child: SvgPicture.asset(
-                        'assets/images/scan_qr_bg.svg',
-                        color: Colors.white,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+            const SizedBox(
+              height: 17,
+            ),
+            ObxValue<RxString>((state) {
+              final currentCodeParts = state.value.split("-");
+              final decoration = BoxDecoration(
+                // color: const Color(0xff585858),
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x45000000),
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
                   ),
-                  Center(
-                    child: Container(
-                      width: 320,
-                      height: 320,
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                            width: 5.0,
-                            color: const Color(ColorCode.accentLightColor)),
-                      ),
-                      child: ObxValue<RxBool>((state) {
-                        return Visibility(
-                          visible: state.value,
-                          child: SvgPicture.asset(
-                            'assets/images/icon_validation.svg',
-                            fit: BoxFit.contain,
-                            width: 140,
-                            height: 104,
-                          ),
-                        );
-                      }, controller.isScanned),
-                    ),
+                  BoxShadow(
+                      color: Color(0x53FCFCFC),
+                      blurRadius: 1,
+                      spreadRadius: -1),
+                  BoxShadow(
+                    color: Color(0xff585858),
+                    offset: Offset(0, 3),
+                    spreadRadius: 0,
+                    blurRadius: 0,
                   ),
                 ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      margin: const EdgeInsets.only(top: 80),
-                      child: ObxValue<RxBool>((state) {
-                        return CustomText(
-                          state.value
-                              ? 'QRcode is valid!'
-                              : 'Scan your QRcode\nTo start playing',
-                          textStyle: TextStyles.textLarge.copyWith(
-                            fontFamily: 'Parisine Plus Std Clair',
-                            color: Colors.black,
-                            height: 1.1666666666666667,
-                          ),
-                        );
-                      }, controller.isScanned)),
-                  GestureDetector(
-                    onTap: () =>
-                        {showLoginWithPinCodeDialog(context, controller)},
-                    child: Container(
-                      width: 360,
-                      height: 64,
-                      margin: EdgeInsets.only(bottom: 80),
-                      decoration: BoxDecoration(
-                        color: const Color(ColorCode.darkGrayBackground),
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                            width: 3.0,
-                            color: const Color(ColorCode.accentLightColor)),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(ColorCode.shadowBackground),
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: CustomText(
-                          'Enter pin code instead',
-                          textStyle: TextStyles.textLarge.copyWith(
-                            color: const Color(ColorCode.accentLightColor),
-                            // height: 0.5833333333333334,
-                            fontFamily: 'Parisine Plus Std Clair',
+              );
+
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 64),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.all(4),
+                        height: 80,
+                        decoration: decoration,
+                        child: Center(
+                          child: Text(
+                            (currentCodeParts.length > 0
+                                    ? currentCodeParts[0]
+                                    : "")
+                                .padRight(4, ' -'),
+                            style: const TextStyle(
+                              fontFamily: 'Helvetica Neue',
+                              fontSize: 80,
+                              color: Color(0xc4ffffff),
+                            ),
+                            softWrap: false,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.all(4),
+                        height: 80,
+                        decoration: decoration,
+                        child: Center(
+                          child: Text(
+                            (currentCodeParts.length > 1
+                                    ? currentCodeParts[1]
+                                    : "")
+                                .padRight(4, ' -'),
+                            style: const TextStyle(
+                              fontFamily: 'Helvetica Neue',
+                              fontSize: 80,
+                              color: Color(0xc4ffffff),
+                            ),
+                            softWrap: false,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }, text),
+            const SizedBox(
+              height: 17,
             ),
+            Expanded(
+              child: !controller.isQrScan.value
+                  ? Container(
+                      // Keyboard is transparent
+                      // color: Colors.red,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ["7", "8", "9"],
+                          ["4", "5", "6"],
+                          ["1", "2", "3"],
+                          ["Q", "0", "X"]
+                        ]
+                            .map((e) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: e.map((e) {
+                                    if (e.isEmpty) {
+                                      return Container(
+                                        width: 150,
+                                      );
+                                    }
+                                    return numPadItem(e);
+                                  }).toList(),
+                                ))
+                            .toList(),
+                      ),
+                    )
+                  : Column(
+                    children: [
+                      Expanded(
+                          child: QRView(
+                            key: qrKey,
+                            onQRViewCreated: controller.onQRViewCreated,
+                          ),
+                        ),
+                    ],
+                  ),
+            )
           ],
         ),
-      ),
+      )),
+    );
+  }
+
+  Widget numPadItem(String number) {
+    var isClicked = false.obs;
+    return AnimatedSwitcher(
+      duration: Duration(seconds: 2),
+      child: ObxValue((context) {
+        return GestureDetector(
+          onPanDown: (d) => isClicked.value = true,
+          // onTapUp: (d) => isClicked.value = false,
+          onPanEnd: (d) => isClicked.value = false,
+          onTapDown: (d) {
+            isClicked.value = false;
+            if (number == "Q") {
+              controller.isQrScan.value = true;
+            } else if (number == "X") {
+              text.value = text.substring(
+                  0, text.value.length - (text.value.length == 5 ? 2 : 1));
+            } else {
+              if (text.value.length == 4) {
+                text.value += "-";
+              }
+              text.value += number;
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            width: 150,
+            height: 130,
+            decoration: BoxDecoration(
+              // color: const Color(0xff585858),
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                const BoxShadow(
+                  color: Color(0x45000000),
+                  offset: Offset(0, 3),
+                  blurRadius: 6,
+                ),
+                const BoxShadow(
+                    color: Color(0x53FCFCFC), blurRadius: 1, spreadRadius: -1),
+                BoxShadow(
+                  color:
+                      isClicked.value ? Color(0xff2FF7F7) : Color(0xff585858),
+                  offset: Offset(0, 3),
+                  spreadRadius: 0,
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+            child: Center(
+              child: (number == "X")
+                  ? const Icon(
+                      Icons.backspace_outlined,
+                      size: 88,
+                      color: Color(0xc4ffffff),
+                    )
+                  : (number == "Q")
+                      ? const Icon(
+                          Icons.qr_code,
+                          size: 88,
+                          color: Color(0xc4ffffff),
+                        )
+                      : Text(
+                          number,
+                          style: const TextStyle(
+                            fontFamily: 'Helvetica Neue',
+                            fontSize: 118,
+                            color: Color(0xc4ffffff),
+                          ),
+                          softWrap: false,
+                        ),
+            ),
+          ),
+        );
+      }, isClicked),
     );
   }
 
   void showLoginWithPinCodeDialog(
       BuildContext context, TicketController controller) {
-    RxString text = "".obs;
     showDialog(
         context: context,
         builder: (BuildContext context) {

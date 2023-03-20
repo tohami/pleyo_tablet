@@ -15,6 +15,8 @@ class TicketController extends SuperController<bool>
     with GetSingleTickerProviderStateMixin {
   late AnimationController _boxAnimationController;
   late Animation<double> boxAnimation;
+  final isQrScan = true.obs ;
+
 
   TicketController({required this.repository});
 
