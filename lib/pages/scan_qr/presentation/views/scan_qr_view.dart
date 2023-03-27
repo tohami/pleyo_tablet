@@ -36,12 +36,14 @@ class ScanQRView extends GetView<TicketController> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomText(
-              'Enter your ticket pin code ',
-              textStyle: TextStyles.textLarge.copyWith(
-                fontSize: 24,
-              ),
-            ),
+            ObxValue<RxString>((state) {
+              return CustomText(
+                state.value,
+                textStyle: TextStyles.textLarge.copyWith(
+                  fontSize: 24,
+                ),
+              );
+            }, controller.errorMsg),
             const SizedBox(
               height: 17,
             ),
@@ -124,44 +126,51 @@ class ScanQRView extends GetView<TicketController> {
             const SizedBox(
               height: 17,
             ),
-            Expanded(
-              child: !controller.isQrScan.value
-                  ? Container(
-                      // Keyboard is transparent
-                      // color: Colors.red,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ["7", "8", "9"],
-                          ["4", "5", "6"],
-                          ["1", "2", "3"],
-                          ["Q", "0", "X"]
-                        ]
-                            .map((e) => Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: e.map((e) {
-                                    if (e.isEmpty) {
-                                      return Container(
-                                        width: 150,
-                                      );
-                                    }
-                                    return numPadItem(e);
-                                  }).toList(),
-                                ))
-                            .toList(),
-                      ),
-                    )
-                  : Column(
-                    children: [
-                      Expanded(
-                          child: QRView(
-                            key: qrKey,
-                            onQRViewCreated: controller.onQRViewCreated,
+            ObxValue<RxBool>( (context) {
+                return Expanded(
+                  child: !controller.isQrScan.value
+                      ? Container(
+                          // Keyboard is transparent
+                          // color: Colors.red,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ["7", "8", "9"],
+                              ["4", "5", "6"],
+                              ["1", "2", "3"],
+                              ["Q", "0", "X"]
+                            ]
+                                .map((e) => Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: e.map((e) {
+                                        if (e.isEmpty) {
+                                          return Container(
+                                            width: 150,
+                                          );
+                                        }
+                                        return numPadItem(e);
+                                      }).toList(),
+                                    ))
+                                .toList(),
                           ),
-                        ),
-                    ],
-                  ),
+                        )
+                      : Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 420,
+                            child: QRView(
+                              key: qrKey,
+                              onQRViewCreated: controller.onQRViewCreated,
+                            ),
+                          ),
+                          numPadItem("Q"),
+                        ],
+                      ),
+              );
+              } , controller.isQrScan
             )
           ],
         ),
@@ -181,15 +190,18 @@ class ScanQRView extends GetView<TicketController> {
           onTapDown: (d) {
             isClicked.value = false;
             if (number == "Q") {
-              controller.isQrScan.value = true;
+              controller.isQrScan.value = !controller.isQrScan.value;
             } else if (number == "X") {
               text.value = text.substring(
                   0, text.value.length - (text.value.length == 5 ? 2 : 1));
             } else {
               if (text.value.length == 4) {
                 text.value += "-";
+              }else if(text.value.length < 9) {
+                text.value += number;
+              }else if(text.value.length == 9){
+                controller.checkTicketWithPinCode(text.value);
               }
-              text.value += number;
             }
           },
           child: Container(
@@ -224,8 +236,8 @@ class ScanQRView extends GetView<TicketController> {
                       color: Color(0xc4ffffff),
                     )
                   : (number == "Q")
-                      ? const Icon(
-                          Icons.qr_code,
+                      ? Icon(
+                          controller.isQrScan.value ? Icons.numbers : Icons.qr_code,
                           size: 88,
                           color: Color(0xc4ffffff),
                         )

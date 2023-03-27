@@ -25,7 +25,7 @@ class TicketController extends SuperController<bool>
   QRViewController? controller;
   RxBool isScanned = false.obs;
   RxBool isLoading = false.obs ;
-
+  RxString errorMsg = "".obs ;
   TextEditingController emailController = TextEditingController();
 
   @override
@@ -51,7 +51,10 @@ class TicketController extends SuperController<bool>
   }
 
   Future checkTicketWithPinCode(String code) async{
-    print("Scan") ;
+    if(isLoading.value)
+      return ;
+
+    errorMsg.value = "" ;
     try {
       isLoading.value = true ;
       var ticket = await repository.checkTicket(int.parse(code), "");
@@ -66,9 +69,9 @@ class TicketController extends SuperController<bool>
     } catch (e) {
       print(e) ;
       if(e is MapEntry){
-        var result = await showAlert(e.key, e.value) ;
+        errorMsg.value = e.value ;
       }else {
-        var result = await showAlert("Error", "Invalid ticket") ;
+        errorMsg.value = "Invalid ticket" ;
       }
       FirebaseCrashlytics.instance.log("Get ticket Error") ;
       FirebaseCrashlytics.instance.recordError(
@@ -85,6 +88,7 @@ class TicketController extends SuperController<bool>
 
   Future onTicketScanned(String url) async {
     try {
+      errorMsg.value = "" ;
       controller?.pauseCamera() ;
       var data = url.split("/") ;
       if(data.length != 6) {
@@ -103,9 +107,9 @@ class TicketController extends SuperController<bool>
       }
     } catch (e) {
       if(e is MapEntry){
-        var result = await showAlert(e.key, e.value) ;
+        errorMsg.value = e.value ;
       }else {
-        var result = await showAlert("Error", "Invalid ticket") ;
+        errorMsg.value = "Invalid ticket" ;
       }
       controller?.resumeCamera() ;
       FirebaseCrashlytics.instance.log("Get ticket Error") ;
