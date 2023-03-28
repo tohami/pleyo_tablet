@@ -23,6 +23,8 @@ class TicketController extends SuperController<bool>
   final ITicketRepository repository;
 
   QRViewController? controller;
+
+  final RxString inputCode = "".obs;
   RxBool isScanned = false.obs;
   RxBool isLoading = false.obs ;
   RxString errorMsg = "".obs ;
@@ -57,7 +59,7 @@ class TicketController extends SuperController<bool>
     errorMsg.value = "" ;
     try {
       isLoading.value = true ;
-      var ticket = await repository.checkTicket(int.parse(code), "");
+      var ticket = await repository.checkTicket(code, "");
       StationService.to.currentTicket = ticket ;
       if (ticket.attributes?.isActivated == true) {
         Get.rootDelegate.offNamed(Routes.HOME);
@@ -82,6 +84,7 @@ class TicketController extends SuperController<bool>
           fatal: true
       );
     } finally {
+      inputCode.value = "" ;
       isLoading.value = false ;
     }
   }
@@ -96,7 +99,10 @@ class TicketController extends SuperController<bool>
         controller?.resumeCamera() ;
         return ;
       }
-      var ticket = await repository.checkTicket(int.parse(data[4]), data[5]);
+      var codeText = data[4].padLeft(8 , "0");
+      inputCode.value = codeText.substring(0, 4) + "-" + codeText.substring(4, 8);
+
+      var ticket = await repository.checkTicket(data[4], data[5]);
       StationService.to.currentTicket = ticket ;
       if (ticket.attributes?.isActivated == true) {
         Get.rootDelegate.offNamed(Routes.HOME);
@@ -106,6 +112,7 @@ class TicketController extends SuperController<bool>
         Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
       }
     } catch (e) {
+      inputCode.value = "" ;
       if(e is MapEntry){
         errorMsg.value = e.value ;
       }else {

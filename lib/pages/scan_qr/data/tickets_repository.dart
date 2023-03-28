@@ -5,7 +5,7 @@ import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_api_provider.dart';
 import '../../../model/strapi/ticket.dart';
 
 abstract class ITicketRepository {
-  Future<Ticket> checkTicket(int id , String secret);
+  Future<Ticket> checkTicket(String id , String secret);
 }
 
 class TicketRepository extends BaseRepository
@@ -15,7 +15,7 @@ class TicketRepository extends BaseRepository
   TicketRepository({required this.provider});
 
   @override
-  Future<Ticket> checkTicket(int id , String secret) async{
+  Future<Ticket> checkTicket(String id , String secret) async{
     // TODO: implement getAllMerchants
     final apiResponse = await provider.checkTicket(id, secret) ;
     if(apiResponse.isOk && apiResponse.body?.data != null){

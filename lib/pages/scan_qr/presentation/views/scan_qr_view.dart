@@ -16,8 +16,27 @@ import '../controllers/scan_qr_controller.dart';
 class ScanQRView extends GetView<TicketController> {
   ScanQRView({Key? key}) : super(key: key);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  final RxString text = "".obs;
-
+  final decoration = BoxDecoration(
+    // color: const Color(0xff585858),
+    borderRadius: BorderRadius.circular(12.0),
+    boxShadow: const [
+      BoxShadow(
+        color: Color(0x45000000),
+        offset: Offset(0, 3),
+        blurRadius: 6,
+      ),
+      BoxShadow(
+          color: Color(0x53FCFCFC),
+          blurRadius: 1,
+          spreadRadius: -1),
+      BoxShadow(
+        color: Color(0xff585858),
+        offset: Offset(0, 3),
+        spreadRadius: 0,
+        blurRadius: 0,
+      ),
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,10 +56,20 @@ class ScanQRView extends GetView<TicketController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ObxValue<RxString>((state) {
-              return CustomText(
-                state.value,
-                textStyle: TextStyles.textLarge.copyWith(
-                  fontSize: 24,
+              return Container(
+                margin: const EdgeInsets.all(4),
+                height: 80,
+                decoration: decoration,
+                child: Center(
+                  child: Text(
+                    state.value,
+                    style: const TextStyle(
+                      fontFamily: 'Helvetica Neue',
+                      fontSize: 30,
+                      color: Colors.red,
+                    ),
+                    softWrap: false,
+                  ),
                 ),
               );
             }, controller.errorMsg),
@@ -49,27 +78,7 @@ class ScanQRView extends GetView<TicketController> {
             ),
             ObxValue<RxString>((state) {
               final currentCodeParts = state.value.split("-");
-              final decoration = BoxDecoration(
-                // color: const Color(0xff585858),
-                borderRadius: BorderRadius.circular(12.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x45000000),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                  BoxShadow(
-                      color: Color(0x53FCFCFC),
-                      blurRadius: 1,
-                      spreadRadius: -1),
-                  BoxShadow(
-                    color: Color(0xff585858),
-                    offset: Offset(0, 3),
-                    spreadRadius: 0,
-                    blurRadius: 0,
-                  ),
-                ],
-              );
+
 
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 64),
@@ -122,7 +131,7 @@ class ScanQRView extends GetView<TicketController> {
                   ],
                 ),
               );
-            }, text),
+            }, controller.inputCode),
             const SizedBox(
               height: 17,
             ),
@@ -180,6 +189,7 @@ class ScanQRView extends GetView<TicketController> {
 
   Widget numPadItem(String number) {
     var isClicked = false.obs;
+    var text = controller.inputCode ;
     return AnimatedSwitcher(
       duration: Duration(seconds: 2),
       child: ObxValue((context) {
@@ -195,11 +205,14 @@ class ScanQRView extends GetView<TicketController> {
               text.value = text.substring(
                   0, text.value.length - (text.value.length == 5 ? 2 : 1));
             } else {
+              if(text.value.length == 9){
+                return ;
+              }
               if (text.value.length == 4) {
                 text.value += "-";
-              }else if(text.value.length < 9) {
-                text.value += number;
-              }else if(text.value.length == 9){
+              }
+              text.value += number;
+              if(text.value.length == 9){
                 controller.checkTicketWithPinCode(text.value);
               }
             }
@@ -259,6 +272,8 @@ class ScanQRView extends GetView<TicketController> {
 
   void showLoginWithPinCodeDialog(
       BuildContext context, TicketController controller) {
+    var text = controller.inputCode ;
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
