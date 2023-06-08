@@ -390,6 +390,7 @@ class ActivateView extends GetView<ActivateController> {
               ),
             ),
       ),
+      ])
     );
   }
 }
