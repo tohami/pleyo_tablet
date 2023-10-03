@@ -199,11 +199,11 @@ class TicketController extends SuperController<bool>
   }
 
   void onQRViewCreated(QRViewController controller) async {
-    // if (kDebugMode) {
-    //   await onTicketScanned(
-    //       "https://pleyo-operator-frontend.vercel.app/activate/372/6bc65586-e03d-4eaa-bb82-9c9e875c9069");
-    //   return;
-    // }
+    if (kDebugMode) {
+      await onTicketScanned(
+          "https://pleyo-operator-frontend.vercel.app/activate/20873/0f2c19f3-9c0b-4805-9c48-b83950ee5f66");
+      return;
+    }
 
     this.controller = controller;
     controller.resumeCamera();

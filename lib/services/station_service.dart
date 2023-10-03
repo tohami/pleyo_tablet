@@ -1,10 +1,15 @@
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/start_game.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 import '../main.dart';
 import '../model/strapi/station.dart';
 import '../model/strapi/ticket.dart';
 import 'package:socket_io_client/socket_io_client.dart' ;
+
+import '../pages/splash/data/splash_repository.dart';
 
 class StationService extends GetxService {
   static StationService get to => Get.find();
@@ -15,6 +20,7 @@ class StationService extends GetxService {
   @override
   void onInit() {
     super.onInit();
+    _init() ;
     Socket socket = io(
         BASE_URL,
         OptionBuilder()
@@ -57,5 +63,23 @@ class StationService extends GetxService {
     socket.onConnecting((data) => print("onConnecting"+data)) ;
     socket.onDisconnect((_) => print('disconnect'));
     socket.on('fromServer', (_) => print(_));
+  }
+
+  _init () async {
+    var identifier = await UniqueIdentifier.serial;
+
+    while(true) {
+      try {
+        var station = await Get.find<ISplashRepository>().findOrCreateStation(identifier);
+        if(leaderboard.stations?.isNotEmpty == true){
+          _initialize(leaderboard.stations!.map((e) => e.id!).toList()) ;
+          isReady.value = true ;
+          break ;
+        }
+        await Future.delayed(const Duration(seconds: 15));
+      } on Error catch (e) {
+        print(e);
+      }
+    }
   }
 }

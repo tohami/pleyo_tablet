@@ -9,16 +9,18 @@ import '../../../model/strapi/ticket_reponse.dart';
 
 // ignore: one_member_abstracts
 abstract class ISplashProvider {
-  Future<Response<StationResponse>> getStationData();
+  Future<Response<StationResponse>> findOrCreateStation(String serial);
 }
 
 class SplashProvider extends BaseProvider
     implements ISplashProvider {
 
   @override
-  Future<Response<StationResponse>> getStationData() {
+  Future<Response<StationResponse>> findOrCreateStation(String serial) {
 
-    return get<StationResponse>('stations/$STATION_ID?populate%5Borganization%5D=true&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bgame%5D=true&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bgame_difficulties%5D%5Bsort%5D=id&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bimage%5D=true',
+    return get<StationResponse>('stations/$serial',
         decoder: StationResponse.fromJson);
+    // return get<StationResponse>('stations/$STATION_ID?populate%5Borganization%5D=true&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bgame%5D=true&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bgame_difficulties%5D%5Bsort%5D=id&populate%5Bgame_variants%5D%5Bpopulate%5D%5Bimage%5D=true',
+    //     decoder: StationResponse.fromJson);
   }
 }
