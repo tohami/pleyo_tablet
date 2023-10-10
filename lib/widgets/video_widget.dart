@@ -3,16 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/main.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
   final int buttonColor;
   final GameVariant variantModel;
   final VoidCallback onTap;
-  late VideoPlayerController _controller;
+  // late VideoPlayerController _controller;
   final RxBool isInitialized = false.obs;
   VideoWidget(this.variantModel,
       {required this.onTap, required this.buttonColor, Key? key})
@@ -44,9 +43,9 @@ class VideoWidget extends StatelessWidget {
               width: 300,
               height: 180,
               child: ObxValue<RxBool>((state) {
-                return state.value
+                return /*state.value
                     ? VideoPlayer(_controller)
-                    : Container(
+                    :*/ Container(
                         child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
                           variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
                         ):CircularProgressIndicator(

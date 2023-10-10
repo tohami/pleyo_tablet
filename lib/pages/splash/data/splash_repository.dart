@@ -19,7 +19,7 @@ class SplashRepository extends BaseRepository implements ISplashRepository {
     if (apiResponse.isOk && apiResponse.body?.data != null) {
       return apiResponse.body!.data!;
     } else {
-      throw (getErrorMessage(apiResponse.bodyString!));
+      throw AssertionError(getErrorMessage(apiResponse.bodyString));
     }
   }
 }

@@ -13,7 +13,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   late AnimationController _buttonAnimationController;
   RxBool isButtonTapDown = false.obs ;
   late Animation<double> buttonAnimation;
-  RxBool isLoading = false.obs ;
   SplashController({required this.splashRepository});
 
   final ISplashRepository splashRepository;
@@ -46,6 +45,12 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
     }on TickerCanceled catch (e) {
 
     }
+
+    StationService.to.isReady.listenAndPump((event) {
+      if(event){
+        Get.rootDelegate.offNamed(Routes.SCAN_QR);
+      }
+    });
   }
 
   @override
@@ -60,26 +65,4 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onResumed() {}
 
-  onStartClicked() async {
-    if(isLoading.value == true)
-      return ;
-    try {
-      isLoading.value = true ;
-      var station = await splashRepository.getStationData();
-      StationService.to.currentStation = station;
-      Get.rootDelegate.offNamed(Routes.SCAN_QR);
-    } catch (e) {
-      showAlert("Error", "Unable to load station data", secondActionTitle: "Retry",onSecondActionClick:  ()=> onStartClicked()) ;
-      FirebaseCrashlytics.instance.log("Get station Error") ;
-      FirebaseCrashlytics.instance.recordError(
-          e,
-          null,
-          reason: 'a fatal error',
-          // Pass in 'fatal' argument
-          fatal: true
-      );
-    }finally {
-      isLoading.value = false ;
-    }
-  }
 }

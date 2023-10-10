@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/start_game.dart';
@@ -16,24 +16,29 @@ class StationService extends GetxService {
 
   late Ticket currentTicket ;
   late Station currentStation ;
+  RxBool isReady = false.obs ;
   final Rx<GameStatus> gameStatus = GameStatus(GameStatusType.IDLE, {}).obs;
+
   @override
   void onInit() {
     super.onInit();
     _init() ;
+  }
+
+  _initialize () {
     Socket socket = io(
         BASE_URL,
         OptionBuilder()
-            .setAuth({"station": STATION_ID})
+            .setAuth({"station": currentStation.id})
             .setTransports(
             ['websocket']) // for Flutter or Dart VM
             .build());
 
     socket.onConnect((_) {
-      print('connect');
+      debugPrint('connect');
       socket.emit('msg', 'test');
     });
-    socket.on('StartGame', (data) => print(data));
+    socket.on('StartGame', (data) => debugPrint(data));
 
     socket.onAny((event, args) {
       // if(event == "MessageQueue" && args.CommandeId == "GAME_START"){
@@ -41,10 +46,10 @@ class StationService extends GetxService {
       //     if(gameStatus.value.type != GameStatusType.STARTED)
       //   })
       // }
-      print("new event -----------") ;
-      print(event);
-      print(args) ;
-      print("---------------------") ;
+      debugPrint("new event -----------") ;
+      debugPrint(event);
+      debugPrint(args) ;
+      debugPrint("---------------------") ;
 
     });
     // socket.on('startGame',
@@ -58,11 +63,12 @@ class StationService extends GetxService {
     socket.on('gameCrashed',
             (data) => gameStatus.value = GameStatus(GameStatusType.CRASHED, data));
 
-    socket.onConnectError((data) => print("onConnectError")) ;
-    socket.onConnectTimeout((data) => print("onConnectTimeout"+data)) ;
-    socket.onConnecting((data) => print("onConnecting"+data)) ;
-    socket.onDisconnect((_) => print('disconnect'));
-    socket.on('fromServer', (_) => print(_));
+    socket.onConnectError((data) => debugPrint("onConnectError")) ;
+    socket.onConnectTimeout((data) => debugPrint("onConnectTimeout"+data)) ;
+    socket.onConnecting((data) => debugPrint("onConnecting"+data)) ;
+    socket.onDisconnect((_) => debugPrint('disconnect'));
+    socket.on('fromServer', (_) => debugPrint(_));
+
   }
 
   _init () async {
@@ -71,14 +77,26 @@ class StationService extends GetxService {
     while(true) {
       try {
         var station = await Get.find<ISplashRepository>().findOrCreateStation(identifier);
-        if(leaderboard.stations?.isNotEmpty == true){
-          _initialize(leaderboard.stations!.map((e) => e.id!).toList()) ;
+
+        if(station.attributes?.gameVariants?.data?.isNotEmpty == true && station.attributes?.organization?.data != null ){
+          currentStation = station ;
+          _initialize() ;
           isReady.value = true ;
           break ;
         }
-        await Future.delayed(const Duration(seconds: 15));
       } on Error catch (e) {
-        print(e);
+        // showAlert("Error", "Unable to load station data") ;
+        FirebaseCrashlytics.instance.log("Get station Error") ;
+        FirebaseCrashlytics.instance.recordError(
+            e,
+            null,
+            reason: 'a fatal error',
+            // Pass in 'fatal' argument
+            fatal: true
+        );
+        debugPrint(e.toString());
+      } finally {
+        await Future.delayed(const Duration(seconds: 15));
       }
     }
   }
