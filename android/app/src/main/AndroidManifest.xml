@@ -2,8 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pleyo_tablet_app">
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
     <application
         android:label="Pleyo controller"
         android:name="${applicationName}"

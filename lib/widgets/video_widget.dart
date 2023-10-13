@@ -42,8 +42,8 @@ class VideoWidget extends StatelessWidget {
             Container(
               width: 300,
               height: 180,
-              child: ObxValue<RxBool>((state) {
-                return /*state.value
+              child: /*ObxValue<RxBool>((state) {
+                return state.value
                     ? VideoPlayer(_controller)
                     :*/ Container(
                         child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
@@ -51,8 +51,8 @@ class VideoWidget extends StatelessWidget {
                         ):CircularProgressIndicator(
                           color: Color(buttonColor),
                         ),
-                      );
-              }, isInitialized),
+                      )/*;
+              }, isInitialized),*/
             ),
             const SizedBox(
               height: 15,

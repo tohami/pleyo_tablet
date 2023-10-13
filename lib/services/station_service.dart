@@ -29,7 +29,7 @@ class StationService extends GetxService {
     Socket socket = io(
         BASE_URL,
         OptionBuilder()
-            .setAuth({"station": currentStation.id})
+            .setAuth({"station": currentStation.id.toString()})
             .setTransports(
             ['websocket']) // for Flutter or Dart VM
             .build());
@@ -48,7 +48,7 @@ class StationService extends GetxService {
       // }
       debugPrint("new event -----------") ;
       debugPrint(event);
-      debugPrint(args) ;
+      debugPrint(args.toString()) ;
       debugPrint("---------------------") ;
 
     });
@@ -76,6 +76,7 @@ class StationService extends GetxService {
 
     while(true) {
       try {
+
         var station = await Get.find<ISplashRepository>().findOrCreateStation(identifier);
 
         if(station.attributes?.gameVariants?.data?.isNotEmpty == true && station.attributes?.organization?.data != null ){
