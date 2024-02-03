@@ -68,13 +68,13 @@ class GameExperienceView extends GetView<SplashController> {
               //   height: 20,
               // ),
               // const GameExperienceSelectItem(
-              //     borderColor: Color(ColorCode.lightBlue),
-              //     titleColor: Color(ColorCode.darkBlue),
-              //     selectItemAssetUrl: 'assets/images/group_play.png',
-              //     selectArrowAssetUrl: 'assets/images/blue_arrow.png',
-              //     selectTitle: 'Group Play',
+              //     borderColor: Color(ColorCode.darkPink),
+              //     titleColor: Color(ColorCode.lightPink),
+              //     selectItemAssetUrl: 'assets/images/one_v_one.png',
+              //     selectArrowAssetUrl: 'assets/images/pink_arrow.png',
+              //     selectTitle: '1 vs 1 play',
               //     selectDetails:
-              //     'Join with friends or family for a group gaming session.'),
+              //     'Face off in a head-to-head battle. May the best player win!'),
               //
               // const SizedBox(
               //   height: 20,

@@ -10,6 +10,8 @@ class ColorCode {
   static const darkBlue = 0xff21bae9;
   static const lightGreen = 0xff22e36d;
   static const darkGreen = 0x831fdd6c;
+  static const lightPink = 0xffc849ab;
+  static const darkPink = 0x83c650b6;
   static const white = 0xccffffff;
 
 /////////////////////////////////
