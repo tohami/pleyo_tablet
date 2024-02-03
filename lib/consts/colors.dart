@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ColorCode {
+  static const primaryBackground = 0xff0D1117;
+  static const darkGrey = 0xff797979;
+  static const lightGrey = 0xffb9b9b9;
+  static const yellow = 0x83d9a700;
+  static const darkYellow = 0xffedb72a;
+  static const lightBlue = 0x831ad4eb;
+  static const darkBlue = 0xff21bae9;
+  static const lightGreen = 0xff22e36d;
+  static const darkGreen = 0x831fdd6c;
+  static const white = 0xccffffff;
+
+/////////////////////////////////
   static const primary = 0xff343434;
   static const accentDarkColor = 0x1a2ff7f7;
   static const accentLightColor = 0xff2ff7f7;

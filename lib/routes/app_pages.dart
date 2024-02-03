@@ -7,6 +7,7 @@ import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.
 import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
+import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
 
 import '../middleware/auth_middleware.dart';
 import '../pages/home/bindings/home_binding.dart';
@@ -26,7 +27,7 @@ class AppPages {
   static final routes = [
     GetPage(
         name: Routes.SPLASH,
-        page: () => const SplashView(),
+        page: () => const GameExperienceView(),
         binding: SplashBinding()),
     GetPage(
       name: Routes.SCAN_QR,
