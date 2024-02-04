@@ -5,6 +5,7 @@ import 'package:pleyo_tablet_app/pages/available_points/bindings/available_point
 import 'package:pleyo_tablet_app/pages/available_points/presentation/views/available_points_view.dart';
 import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.dart';
 import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
+import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
@@ -27,7 +28,8 @@ class AppPages {
   static final routes = [
     GetPage(
         name: Routes.SPLASH,
-        page: () => const GameExperienceView(),
+        // page: () => const GameExperienceView(),
+        page: () => const SelectTeamSizeStep(),
         binding: SplashBinding()),
     GetPage(
       name: Routes.SCAN_QR,

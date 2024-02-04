@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 class TextStyles {
+  static const textXXXLarge = TextStyle(
+    fontFamily: 'CoconPro',
+    fontSize: 80.0,
+    color: Color(ColorCode.darkGrey),
+    fontWeight: FontWeight.w800,
+    height: 0.5
+  );
+  static const textXXLarge = TextStyle(
+    fontFamily: 'CoconPro',
+    fontSize: 50.0,
+    color: Color(ColorCode.darkGrey),
+    fontWeight: FontWeight.w700,
+  );
   static const textXLarge = TextStyle(
     fontFamily: 'CoconPro',
     fontSize: 35.0,

@@ -4,6 +4,7 @@ class ColorCode {
   static const primaryBackground = 0xff0D1117;
   static const darkGrey = 0xff797979;
   static const lightGrey = 0xffb9b9b9;
+  static const extraLightGrey = 0xffd1d1d1;
   static const yellow = 0x83d9a700;
   static const darkYellow = 0xffedb72a;
   static const lightBlue = 0x831ad4eb;
