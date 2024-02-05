@@ -15,6 +15,7 @@ class GroupNumberSelectItem extends StatelessWidget {
   final String selectNumber;
   final String turnsNumber;
   final String gameDuration;
+  final VoidCallback onTap;
 
   const GroupNumberSelectItem({
     required this.borderColor,
@@ -23,65 +24,74 @@ class GroupNumberSelectItem extends StatelessWidget {
     required this.selectNumber,
     required this.turnsNumber,
     required this.gameDuration,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //40
-      width: 100,
-      height: 100,
-      padding: const EdgeInsets.only(left: 30, right: 5,top: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40.0),
-        border: Border.all(width: 4.0, color: borderColor),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-
-            children: [
-              CustomText(
-                selectNumber,
-                textStyle: TextStyles.textXXXLarge.copyWith(color: titleColor),
-              ),
-              const SizedBox(width: 35,),
-              Image.asset(selectArrowAssetUrl,
-                width:78,
-                height: 58,
-              ),
-            ],
-          ),
-          CustomText(
-            'Players',
-            textStyle: TextStyles.textMedium.copyWith(
-                fontWeight: FontWeight.normal,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        //40
+        width: 100,
+        height: 100,
+        padding: const EdgeInsets.only(left: 30, right: 5, top: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40.0),
+          border: Border.all(width: 4.0, color: borderColor),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomText(
+                  selectNumber,
+                  textStyle:
+                      TextStyles.textXXXLarge.copyWith(color: titleColor),
+                ),
+                const SizedBox(
+                  width: 35,
+                ),
+                Image.asset(
+                  selectArrowAssetUrl,
+                  width: 78,
+                  height: 58,
+                ),
+              ],
+            ),
+            CustomText(
+              'Players',
+              textStyle: TextStyles.textMedium.copyWith(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'CoconPro',
+                  color: Colors.white),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            CustomText(
+              '$turnsNumber turns each ',
+              textStyle: TextStyles.textXSmall.copyWith(
                 fontFamily: 'CoconPro',
-                color: Colors.white),
-          ),
-          SizedBox(height: 20,),
-          CustomText(
-            '$turnsNumber turns each ',
-            textStyle: TextStyles.textXSmall.copyWith(
-              fontFamily: 'CoconPro',
-              color: const Color(ColorCode.extraLightGrey),
-              fontWeight: FontWeight.w300,
+                color: const Color(ColorCode.extraLightGrey),
+                fontWeight: FontWeight.w300,
+              ),
             ),
-          ),
-          CustomText(
-            'Time : $gameDuration min ',
-            textStyle: TextStyles.textXSmall.copyWith(
-              fontFamily: 'CoconPro',
-              color: const Color(ColorCode.extraLightGrey),
-              fontWeight: FontWeight.w300,
+            CustomText(
+              'Time : $gameDuration min ',
+              textStyle: TextStyles.textXSmall.copyWith(
+                fontFamily: 'CoconPro',
+                color: const Color(ColorCode.extraLightGrey),
+                fontWeight: FontWeight.w300,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_experience_select_item.dart';
 
@@ -45,25 +46,33 @@ class GameExperienceView extends GetView<SplashController> {
               const SizedBox(
                 height: 20,
               ),
-              const GameExperienceSelectItem(
-                  borderColor: Color(ColorCode.yellow),
-                  titleColor: Color(ColorCode.darkYellow),
-                  selectItemAssetUrl: 'assets/images/single_play.png',
-                  selectArrowAssetUrl: 'assets/images/yellow_arrow.png',
-                  selectTitle: 'Single Play',
-                  selectDetails:
-                      'Challenge yourself in a solo game and compete with others on the leaderboard.'),
+              GameExperienceSelectItem(
+                borderColor: Color(ColorCode.yellow),
+                titleColor: Color(ColorCode.darkYellow),
+                selectItemAssetUrl: 'assets/images/single_play.png',
+                selectArrowAssetUrl: 'assets/images/yellow_arrow.png',
+                selectTitle: 'Single Play',
+                selectDetails:
+                    'Challenge yourself in a solo game and compete with others on the leaderboard.',
+                onTap: () {
+                  // Get.offNamed(Routes.SELECT_TEAM_SIZE);
+                },
+              ),
               const SizedBox(
                 height: 20,
               ),
-              const GameExperienceSelectItem(
-                  borderColor: Color(ColorCode.lightBlue),
-                  titleColor: Color(ColorCode.darkBlue),
-                  selectItemAssetUrl: 'assets/images/group_play.png',
-                  selectArrowAssetUrl: 'assets/images/blue_arrow.png',
-                  selectTitle: 'Group Play',
-                  selectDetails:
-                      'Join with friends or family for a group gaming session.'),
+              GameExperienceSelectItem(
+                borderColor: Color(ColorCode.lightBlue),
+                titleColor: Color(ColorCode.darkBlue),
+                selectItemAssetUrl: 'assets/images/group_play.png',
+                selectArrowAssetUrl: 'assets/images/blue_arrow.png',
+                selectTitle: 'Group Play',
+                selectDetails:
+                    'Join with friends or family for a group gaming session.',
+                onTap: () {
+                  Get.rootDelegate.offNamed(Routes.SELECT_TEAM_SIZE);
+                },
+              ),
               // const SizedBox(
               //   height: 20,
               // ),
@@ -80,14 +89,17 @@ class GameExperienceView extends GetView<SplashController> {
               //   height: 20,
               // ),
               Expanded(child: Container()),
-              const GameExperienceSelectItem(
+              GameExperienceSelectItem(
                   borderColor: Color(ColorCode.darkGreen),
                   titleColor: Color(ColorCode.lightGreen),
                   selectItemAssetUrl: 'assets/images/qr_code.png',
                   selectArrowAssetUrl: 'assets/images/green_arrow.png',
                   selectTitle: 'Scan QR',
                   selectDetails:
-                      'Start your game by scanning a QR code for preset games or competitions.'),
+                      'Start your game by scanning a QR code for preset games or competitions.',
+                  onTap: () {
+                    // Get.offNamed(Routes.SELECT_TEAM_SIZE);
+                  }),
               const SizedBox(
                 height: 20,
               ),
