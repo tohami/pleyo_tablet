@@ -24,10 +24,13 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
             textAlign: TextAlign.start,
           ),
           titleSpacing: 5,
-          leading: const Icon(
-            Icons.arrow_back,
-            color: Color(ColorCode.darkGrey),
-            size: 35,
+          leading: GestureDetector(
+            onTap: () => Get.back(),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Color(ColorCode.darkGrey),
+              size: 35,
+            ),
           ),
         ),
         body: Container(
