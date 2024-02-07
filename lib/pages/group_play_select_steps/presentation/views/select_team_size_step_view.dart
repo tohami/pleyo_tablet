@@ -75,6 +75,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                       turnsNumber: '2',
                       gameDuration: '10',
                       onTap: () {
+                        controller.updateTeamSize(2);
                         Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
                       },
                     ),
@@ -87,6 +88,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                       turnsNumber: '2',
                       gameDuration: '10',
                       onTap: () {
+                        controller.updateTeamSize(3);
                         Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
                       },
                     ),
@@ -99,6 +101,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                       turnsNumber: '2',
                       gameDuration: '10',
                       onTap: () {
+                        controller.updateTeamSize(4);
                         Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
                       },
                     ),
@@ -111,6 +114,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                       turnsNumber: '2',
                       gameDuration: '10',
                       onTap: () {
+                        controller.updateTeamSize(5);
                         Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
                       },
                     ),

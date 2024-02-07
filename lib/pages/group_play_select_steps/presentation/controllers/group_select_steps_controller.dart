@@ -1,11 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GroupPlayStepsController extends SuperController<bool> {
   final teamNameController = TextEditingController();
+  final playerName1Controller = TextEditingController();
+  final playerName2Controller = TextEditingController();
+  final playerName3Controller = TextEditingController();
+  final playerName4Controller = TextEditingController();
+  final playerName5Controller = TextEditingController();
   RxBool goPlaying = false.obs;
-
-  GroupPlayStepsController();
+  RxInt selectedItem = (-1).obs;
+  int teamSize = 0;
+  final players = <String>[];
 
   @override
   void onInit() {
@@ -60,5 +68,9 @@ class GroupPlayStepsController extends SuperController<bool> {
     // TODO: implement onResumed
   }
 
-  void validateTeamName(String value) {}
+  void updateTeamSize(int size) {
+    teamSize = size;
+    players.clear();
+    players.addAll(List.generate(teamSize, (index) => ""));
+  }
 }

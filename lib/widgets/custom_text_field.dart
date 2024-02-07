@@ -4,28 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 
-import 'custom_text_form_field.dart';
-
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
-  final void Function(String)? onChanged;
+  final TextStyle fontStyle;
+  final EdgeInsets padding;
 
   const CustomTextField({
     Key? key,
     required this.hintText,
     required this.controller,
     required this.keyboardType,
-    required this.onChanged,
+    required this.fontStyle,
+    this.padding =
+        const EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: const Color(ColorCode.primaryBackground),
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(10.0),
         border: Border.all(width: 2.0, color: const Color(0xffffffff)),
         boxShadow: const [
           BoxShadow(
@@ -37,14 +39,10 @@ class CustomTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        onChanged: onChanged,
         autofocus: false,
         keyboardType: keyboardType,
-        style: TextStyles.textSmall.copyWith(
-          fontFamily: 'CoconPro',
-          color: Colors.white,
-          fontWeight: FontWeight.w300,
-        ),
+        style: fontStyle,
+        enableSuggestions: false,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyles.textSmall.copyWith(
@@ -52,13 +50,17 @@ class CustomTextField extends StatelessWidget {
             color: const Color(ColorCode.grey2),
             fontWeight: FontWeight.w300,
           ),
+          focusedErrorBorder: InputBorder.none,
           border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          contentPadding: padding,
         ),
         cursorColor: Colors.white,
         cursorWidth: 2.5,
-        cursorHeight: 27,
+        // cursorHeight: 10,
       ),
     );
   }

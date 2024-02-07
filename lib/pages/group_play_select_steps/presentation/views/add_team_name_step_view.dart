@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_field.dart';
 import '../controllers/group_select_steps_controller.dart';
@@ -66,9 +67,11 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                             hintText: 'Enter Team Name here',
                             controller: controller.teamNameController,
                             keyboardType: TextInputType.text,
-                            onChanged: (value) {
-                              controller.validateTeamName(value);
-                            },
+                            fontStyle: TextStyles.textSmall.copyWith(
+                              fontFamily: 'CoconPro',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
@@ -96,27 +99,33 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                     Positioned(
                       top: 140,
                       left: 270,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Image.asset(
-                              goPlaying.value
-                                  ? 'assets/images/go_button_active_bg.png'
-                                  : 'assets/images/go_button_inactive_bg.png',
-                              height: 165,
-                              width: 171),
-                          CustomText(
-                            'Go',
-                            textStyle: TextStyles.textXLarge.copyWith(
-                              fontFamily: 'CoconPro',
-                              color: Color(
+                      child: GestureDetector(
+                        onTap: () => {
+                          if (goPlaying.value)
+                            Get.rootDelegate.toNamed(Routes.GROUP_NAMES_LIST)
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
                                 goPlaying.value
-                                    ? ColorCode.aqua
-                                    : ColorCode.lightGrey2,
+                                    ? 'assets/images/go_button_active_bg.png'
+                                    : 'assets/images/go_button_inactive_bg.png',
+                                height: 165,
+                                width: 171),
+                            CustomText(
+                              'Go',
+                              textStyle: TextStyles.textXLarge.copyWith(
+                                fontFamily: 'CoconPro',
+                                color: Color(
+                                  goPlaying.value
+                                      ? ColorCode.aqua
+                                      : ColorCode.lightGrey2,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],

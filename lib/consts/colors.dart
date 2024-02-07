@@ -8,6 +8,8 @@ class ColorCode {
   static const lightGrey = 0xffb9b9b9;
   static const lightGrey2 = 0x7fc5cfd0;
   static const lightGrey3 = 0xbac5cfd0;
+  static const lightGrey4 = 0xffc5cfd0;
+  static const lightGrey5 = 0xa9ffffff;
   static const extraLightGrey = 0xffd1d1d1;
   static const yellow = 0x83d9a700;
   static const darkYellow = 0xffedb72a;
@@ -18,11 +20,32 @@ class ColorCode {
   static const lightPink = 0xffc849ab;
   static const darkPink = 0x83c650b6;
   static const white = 0xccffffff;
+  static const white2 = 0xa8ffffff;
+  static const white3 = 0x40ffffff;
   static const black = 0xff20262d;
+  static const black2 = 0x00808080;
   static const shadowColor = 0x99000000;
   static const aqua = 0xff2ff7f7;
-
-/////////////////////////////////
+  static const aqua2 = 0xff8ce9fc;
+  static const aqua3 = 0x4d2cbae2;
+  static const aqua4 = 0x4d7bdcf4;
+  static const pink = 0xffe8a9b9;
+  static const pink2 = 0x4dda698b;
+  static const pink3 = 0x4dfeebf1;
+  static const pink4 = 0xeeE8A9B9;
+  static const yellow2 = 0x4dfac339;
+  static const yellow3 = 0x4dfdefb1;
+  static const yellow4 = 0xfffefbce;
+  static const yellow5 = 0xeefefbce;
+  static const red = 0x4dca2b18;
+  static const red2 = 0x4ddc978a;
+  static const red3 = 0xffeda69a;
+  static const red4 = 0xeefdd4cd;
+  static const green = 0xeeefff76;
+  static const green2 = 0xffacb94b;
+  static const green3 = 0x4d5c9a7c;
+  static const green4 = 0x4dc5e87a;
+  /////////////////////////////////
   static const primary = 0xff343434;
   static const accentDarkColor = 0x1a2ff7f7;
   static const accentLightColor = 0xff2ff7f7;
