@@ -23,12 +23,12 @@ class TextStyles {
     fontWeight: FontWeight.w700,
     height: 0.8
   );
-  // static const textLarge = TextStyle(
-  //   fontFamily: 'CoconPro',
-  //   fontSize: 30.0,
-  //   color: Color(ColorCode.whiteBackground),
-  //   fontWeight: FontWeight.w700,
-  // );
+  static const textLarge = TextStyle(
+    fontFamily: 'CoconPro',
+    fontSize: 30.0,
+    color: Color(ColorCode.darkGrey),
+    fontWeight: FontWeight.w700,
+  );
   static const textMedium = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 25,
@@ -55,12 +55,12 @@ class TextStyles {
   //   color: Color(ColorCode.whiteBackground),
   //   fontWeight: FontWeight.w700,
   // );
-  static const textLarge = TextStyle(
-    fontFamily: 'CoconPro',
-    fontSize: 30.0,
-    color: Color(ColorCode.whiteBackground),
-    fontWeight: FontWeight.w700,
-  );
+  // static const textLarge = TextStyle(
+  //   fontFamily: 'CoconPro',
+  //   fontSize: 30.0,
+  //   color: Color(ColorCode.whiteBackground),
+  //   fontWeight: FontWeight.w700,
+  // );
   // static const textMedium = TextStyle(
   //   fontFamily: 'CoconPro',
   //   fontSize: 16,

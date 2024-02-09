@@ -8,7 +8,9 @@ import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_resul
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/bindings/group_select_steps_binding.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/add_team_name_step_view.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/group_names_step_view.dart';
+import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_game_step_view.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_team_size_step_view.dart';
+import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/selected_game_details_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
@@ -44,6 +46,14 @@ class AppPages {
     GetPage(
         name: Routes.GROUP_NAMES_LIST,
         page: () => const GroupNamesStep(),
+        binding: GroupSelectStepsBinding()),
+    GetPage(
+        name: Routes.GROUP_SELECT_GAME,
+        page: () => const SelectGameStep(),
+        binding: GroupSelectStepsBinding()),
+    GetPage(
+        name: Routes.SELECTED_GAME,
+        page: () => const SelectedGameDetails(),
         binding: GroupSelectStepsBinding()),
     GetPage(
       name: Routes.SCAN_QR,

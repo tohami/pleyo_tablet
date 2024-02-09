@@ -27,7 +27,7 @@ Future main() async {
   //     options: DefaultFirebaseOptions.currentPlatform,
   //   );
   //   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  // Get.put(StationService());
+  Get.put(StationService());
   runApp(const MyApp());
   // }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 

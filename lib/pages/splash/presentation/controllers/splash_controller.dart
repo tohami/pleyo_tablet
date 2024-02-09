@@ -26,7 +26,7 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onInit() {
     super.onInit();
-
+    getStationData() ;
     _buttonAnimationController =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
 
@@ -60,26 +60,33 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onResumed() {}
 
-  onStartClicked() async {
+  Future getStationData() async{
     if(isLoading.value == true)
       return ;
     try {
       isLoading.value = true ;
       var station = await splashRepository.getStationData();
       StationService.to.currentStation = station;
-      Get.rootDelegate.offNamed(Routes.SCAN_QR);
     } catch (e) {
+      print(e) ;
       showAlert("Error", "Unable to load station data", secondActionTitle: "Retry",onSecondActionClick:  ()=> onStartClicked()) ;
-      FirebaseCrashlytics.instance.log("Get station Error") ;
-      FirebaseCrashlytics.instance.recordError(
-          e,
-          null,
-          reason: 'a fatal error',
-          // Pass in 'fatal' argument
-          fatal: true
-      );
+      // FirebaseCrashlytics.instance.log("Get station Error") ;
+      // FirebaseCrashlytics.instance.recordError(
+      //     e,
+      //     null,
+      //     reason: 'a fatal error',
+      //     // Pass in 'fatal' argument
+      //     fatal: true
+      // );
     }finally {
       isLoading.value = false ;
     }
+  }
+
+  onStartClicked() async {
+    if(isLoading.value == true)
+      return ;
+
+    Get.rootDelegate.offNamed(Routes.SCAN_QR);
   }
 }

@@ -9,44 +9,77 @@ import '../consts/text_styles.dart';
 import 'custom_text.dart';
 
 class GameWidget extends StatelessWidget {
-  final Function(GameVariant) onPlayClicked;
-  final bool isChampion ;
-  final MapEntry<Game , List<GameVariant>> game;
+  final Function(GameVariant) onGameSelected;
+  final bool isChampion;
 
-  const GameWidget({ required this.isChampion, required this.game,required this.onPlayClicked ,  Key? key}) : super(key: key);
+  final MapEntry<Game, List<GameVariant>> game;
+
+  const GameWidget(
+      {required this.isChampion,
+      required this.game,
+      required this.onGameSelected,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        CustomText(
-          game.key.attributes?.name??"",
-          textStyle: TextStyles.textLarge.copyWith(
-            fontSize: 40,
+        Container(
+          height: 84,
+          width: 300,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(-0.973, 0.0),
+              end: Alignment(1.0, 0.0),
+              colors: [
+                Color(ColorCode.primaryBackground),
+                Color(ColorCode.black3),
+                Color(ColorCode.primaryBackground),
+              ],
+              stops: [0.0, 0.325, 1.0],
+            ),
           ),
         ),
-        const SizedBox(
-          height: 25,
-        ),
-        Container(
-          height: 260,
-          child: ListView.builder(
-            clipBehavior: Clip.none ,
-            scrollDirection: Axis.horizontal,
-            itemCount: game.value.length,
-            itemBuilder: (context , index) {
-              return VideoWidget(
-                game.value[index],
-                buttonColor: isChampion
-                    ? ColorCode.customAccent2Background
-                    : ColorCode.yellow3Background,
-                onTap: () {
-                  onPlayClicked(game.value[index]);
-                },
-                key: const ValueKey(1),
-              ) ;
-            },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: CustomText(
+                  game.key.attributes?.name ?? "",
+                  textStyle: TextStyles.textLarge.copyWith(
+                    color: const Color(ColorCode.lightGrey4),
+                  ),
+                ),
+              ),
+
+              Container(
+                height: 175,
+                child: ListView.builder(
+                  clipBehavior: Clip.none,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: game.value.length,
+                  itemBuilder: (context, index) {
+                    return VideoWidget(
+                      game.value[index],
+                      buttonColor: isChampion
+                          ? ColorCode.customAccent2Background
+                          : ColorCode.yellow3Background,
+                      onTap: () {
+                        onGameSelected(game.value[index]);
+                      },
+                      key: const ValueKey(1),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/controllers/group_select_steps_controller.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
-import 'package:pleyo_tablet_app/widgets/custom_text_field.dart';
 import 'package:pleyo_tablet_app/widgets/player_name_item.dart';
 
 class GroupNamesStep extends GetView<GroupPlayStepsController> {
@@ -74,132 +74,184 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                   const SizedBox(
                     height: 10,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedItem.value = 0;
-                    },
-                    child: PlayerNameItem(
-                      containerGradient: const LinearGradient(
-                        begin: Alignment(-0.778, 0.0),
-                        end: Alignment(1.19, 0.0),
-                        colors: [
-                          Color(ColorCode.pink2),
-                          Color(ColorCode.pink3)
-                        ],
-                        stops: [0.0, 1.0],
-                      ),
-                      imageBorderColor: const Color(ColorCode.pink),
-                      nameColor: const Color(ColorCode.pink4),
-                      imageUrl: 'assets/images/first_player_image.png',
-                      playerNumber: 1,
-                      name: controller.playerName1Controller.text.isEmpty
-                          ? "Rosana"
-                          : controller.playerName1Controller.text,
-                      controller: controller.playerName1Controller,
-                      isItemSelected: controller.selectedItem.value == 0,
-                      hasSelectedItem: controller.selectedItem.value != -1,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedItem.value = 1;
-                    },
-                    child: PlayerNameItem(
-                      containerGradient: const LinearGradient(
-                        begin: Alignment(-0.955, 0.0),
-                        end: Alignment(1.15, 0.0),
-                        colors: [
-                          Color(ColorCode.aqua3),
-                          Color(ColorCode.aqua4)
-                        ],
-                        stops: [0.0, 1.0],
-                      ),
-                      imageBorderColor: const Color(ColorCode.aqua2),
-                      nameColor: const Color(ColorCode.aqua2),
-                      imageUrl: 'assets/images/second_player_image.png',
-                      playerNumber: 2,
-                      name: controller.playerName2Controller.text.isEmpty
-                          ? "Spike"
-                          : controller.playerName2Controller.text,
-                      controller: controller.playerName2Controller,
-                      isItemSelected: controller.selectedItem.value == 1,
-                      hasSelectedItem: controller.selectedItem.value != -1,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedItem.value = 2;
-                    },
-                    child: PlayerNameItem(
-                      containerGradient: const LinearGradient(
-                        begin: Alignment(-0.958, 0.0),
-                        end: Alignment(1.249, 0.0),
-                        colors: [
-                          Color(ColorCode.yellow2),
-                          Color(ColorCode.yellow3)
-                        ],
-                        stops: [0.0, 1.0],
-                      ),
-                      imageBorderColor: const Color(ColorCode.yellow4),
-                      nameColor: const Color(ColorCode.yellow5),
-                      imageUrl: 'assets/images/third_player_image.png',
-                      playerNumber: 3,
-                      name: controller.playerName3Controller.text.isEmpty
-                          ? "Bahhnaa"
-                          : controller.playerName3Controller.text,
-                      controller: controller.playerName3Controller,
-                      isItemSelected: controller.selectedItem.value == 2,
-                      hasSelectedItem: controller.selectedItem.value != -1,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedItem.value = 3;
-                    },
-                    child: PlayerNameItem(
-                      containerGradient: const LinearGradient(
-                        begin: Alignment(-1.0, 0.0),
-                        end: Alignment(1.265, 0.0),
-                        colors: [Color(ColorCode.red), Color(ColorCode.red2)],
-                        stops: [0.0, 1.0],
-                      ),
-                      imageBorderColor: const Color(ColorCode.red3),
-                      nameColor: const Color(ColorCode.red4),
-                      imageUrl: 'assets/images/fourth_player_image.png',
-                      playerNumber: 4,
-                      name: controller.playerName4Controller.text.isEmpty
-                          ? "One"
-                          : controller.playerName4Controller.text,
-                      controller: controller.playerName4Controller,
-                      isItemSelected: controller.selectedItem.value == 3,
-                      hasSelectedItem: controller.selectedItem.value != -1,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedItem.value = 4;
-                    },
-                    child: PlayerNameItem(
-                      containerGradient: const LinearGradient(
-                        begin: Alignment(-0.968, 0.0),
-                        end: Alignment(1.206, 0.0),
-                        colors: [
-                          Color(ColorCode.green3),
-                          Color(ColorCode.green4)
-                        ],
-                        stops: [0.0, 1.0],
-                      ),
-                      imageBorderColor: const Color(ColorCode.green2),
-                      nameColor: const Color(ColorCode.green),
-                      imageUrl: 'assets/images/fifth_player_image.png',
-                      playerNumber: 5,
-                      name: controller.playerName5Controller.text.isEmpty
-                          ? "Erith"
-                          : controller.playerName5Controller.text,
-                      controller: controller.playerName5Controller,
-                      isItemSelected: controller.selectedItem.value == 4,
-                      hasSelectedItem: controller.selectedItem.value != -1,
-                    ),
+                  Column(
+                    children: List.generate(controller.players.length, (index) {
+                      if (index == 0) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedItem.value = 0;
+                          },
+                          child: PlayerNameItem(
+                            containerGradient: const LinearGradient(
+                              begin: Alignment(-0.778, 0.0),
+                              end: Alignment(1.19, 0.0),
+                              colors: [
+                                Color(ColorCode.pink2),
+                                Color(ColorCode.pink3)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            imageBorderColor: const Color(ColorCode.pink),
+                            nameColor: const Color(ColorCode.pink4),
+                            imageUrl: 'assets/images/first_player_image.png',
+                            playerNumber: 1,
+                            name: controller.playerName1Controller.text.isEmpty
+                                ? "Rosana"
+                                : controller.playerName1Controller.text,
+                            controller: controller.playerName1Controller,
+                            isItemSelected: controller.selectedItem.value == 0,
+                            hasSelectedItem:
+                                controller.selectedItem.value != -1,
+                          ),
+                        );
+                      }
+                      if (index == 1) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedItem.value = 1;
+                          },
+                          child: PlayerNameItem(
+                            containerGradient: const LinearGradient(
+                              begin: Alignment(-0.955, 0.0),
+                              end: Alignment(1.15, 0.0),
+                              colors: [
+                                Color(ColorCode.aqua3),
+                                Color(ColorCode.aqua4)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            imageBorderColor: const Color(ColorCode.aqua2),
+                            nameColor: const Color(ColorCode.aqua2),
+                            imageUrl: 'assets/images/second_player_image.png',
+                            playerNumber: 2,
+                            name: controller.playerName2Controller.text.isEmpty
+                                ? "Spike"
+                                : controller.playerName2Controller.text,
+                            controller: controller.playerName2Controller,
+                            isItemSelected: controller.selectedItem.value == 1,
+                            hasSelectedItem:
+                                controller.selectedItem.value != -1,
+                          ),
+                        );
+                      }
+
+                      if (index == 2) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedItem.value = 2;
+                          },
+                          child: PlayerNameItem(
+                            containerGradient: const LinearGradient(
+                              begin: Alignment(-0.958, 0.0),
+                              end: Alignment(1.249, 0.0),
+                              colors: [
+                                Color(ColorCode.yellow2),
+                                Color(ColorCode.yellow3)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            imageBorderColor: const Color(ColorCode.yellow4),
+                            nameColor: const Color(ColorCode.yellow5),
+                            imageUrl: 'assets/images/third_player_image.png',
+                            playerNumber: 3,
+                            name: controller.playerName3Controller.text.isEmpty
+                                ? "Bahhnaa"
+                                : controller.playerName3Controller.text,
+                            controller: controller.playerName3Controller,
+                            isItemSelected: controller.selectedItem.value == 2,
+                            hasSelectedItem:
+                                controller.selectedItem.value != -1,
+                          ),
+                        );
+                      }
+
+                      if (index == 3) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedItem.value = 3;
+                          },
+                          child: PlayerNameItem(
+                            containerGradient: const LinearGradient(
+                              begin: Alignment(-1.0, 0.0),
+                              end: Alignment(1.265, 0.0),
+                              colors: [
+                                Color(ColorCode.red),
+                                Color(ColorCode.red2)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            imageBorderColor: const Color(ColorCode.red3),
+                            nameColor: const Color(ColorCode.red4),
+                            imageUrl: 'assets/images/fourth_player_image.png',
+                            playerNumber: 4,
+                            name: controller.playerName4Controller.text.isEmpty
+                                ? "One"
+                                : controller.playerName4Controller.text,
+                            controller: controller.playerName4Controller,
+                            isItemSelected: controller.selectedItem.value == 3,
+                            hasSelectedItem:
+                                controller.selectedItem.value != -1,
+                          ),
+                        );
+                      }
+
+                      if (index == 4) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedItem.value = 4;
+                          },
+                          child: PlayerNameItem(
+                            containerGradient: const LinearGradient(
+                              begin: Alignment(-0.968, 0.0),
+                              end: Alignment(1.206, 0.0),
+                              colors: [
+                                Color(ColorCode.green3),
+                                Color(ColorCode.green4)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            imageBorderColor: const Color(ColorCode.green2),
+                            nameColor: const Color(ColorCode.green),
+                            imageUrl: 'assets/images/fifth_player_image.png',
+                            playerNumber: 5,
+                            name: controller.playerName5Controller.text.isEmpty
+                                ? "Erith"
+                                : controller.playerName5Controller.text,
+                            controller: controller.playerName5Controller,
+                            isItemSelected: controller.selectedItem.value == 4,
+                            hasSelectedItem:
+                                controller.selectedItem.value != -1,
+                          ),
+                        );
+                      }
+
+                      return GestureDetector(
+                        onTap: () {
+                          controller.selectedItem.value = 0;
+                        },
+                        child: PlayerNameItem(
+                          containerGradient: const LinearGradient(
+                            begin: Alignment(-0.778, 0.0),
+                            end: Alignment(1.19, 0.0),
+                            colors: [
+                              Color(ColorCode.pink2),
+                              Color(ColorCode.pink3)
+                            ],
+                            stops: [0.0, 1.0],
+                          ),
+                          imageBorderColor: const Color(ColorCode.pink),
+                          nameColor: const Color(ColorCode.pink4),
+                          imageUrl: 'assets/images/first_player_image.png',
+                          playerNumber: 1,
+                          name: controller.playerName1Controller.text.isEmpty
+                              ? "Rosana"
+                              : controller.playerName1Controller.text,
+                          controller: controller.playerName1Controller,
+                          isItemSelected: controller.selectedItem.value == 0,
+                          hasSelectedItem: controller.selectedItem.value != -1,
+                        ),
+                      );
+                    }),
                   ),
                   const SizedBox(
                     height: 10,
@@ -234,25 +286,29 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                       border: Border.all(
                           width: 6.0, color: const Color(ColorCode.aqua)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText(
-                          'Select Game',
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontFamily: 'CoconPro',
-                            color: const Color(ColorCode.aqua),
+                    child: GestureDetector(
+                      onTap: () =>
+                          Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            'Select Game',
+                            textStyle: TextStyles.textMedium.copyWith(
+                              fontFamily: 'CoconPro',
+                              color: const Color(ColorCode.aqua),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Image.asset(
-                          'assets/images/lets_play_arrow.png',
-                          width: 40,
-                          height: 25,
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Image.asset(
+                            'assets/images/lets_play_arrow.png',
+                            width: 40,
+                            height: 25,
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],

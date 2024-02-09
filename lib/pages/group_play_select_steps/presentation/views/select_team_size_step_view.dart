@@ -15,6 +15,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

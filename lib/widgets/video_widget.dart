@@ -6,107 +6,136 @@ import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/main.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
+import 'package:pleyo_tablet_app/widgets/game_difficulty_item.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoWidget extends StatelessWidget {
   final int buttonColor;
   final GameVariant variantModel;
   final VoidCallback onTap;
-  late VideoPlayerController _controller;
   final RxBool isInitialized = false.obs;
+
   VideoWidget(this.variantModel,
       {required this.onTap, required this.buttonColor, Key? key})
-      : super(key: key) {
-    // _controller = VideoPlayerController.network(variantModel.urlVideoTablet!,
-    //     videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false))
-    //   ..initialize().then((_) {
-    //     isInitialized.value = true;
-    //   });
-    // _controller.setLooping(true);
-    // _controller.setVolume(0.0);
-  }
+      : super(key: key) {}
 
   @override
   Widget build(BuildContext context) {
+    var gameDifficulties = variantModel.attributes?.gameDifficulties?.data;
     return GestureDetector(
-      onTap: () {
-        // _controller.play() ;
-        onTap() ;
-      },
-      child: Container(
-        width: 315,
-        height: 256,
-        margin: EdgeInsets.only(right: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 300,
-              height: 180,
-              child: ObxValue<RxBool>((state) {
-                return state.value
-                    ? VideoPlayer(_controller)
-                    : Container(
-                        child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
-                          variantModel.attributes!.image!.data!.attributes!.formats!.thumbnail!.url!,
-                        ):CircularProgressIndicator(
-                          color: Color(buttonColor),
-                        ),
-                      );
-              }, isInitialized),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Color(buttonColor),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      'assets/images/icon_awesome_play.svg',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      CustomText(
-                        variantModel.attributes?.name??"",
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                        textStyle: TextStyles.textLarge.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: const Color(ColorCode.white4Background),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 2,
-                      ),
-                      CustomText(
-                        variantModel.attributes?.description??"",
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                        textStyle: TextStyles.textMedium.copyWith(
-                          color: const Color(ColorCode.white2Background),
-                        ),
-                      ),
-                    ],
-                  ),
+      onTap: onTap,
+      child: Stack(
+        children: [
+          Container(
+            width: 300,
+            height: 200,
+            decoration: BoxDecoration(
+              color: const Color(ColorCode.darkGrayBackground),
+              borderRadius: BorderRadius.circular(25.0),
+              border: Border.all(
+                width: 3.0,
+                color: const Color(ColorCode.accentLightColor),
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(ColorCode.shadowBackground),
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
                 ),
               ],
-            )
-          ],
-        ),
+            ),
+            margin: const EdgeInsets.only(right: 20),
+            child: Container(
+              child: variantModel.attributes?.image?.data?.attributes != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(23.0),
+                      child: Image.network(
+                        variantModel.attributes!.image!.data!.attributes!
+                            .formats!.thumbnail!.url!,
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  : CircularProgressIndicator(
+                      color: Color(buttonColor),
+                    ),
+            ),
+          ),
+          Container(
+            width: 300,
+            padding: const EdgeInsets.only(top: 30, left: 15),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment(0.0, -1.0),
+                end: Alignment(0.0, 1.0),
+                colors: [
+                  Color(ColorCode.black4),
+                  Color(ColorCode.shadowColor2)
+                ],
+                stops: [0.0, 1.0],
+              ),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            child: Stack(
+              children: [
+                CustomText(
+                  variantModel.attributes?.name?.toUpperCase() ?? "",
+                  maxLines: 2,
+                  textStyle: TextStyles.textMedium.copyWith(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 0.8
+                      ..color = Colors.white,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+                CustomText(
+                  variantModel.attributes?.name?.toUpperCase() ?? "",
+                  maxLines: 2,
+                  textStyle: TextStyles.textMedium.copyWith(
+                    fontFamily: 'Roboto',
+                    color: const Color(ColorCode.lightGrey2),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 5,
+            right: 27,
+            child: gameDifficulties!.isNotEmpty
+                ? Container(
+                    height: 70,
+                    child: ListView.builder(
+                      itemCount: gameDifficulties.length,
+                      shrinkWrap: true,
+                      clipBehavior: Clip.none,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return GameDifficultyItem(
+                            imageUrl: gameDifficulties[index]
+                                        .attributes
+                                        ?.difficulty ==
+                                    1
+                                ? 'assets/images/game_easy.png'
+                                : gameDifficulties[index]
+                                            .attributes
+                                            ?.difficulty ==
+                                        2
+                                    ? 'assets/images/game_medium.png'
+                                    : 'assets/images/game_diffcult.png',
+                            difficultyName:
+                                gameDifficulties[index].attributes?.name ?? "");
+                      },
+                    ),
+                  )
+                : Container(),
+          ),
+        ],
       ),
     );
   }

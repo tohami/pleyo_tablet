@@ -2,6 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/model/strapi/game.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
+import "package:collection/collection.dart";
+import 'package:pleyo_tablet_app/model/strapi/station.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 
 class GroupPlayStepsController extends SuperController<bool> {
   final teamNameController = TextEditingController();
@@ -14,6 +19,14 @@ class GroupPlayStepsController extends SuperController<bool> {
   RxInt selectedItem = (-1).obs;
   int teamSize = 0;
   final players = <String>[];
+  RxBool isChampoinship = true.obs;
+
+  Station station = StationService.to.currentStation;
+  late Map<Game, List<GameVariant>> games = groupBy(
+      station.attributes!.gameVariants!.data!,
+      (GameVariant item) => item.attributes!.game!.data!);
+
+  Rx<GameVariant> selectedGame = GameVariant().obs;
 
   @override
   void onInit() {
@@ -26,6 +39,10 @@ class GroupPlayStepsController extends SuperController<bool> {
         goPlaying.value = false;
       }
     });
+  }
+
+  void changeMode(bool val) {
+    isChampoinship.value = val;
   }
 
   @override
