@@ -6,7 +6,6 @@ import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/cont
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_difficulty_item.dart';
-import 'package:pleyo_tablet_app/widgets/game_widget.dart';
 
 class SelectedGameDetails extends GetView<GroupPlayStepsController> {
   const SelectedGameDetails({Key? key}) : super(key: key);
@@ -225,10 +224,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                   gradient: const LinearGradient(
                     begin: Alignment(-1.0, 0.0),
                     end: Alignment(1.0, 0.0),
-                    colors: [
-                      Color(ColorCode.white3),
-                      Color(ColorCode.black2)
-                    ],
+                    colors: [Color(ColorCode.white3), Color(ColorCode.black2)],
                     stops: [0.0, 1.0],
                   ),
                   borderRadius: BorderRadius.circular(56.0),
@@ -236,8 +232,10 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                       width: 6.0, color: const Color(ColorCode.aqua)),
                 ),
                 child: GestureDetector(
-                  onTap: () =>
-                      Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME),
+                  onTap: () => Get.rootDelegate.toNamed(
+                    Routes.SELECT_GAME_DIFFICULTY,
+                    arguments: controller.selectedGame.value,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -287,8 +287,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                           width: 6.0, color: const Color(ColorCode.aqua)),
                     ),
                     child: GestureDetector(
-                      onTap: () =>
-                          Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME),
+                      onTap: () {
+                          Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

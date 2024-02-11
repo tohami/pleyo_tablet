@@ -11,6 +11,7 @@ class ColorCode {
   static const lightGrey4 = 0xffc5cfd0;
   static const lightGrey5 = 0xa9ffffff;
   static const lightGrey6 = 0xccc5cfd0;
+  static const lightGrey7 = 0x66b9b9b9;
   static const extraLightGrey = 0xffd1d1d1;
   static const yellow = 0x83d9a700;
   static const darkYellow = 0xffedb72a;
@@ -37,6 +38,7 @@ class ColorCode {
   static const pink2 = 0x4dda698b;
   static const pink3 = 0x4dfeebf1;
   static const pink4 = 0xeeE8A9B9;
+  static const pink5 = 0xfeea4e84;
   static const yellow2 = 0x4dfac339;
   static const yellow3 = 0x4dfdefb1;
   static const yellow4 = 0xfffefbce;

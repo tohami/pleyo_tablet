@@ -5,9 +5,13 @@ import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 class GameDifficultyItem extends StatelessWidget {
   final String imageUrl;
   final String difficultyName;
+  final double? imageSize;
 
   const GameDifficultyItem(
-      {Key? key, required this.imageUrl, required this.difficultyName})
+      {Key? key,
+      required this.imageUrl,
+      required this.difficultyName,
+      this.imageSize})
       : super(key: key);
 
   @override
@@ -19,6 +23,8 @@ class GameDifficultyItem extends StatelessWidget {
       children: [
         Container(
           child: Image.asset(imageUrl, fit: BoxFit.fitHeight),
+          width: imageSize,
+          height: imageSize,
         ),
         CustomText(
           difficultyName,

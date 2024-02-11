@@ -24,7 +24,7 @@ class GroupPlayStepsController extends SuperController<bool> {
   Station station = StationService.to.currentStation;
   late Map<Game, List<GameVariant>> games = groupBy(
       station.attributes!.gameVariants!.data!,
-      (GameVariant item) => item.attributes!.game!.data!);
+          (GameVariant item) => item.attributes!.game!.data!);
 
   Rx<GameVariant> selectedGame = GameVariant().obs;
 
@@ -37,6 +37,46 @@ class GroupPlayStepsController extends SuperController<bool> {
         goPlaying.value = true;
       } else {
         goPlaying.value = false;
+      }
+    });
+    playerName1Controller.text="Rosana";
+    playerName1Controller.addListener(() {
+      if (playerName1Controller.text.isNotEmpty) {
+        players[0]=playerName1Controller.text;
+      } else {
+        players[0]="Rosana";
+      }
+    });
+    playerName2Controller.text="Spike";
+    playerName2Controller.addListener(() {
+      if (playerName2Controller.text.isNotEmpty) {
+        players[1]=playerName2Controller.text;
+      } else {
+        players[1]="Spike";
+      }
+    });
+    playerName3Controller.text="Bahhnaa";
+    playerName3Controller.addListener(() {
+      if (playerName3Controller.text.isNotEmpty) {
+        players[2]=playerName3Controller.text;
+      } else {
+        players[2]="Bahhnaa";
+      }
+    });
+    playerName4Controller.text="One";
+    playerName4Controller.addListener(() {
+      if (playerName4Controller.text.isNotEmpty) {
+        players[3]=playerName4Controller.text;
+      } else {
+        players[3]="One";
+      }
+    });
+    playerName5Controller.text="Erith";
+    playerName5Controller.addListener(() {
+      if (playerName5Controller.text.isNotEmpty) {
+        players[4]=playerName5Controller.text;
+      } else {
+        players[4]="sErith";
       }
     });
   }

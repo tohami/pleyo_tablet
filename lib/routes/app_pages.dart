@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/pages/activate/bindings/activate_binding.dart';
 import 'package:pleyo_tablet_app/pages/activate/presentation/views/activate_view.dart';
 import 'package:pleyo_tablet_app/pages/available_points/bindings/available_points_binding.dart';
@@ -11,6 +12,8 @@ import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/view
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_game_step_view.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/selected_game_details_view.dart';
+import 'package:pleyo_tablet_app/pages/group_rotation/bindings/group_rotation_binding.dart';
+import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/select_game_difficulty_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
@@ -55,6 +58,11 @@ class AppPages {
         name: Routes.SELECTED_GAME,
         page: () => const SelectedGameDetails(),
         binding: GroupSelectStepsBinding()),
+    GetPage(
+        name: Routes.SELECT_GAME_DIFFICULTY,
+        page: () => const SelectGameDifficulty(),
+        binding: GroupRotationBinding(),
+     ),
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),
