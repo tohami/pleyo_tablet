@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextStyle fontStyle;
   final EdgeInsets padding;
+  final bool? isEnabled;
 
   const CustomTextField({
     Key? key,
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     required this.fontStyle,
     this.padding =
         const EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
@@ -60,6 +62,7 @@ class CustomTextField extends StatelessWidget {
         ),
         cursorColor: Colors.white,
         cursorWidth: 2.5,
+        enabled: isEnabled,
         // cursorHeight: 10,
       ),
     );

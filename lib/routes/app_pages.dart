@@ -13,6 +13,7 @@ import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/view
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/selected_game_details_view.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/bindings/group_rotation_binding.dart';
+import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/final_result_view.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/remake_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/select_game_difficulty_view.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/start_game_view.dart';
@@ -73,6 +74,11 @@ class AppPages {
     GetPage(
       name: Routes.REMAKE_PLAYING,
       page: () => const RemakePlaying(),
+      binding: GroupRotationBinding(),
+    ),
+    GetPage(
+      name: Routes.FINAL_RESULT,
+      page: () => const FinalResult(),
       binding: GroupRotationBinding(),
     ),
     GetPage(
