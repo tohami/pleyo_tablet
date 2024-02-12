@@ -4,6 +4,8 @@ import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 class GroupRotationController extends SuperController<bool> {
   GameVariant selectedGame = Get.rootDelegate.arguments();
   int gameAttemptNumbers = 2;
+  int? selectedGameDifficulty;
+  RxBool gameFail=true.obs;
 
   @override
   void onInit() {
@@ -49,5 +51,9 @@ class GroupRotationController extends SuperController<bool> {
   @override
   void onResumed() {
     // TODO: implement onResumed
+  }
+
+  void setSelectedGameDifficulty(int? selectedDifficulty) {
+    selectedGameDifficulty = selectedDifficulty;
   }
 }

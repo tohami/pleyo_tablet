@@ -14,6 +14,7 @@ import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/view
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/selected_game_details_view.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/bindings/group_rotation_binding.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/select_game_difficulty_view.dart';
+import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/start_game_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
@@ -59,10 +60,15 @@ class AppPages {
         page: () => const SelectedGameDetails(),
         binding: GroupSelectStepsBinding()),
     GetPage(
-        name: Routes.SELECT_GAME_DIFFICULTY,
-        page: () => const SelectGameDifficulty(),
-        binding: GroupRotationBinding(),
-     ),
+      name: Routes.SELECT_GAME_DIFFICULTY,
+      page: () => const SelectGameDifficulty(),
+      binding: GroupRotationBinding(),
+    ),
+    GetPage(
+      name: Routes.START_GAME,
+      page: () => const StartGame(),
+      binding: GroupRotationBinding(),
+    ),
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),

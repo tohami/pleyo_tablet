@@ -328,7 +328,16 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
-                                    onTap: () => {},
+                                    onTap: () {
+                                      controller.setSelectedGameDifficulty(
+                                          selectedGameAttributes
+                                              .gameDifficulties!
+                                              .data![index]
+                                              .attributes!
+                                              .difficulty);
+                                      Get.rootDelegate
+                                          .toNamed(Routes.START_GAME);
+                                    },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
