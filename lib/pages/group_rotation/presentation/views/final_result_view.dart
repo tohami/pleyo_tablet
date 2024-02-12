@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/controllers/group_rotation_controller.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_field.dart';
 import 'package:pleyo_tablet_app/widgets/player_result_item.dart';
@@ -171,18 +172,18 @@ class FinalResult extends GetView<GroupRotationController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:
-                          List.generate(controller.playersNumber, (index) {
+                      List.generate(controller.playersNumber, (index) {
                         return PlayerResultItem(
-                          isEnabled:controller.isEmailAdded.value,
+                          isEnabled: controller.isEmailAdded.value,
                           playerImageURl: index == 0
                               ? 'assets/images/first_player_image.png'
                               : index == 1
-                                  ? 'assets/images/second_player_image.png'
-                                  : index == 2
-                                      ? 'assets/images/third_player_image.png'
-                                      : index == 3
-                                          ? 'assets/images/fourth_player_image.png'
-                                          : 'assets/images/fifth_player_image.png',
+                              ? 'assets/images/second_player_image.png'
+                              : index == 2
+                              ? 'assets/images/third_player_image.png'
+                              : index == 3
+                              ? 'assets/images/fourth_player_image.png'
+                              : 'assets/images/fifth_player_image.png',
                         );
                       }).toList(),
                     ),
@@ -243,23 +244,23 @@ class FinalResult extends GetView<GroupRotationController> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () =>
-                                          controller.isEmailEnabled.value =
-                                              !controller.isEmailEnabled.value,
+                                      controller.isEmailEnabled.value =
+                                      !controller.isEmailEnabled.value,
                                       child: Container(
                                         height: 46,
                                         child: CustomTextField(
                                           hintText: 'tap to enter your email',
                                           controller:
-                                              controller.groupEmailController,
+                                          controller.groupEmailController,
                                           keyboardType: TextInputType.text,
                                           fontStyle:
-                                              TextStyles.textSmall.copyWith(
+                                          TextStyles.textSmall.copyWith(
                                             fontFamily: 'Helvetica Neue',
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300,
                                           ),
                                           isEnabled:
-                                              controller.isEmailEnabled.value,
+                                          controller.isEmailEnabled.value,
                                         ),
                                       ),
                                     ),
@@ -276,7 +277,7 @@ class FinalResult extends GetView<GroupRotationController> {
                             visible: controller.isEmailEnabled.value,
                             child: GestureDetector(
                               onTap: () =>
-                                  {controller.isEmailAdded.value = true},
+                              {controller.isEmailAdded.value = true},
                               child: Container(
                                 width: 120,
                                 height: 60,
@@ -353,28 +354,33 @@ class FinalResult extends GetView<GroupRotationController> {
                       const SizedBox(
                         height: 130,
                       ),
-                      Container(
-                        width: 200,
-                        height: 120,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment(-1.0, 0.055),
-                            end: Alignment(0.699, 0.0),
-                            colors: [
-                              Color(ColorCode.black),
-                              Color(ColorCode.primaryBackground)
-                            ],
-                            stops: [0.0, 1.0],
+                      GestureDetector(
+                        onTap: () => {
+                        Get.rootDelegate.toNamed(Routes.SPLASH)
+                      },
+                        child: Container(
+                          width: 200,
+                          height: 120,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment(-1.0, 0.055),
+                              end: Alignment(0.699, 0.0),
+                              colors: [
+                                Color(ColorCode.black),
+                                Color(ColorCode.primaryBackground)
+                              ],
+                              stops: [0.0, 1.0],
+                            ),
+                            borderRadius: BorderRadius.circular(40.0),
+                            border: Border.all(
+                                width: 4.0, color: const Color(ColorCode.aqua)),
                           ),
-                          borderRadius: BorderRadius.circular(40.0),
-                          border: Border.all(
-                              width: 4.0, color: const Color(ColorCode.aqua)),
-                        ),
-                        child: CustomText(
-                          'Exit',
-                          textStyle: TextStyles.textXXLarge.copyWith(
-                            color: const Color(ColorCode.lightGrey6),
+                          child: CustomText(
+                            'Exit',
+                            textStyle: TextStyles.textXXLarge.copyWith(
+                              color: const Color(ColorCode.lightGrey6),
+                            ),
                           ),
                         ),
                       ),
