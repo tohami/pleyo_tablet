@@ -3,9 +3,11 @@ import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 
 class GroupRotationController extends SuperController<bool> {
   GameVariant selectedGame = Get.rootDelegate.arguments();
+  String playerName = 'Rossana';
+  int playersNumber = 5;
   int gameAttemptNumbers = 2;
   int? selectedGameDifficulty;
-  RxBool gameFail=true.obs;
+  RxBool gameFail = false.obs;
 
   @override
   void onInit() {
