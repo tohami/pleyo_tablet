@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -107,33 +108,47 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                     // TODO this stack for timer text
                     Positioned(
                       bottom: 85,
-                      child: Stack(
-                        children: [
-                          CustomText(
-                            "10",
-                            maxLines: 2,
-                            textStyle: TextStyles.textXXXLarge.copyWith(
-                              fontSize: 115,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          CustomText(
-                            '10',
-                            maxLines: 2,
-                            textStyle: TextStyles.textXXXLarge.copyWith(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 115,
-                              foreground: Paint()
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 1.5
-                                ..color = const Color(ColorCode.black),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                      child: ObxValue<RxString>((state) {
+                        return Visibility(
+                          visible: !controller.chooseGameDifficulty.value,
+                          child: Stack(
+                            children: [
+                              CustomText(
+                                '${controller.time.value}',
+                                maxLines: 2,
+                                textStyle: TextStyles.textXXXLarge.copyWith(
+                                  fontSize: 115,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              CustomText(
+                                '${controller.time.value}',
+                                maxLines: 2,
+                                textStyle: TextStyles.textXXXLarge.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 115,
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 1.5
+                                    ..color = const Color(ColorCode.black),
+                                ),
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          )
+                              .animate(
+                                  onPlay: (controller) =>
+                                      controller.repeat(reverse: false))
+                              .fade(
+                                  curve: Curves.easeOut,
+                                  begin: 0,
+                                  end: 1,
+                                  delay: 800.ms,
+                                  duration: 1500.ms),
+                        );
+                      }, controller.time),
                     ),
                     //TODO this stack for player number text
                     Positioned(
@@ -329,6 +344,8 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
+                                      controller.chooseGameDifficulty.value =
+                                          true;
                                       controller.setSelectedGameDifficulty(
                                           selectedGameAttributes
                                               .gameDifficulties!
@@ -364,7 +381,15 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                                   .attributes
                                                   ?.name ??
                                               ""),
-                                    ),
+                                    )  .animate(
+                                        onPlay: (controller) =>
+                                            controller.repeat(reverse: false))
+                                        .fade(
+                                        curve: Curves.easeOut,
+                                        begin: 0.7,
+                                        end: 2,
+                                        delay: 500.ms,
+                                        duration: 1000.ms),
                                   );
                                 },
                               ),
