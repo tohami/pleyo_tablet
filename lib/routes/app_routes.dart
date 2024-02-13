@@ -6,6 +6,7 @@ abstract class Routes {
   Routes._();
 
   static const SPLASH = _Paths.SPLASH;
+  static const MODE = _Paths.MODE;
   static const SELECT_TEAM_SIZE = _Paths.SELECT_TEAM_SIZE;
   static const ADD_TEAM_NAME = _Paths.ADD_TEAM_NAME;
   static const GROUP_NAMES_LIST = _Paths.GROUP_NAMES_LIST;
@@ -25,6 +26,7 @@ abstract class Routes {
 
 abstract class _Paths {
   static const SPLASH = '/splash';
+  static const MODE = '/mode';
   static const SELECT_TEAM_SIZE = '/select_team_size';
   static const ADD_TEAM_NAME = '/add_team_name';
   static const GROUP_NAMES_LIST = '/group_name_list';

@@ -70,7 +70,7 @@ class HomeView extends GetView<HomeController> {
                             const SizedBox(
                               height: 60,
                             ),
-                            GameWidget(game: games[index],isChampion: controller.isChampoinship.value,onGameSelected: (variant) {
+                            GameWidget(game: games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
                               print(variant.toJson()) ;
                               showBottomSheetModal(context , variant , (diff) {
                                 controller.startGame(variant.id!, diff);

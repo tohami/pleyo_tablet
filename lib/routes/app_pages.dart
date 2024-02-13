@@ -39,6 +39,10 @@ class AppPages {
   static final routes = [
     GetPage(
         name: Routes.SPLASH,
+        page: () => const SplashView(),
+        binding: SplashBinding()),
+    GetPage(
+        name: Routes.MODE,
         page: () => const GameExperienceView(),
         binding: SplashBinding()),
     GetPage(

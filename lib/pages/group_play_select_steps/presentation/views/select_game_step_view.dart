@@ -6,6 +6,7 @@ import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/cont
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
+import 'package:pleyo_tablet_app/widgets/group_game_widget.dart';
 
 class SelectGameStep extends GetView<GroupPlayStepsController> {
   const SelectGameStep({Key? key}) : super(key: key);
@@ -69,7 +70,7 @@ class SelectGameStep extends GetView<GroupPlayStepsController> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GameWidget(
+                            GroupGameWidget(
                               game: games[index],
                               isChampion: controller.isChampoinship.value,
                               onGameSelected: (variant) {

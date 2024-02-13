@@ -30,9 +30,7 @@ class GameExperienceView extends GetView<SplashController> {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           color: const Color(ColorCode.primaryBackground),
           child: Center(
-            child: ObxValue<RxBool>((state) {
-              return !state.value
-                  ? Column(
+            child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.max,
@@ -109,10 +107,6 @@ class GameExperienceView extends GetView<SplashController> {
                         ),
                       ],
                     )
-                  : CircularProgressIndicator(
-                      color: const Color(ColorCode.lightGrayBackground),
-                    );
-            }, controller.isLoading),
           ),
         ),
       ),

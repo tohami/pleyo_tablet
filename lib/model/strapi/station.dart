@@ -30,6 +30,10 @@ class _Attributes {
   OrganizationResponse? organization;
   String? tabletSerial;
   bool? isEnabled;
+  bool? singlePlayerEnabled;
+  bool? groupEnabled;
+  bool? multiplayerEnabled;
+  bool? competitionEnabled;
 
   _Attributes({this.name, this.gameVariants, this.organization, this.tabletSerial,  this.isEnabled});
 
@@ -39,6 +43,10 @@ class _Attributes {
     organization = json['organization'] != null ? new OrganizationResponse.fromJson(json['organization']) : null;
     tabletSerial = json['tablet_serial'];
     isEnabled = json['isEnabled'];
+    singlePlayerEnabled = json['singlePlayerEnabled'];
+    groupEnabled = json['groupEnabled'];
+    multiplayerEnabled = json['multiplayerEnabled'];
+    competitionEnabled = json['competitionEnabled'];
 }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +61,10 @@ class _Attributes {
     data['tablet_serial'] = this.tabletSerial;
 
     data['isEnabled'] = this.isEnabled;
+    data['singlePlayerEnabled'] = this.singlePlayerEnabled;
+    data['competitionEnabled'] = this.competitionEnabled;
+    data['groupEnabled'] = this.groupEnabled;
+    data['multiplayerEnabled'] = this.multiplayerEnabled;
     return data;
   }
 }
