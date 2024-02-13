@@ -47,6 +47,7 @@ dependencies:
   socket_io_client: ^2.0.0
   screen_brightness: ^0.2.2
   virtual_keyboard_multi_language: ^1.0.3
+  flutter_animate: ^4.5.0
 
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
@@ -60,7 +61,15 @@ class RemakePlayerItem extends StatelessWidget {
                     'assets/images/icon_downloading.png',
                     width: 100,
                     height: 100,
-                  ),
+                  )
+                      .animate(
+                          onPlay: (controller) =>
+                              controller.repeat(reverse: false))
+                      .rotate(
+                          curve: Curves.slowMiddle,
+                          begin: 0,
+                          end: 1,
+                          duration: 1500.ms),
                 ),
               ],
             ),

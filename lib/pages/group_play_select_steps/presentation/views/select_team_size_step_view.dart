@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -47,7 +48,15 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                   color: const Color(ColorCode.lightGrey),
                   fontFamily: 'CoconPro',
                 ),
-              ),
+              )
+                  .animate(
+                      onPlay: (controller) => controller.repeat(reverse: true))
+                  .moveY(
+                      curve: Curves.ease,
+                      begin: 1,
+                      end: 12,
+                      delay: 700.ms,
+                      duration: 900.ms),
               const SizedBox(
                 height: 100,
               ),

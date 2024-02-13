@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
@@ -61,7 +62,16 @@ class GroupNumberSelectItem extends StatelessWidget {
                   selectArrowAssetUrl,
                   width: 78,
                   height: 58,
-                ),
+                )
+                    .animate(
+                        onPlay: (controller) =>
+                            controller.repeat(reverse: true))
+                    .moveX(
+                        curve: Curves.ease,
+                        begin: 1,
+                        end: 12,
+                        delay: 700.ms,
+                        duration: 900.ms),
               ],
             ),
             CustomText(

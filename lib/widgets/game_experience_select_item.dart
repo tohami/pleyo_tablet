@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
@@ -89,7 +90,13 @@ class GameExperienceSelectItem extends StatelessWidget {
                   selectArrowAssetUrl,
                   width: 18,
                   height: 35,
-                ),
+                )
+                    .animate(
+                        onPlay: (controller) =>
+                            controller.repeat(reverse: true))
+                    .moveX(begin: 1, end: 7, delay: 400.ms, duration: 700.ms)
+                // runs after the above w/new duration
+                ,
               ),
             ],
           ),
