@@ -142,11 +142,18 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                   onPlay: (controller) =>
                                       controller.repeat(reverse: false))
                               .fade(
-                                  curve: Curves.easeOut,
+                                  curve: Curves.easeIn,
                                   begin: 0,
                                   end: 1,
-                                  delay: 800.ms,
-                                  duration: 1500.ms),
+                                  delay: 200.ms,
+                                  duration: 400.ms)
+                              .then()
+                              .fade(
+                              curve: Curves.easeOut,
+                              begin: 1,
+                              end: 0,
+                              // delay: 800.ms,
+                              duration: 400.ms),
                         );
                       }, controller.time),
                     ),
@@ -385,11 +392,17 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                         onPlay: (controller) =>
                                             controller.repeat(reverse: false))
                                         .fade(
-                                        curve: Curves.easeOut,
-                                        begin: 0.7,
-                                        end: 2,
-                                        delay: 500.ms,
-                                        duration: 1000.ms),
+                                        curve: Curves.easeIn,
+                                        begin: 0.5,
+                                        end: 1,
+                                        delay: 100.ms,
+                                        duration: 500.ms)
+                                    .then()
+                                        .fade(
+                                        curve: Curves.easeIn,
+                                        begin: 1,
+                                        end: 0.5,
+                                        duration: 500.ms),
                                   );
                                 },
                               ),
