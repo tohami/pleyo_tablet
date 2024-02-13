@@ -26,35 +26,33 @@ class Station {
 
 class _Attributes {
   String? name;
-  String? createdAt;
-  String? updatedAt;
-  String? publishedAt;
-  OrganizationResponse? organization;
   GameVariantsResponse? gameVariants;
+  OrganizationResponse? organization;
+  String? tabletSerial;
+  bool? isEnabled;
 
-  _Attributes({this.name, this.createdAt, this.updatedAt, this.publishedAt, this.organization, this.gameVariants});
+  _Attributes({this.name, this.gameVariants, this.organization, this.tabletSerial,  this.isEnabled});
 
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    publishedAt = json['publishedAt'];
-    organization = json['organization'] != null ? new OrganizationResponse.fromJson(json['organization']) : null;
     gameVariants = json['game_variants'] != null ? new GameVariantsResponse.fromJson(json['game_variants']) : null;
-  }
+    organization = json['organization'] != null ? new OrganizationResponse.fromJson(json['organization']) : null;
+    tabletSerial = json['tablet_serial'];
+    isEnabled = json['isEnabled'];
+}
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['publishedAt'] = this.publishedAt;
-    if (this.organization != null) {
-      data['organization'] = this.organization!.toJson();
-    }
     if (this.gameVariants != null) {
       data['game_variants'] = this.gameVariants!.toJson();
     }
+    if (this.organization != null) {
+      data['organization'] = this.organization!.toJson();
+    }
+    data['tablet_serial'] = this.tabletSerial;
+
+    data['isEnabled'] = this.isEnabled;
     return data;
   }
 }

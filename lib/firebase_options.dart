@@ -44,11 +44,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDyFa174c8LOtBCOqc3d-s5mQWaSwAGXkc',
-    appId: '1:579176266412:android:caa4b1abde6f9da20e7d09',
-    messagingSenderId: '579176266412',
-    projectId: 'mondeville2-91979',
-    databaseURL: 'https://mondeville2-91979-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'mondeville2-91979.appspot.com',
+    apiKey: 'AIzaSyAE87-eMDSr6UsEuabGJVADMr2fN-8DsEQ',
+    appId: '1:587312422114:android:867f544e55266158c092bb',
+    messagingSenderId: '587312422114',
+    projectId: 'pleyo-operator',
+    storageBucket: 'pleyo-operator.appspot.com',
   );
 }

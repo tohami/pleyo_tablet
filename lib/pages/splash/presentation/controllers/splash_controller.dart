@@ -13,7 +13,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   late AnimationController _buttonAnimationController;
   RxBool isButtonTapDown = false.obs ;
   late Animation<double> buttonAnimation;
-  RxBool isLoading = false.obs ;
   SplashController({required this.splashRepository});
 
   final ISplashRepository splashRepository;
@@ -46,6 +45,12 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
     }on TickerCanceled catch (e) {
 
     }
+
+    StationService.to.isReady.listenAndPump((event) {
+      if(event){
+        Get.rootDelegate.offNamed(Routes.SCAN_QR);
+      }
+    });
   }
 
   @override
