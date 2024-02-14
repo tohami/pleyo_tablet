@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -6,6 +9,7 @@ import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/controllers/group_select_steps_controller.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/controllers/group_rotation_controller.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/widgets/alert_dialog.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_attempt_item.dart';
 import 'package:pleyo_tablet_app/widgets/game_difficulty_item.dart';
@@ -142,11 +146,18 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                   onPlay: (controller) =>
                                       controller.repeat(reverse: false))
                               .fade(
-                                  curve: Curves.easeOut,
+                                  curve: Curves.easeIn,
                                   begin: 0,
                                   end: 1,
-                                  delay: 800.ms,
-                                  duration: 1500.ms),
+                                  delay: 200.ms,
+                                  duration: 400.ms)
+                              .then()
+                              .fade(
+                                  curve: Curves.easeOut,
+                                  begin: 1,
+                                  end: 0,
+                                  // delay: 800.ms,
+                                  duration: 400.ms),
                         );
                       }, controller.time),
                     ),
@@ -381,15 +392,22 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                                   .attributes
                                                   ?.name ??
                                               ""),
-                                    )  .animate(
-                                        onPlay: (controller) =>
-                                            controller.repeat(reverse: false))
+                                    )
+                                        .animate(
+                                            onPlay: (controller) => controller
+                                                .repeat(reverse: false))
                                         .fade(
-                                        curve: Curves.easeOut,
-                                        begin: 0.7,
-                                        end: 2,
-                                        delay: 500.ms,
-                                        duration: 1000.ms),
+                                            curve: Curves.easeIn,
+                                            begin: 0.5,
+                                            end: 1,
+                                            delay: 100.ms,
+                                            duration: 500.ms)
+                                        .then()
+                                        .fade(
+                                            curve: Curves.easeIn,
+                                            begin: 1,
+                                            end: 0.5,
+                                            duration: 500.ms),
                                   );
                                 },
                               ),
@@ -400,82 +418,55 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                 ),
               ),
               Expanded(child: Container()),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                      height: 50,
-                      width: 250,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment(-1.0, 0.055),
-                          end: Alignment(0.699, 0.0),
-                          colors: [
-                            Color(ColorCode.black),
-                            Color(ColorCode.primaryBackground)
-                          ],
-                          stops: [0.0, 1.0],
+              GestureDetector(
+                onTap: () {
+                  Get.dialog(
+                    AlertDialogWidget(
+                        content:
+                            'If you skip, you will lose this turn and can’t undo. Proceed?',
+                        actionCancelText: 'Skip',
+                        actionAcceptText: 'Resume',
+                        onCancelClicked: () => {Get.back(result: false)},
+                        onAcceptClicked: () => {Get.back(result: false)}),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50,
+                        width: 250,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment(-1.0, 0.055),
+                            end: Alignment(0.699, 0.0),
+                            colors: [
+                              Color(ColorCode.black),
+                              Color(ColorCode.primaryBackground)
+                            ],
+                            stops: [0.0, 1.0],
+                          ),
+                          borderRadius: BorderRadius.circular(56.0),
+                          border: Border.all(
+                              width: 4.0, color: const Color(ColorCode.aqua)),
                         ),
-                        borderRadius: BorderRadius.circular(56.0),
-                        border: Border.all(
-                            width: 4.0, color: const Color(ColorCode.aqua)),
-                      ),
-                      child: CustomText(
-                        'Skip to next player',
-                        textStyle: TextStyles.textMedium.copyWith(
-                          fontFamily: 'CoconPro',
-                          color: const Color(ColorCode.lightGrey6),
-                          fontWeight: FontWeight.w300,
-                        ),
-                        textAlign: TextAlign.center,
-                      )),
-                  const SizedBox(
-                    width: 45,
-                  ),
-                ],
+                        child: CustomText(
+                          'Skip to next player',
+                          textStyle: TextStyles.textMedium.copyWith(
+                            fontFamily: 'CoconPro',
+                            color: const Color(ColorCode.lightGrey6),
+                            fontWeight: FontWeight.w300,
+                          ),
+                          textAlign: TextAlign.center,
+                        )),
+                    const SizedBox(
+                      width: 45,
+                    ),
+                  ],
+                ),
               )
-              // Container(
-              //   height: 90,
-              //   margin: const EdgeInsets.symmetric(horizontal: 50),
-              //   alignment: Alignment.center,
-              //   decoration: BoxDecoration(
-              //     gradient: const LinearGradient(
-              //       begin: Alignment(-1.0, 0.0),
-              //       end: Alignment(1.0, 0.0),
-              //       colors: [Color(ColorCode.white3), Color(ColorCode.black2)],
-              //       stops: [0.0, 1.0],
-              //     ),
-              //     borderRadius: BorderRadius.circular(56.0),
-              //     border: Border.all(
-              //         width: 6.0, color: const Color(ColorCode.aqua)),
-              //   ),
-              //   child: GestureDetector(
-              //     onTap: () =>
-              //         Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         CustomText(
-              //           'Let\'s Play ',
-              //           textStyle: TextStyles.textMedium.copyWith(
-              //             fontFamily: 'CoconPro',
-              //             color: const Color(ColorCode.aqua),
-              //           ),
-              //         ),
-              //         const SizedBox(
-              //           width: 20,
-              //         ),
-              //         Image.asset(
-              //           'assets/images/lets_play_arrow.png',
-              //           width: 40,
-              //           height: 25,
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ),
