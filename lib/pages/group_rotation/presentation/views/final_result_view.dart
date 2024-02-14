@@ -14,7 +14,6 @@ class FinalResult extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.attributes;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

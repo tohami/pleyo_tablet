@@ -11,6 +11,9 @@ import 'package:pleyo_tablet_app/model/strapi/personas.dart';
 import 'package:pleyo_tablet_app/model/strapi/station.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 
+import '../../../../routes/app_pages.dart';
+import '../../data/group_repository.dart';
+
 class GroupPlayStepsController extends SuperController<bool> {
   final teamNameController = TextEditingController();
   final playerName1Controller = TextEditingController();
@@ -23,7 +26,6 @@ class GroupPlayStepsController extends SuperController<bool> {
 
   GroupTemplates? template = null;
 
-
   final templatePersonas = <Personas>[];
   final playersPersonas = <Personas>[];
 
@@ -32,16 +34,21 @@ class GroupPlayStepsController extends SuperController<bool> {
   Station station = StationService.to.currentStation;
   late Map<Game, List<GameVariant>> games = groupBy(
       station.attributes!.gameVariants!.data!,
-          (GameVariant item) => item.attributes!.game!.data!);
+      (GameVariant item) => item.attributes!.game!.data!);
 
   Rx<GameVariant> selectedGameVariant = GameVariant().obs;
   Game? selectedGame = null;
 
+  final IGroupsRepository repository;
+
+  GroupPlayStepsController(this.repository);
+
   @override
   void onInit() {
     super.onInit();
-    templatePersonas.clear() ;
-    templatePersonas.addAll(StationService.to.personasGroups[0].attributes!.personas!);
+    templatePersonas.clear();
+    templatePersonas
+        .addAll(StationService.to.personasGroups[0].attributes!.personas!);
 
     teamNameController.addListener(() {
       if (teamNameController.text.isNotEmpty &&
@@ -52,47 +59,47 @@ class GroupPlayStepsController extends SuperController<bool> {
       }
     });
 
-    playerName1Controller.text = templatePersonas[0].nickname ?? "" ;
+    playerName1Controller.text = templatePersonas[0].nickname ?? "";
 
     playerName1Controller.addListener(() {
       if (playerName1Controller.text.isNotEmpty) {
-        playersPersonas[0].nickname =playerName1Controller.text;
+        playersPersonas[0].nickname = playerName1Controller.text;
       } else {
         playersPersonas[0].nickname = templatePersonas[0].nickname;
       }
     });
 
-    playerName2Controller.text = templatePersonas[1].nickname ?? "" ;
+    playerName2Controller.text = templatePersonas[1].nickname ?? "";
     playerName2Controller.addListener(() {
       if (playerName2Controller.text.isNotEmpty) {
-        playersPersonas[1].nickname =playerName2Controller.text;
+        playersPersonas[1].nickname = playerName2Controller.text;
       } else {
         playersPersonas[1].nickname = templatePersonas[1].nickname;
       }
     });
 
-    playerName3Controller.text = templatePersonas[2].nickname ?? "" ;
+    playerName3Controller.text = templatePersonas[2].nickname ?? "";
     playerName3Controller.addListener(() {
       if (playerName3Controller.text.isNotEmpty) {
-        playersPersonas[2].nickname =playerName3Controller.text;
+        playersPersonas[2].nickname = playerName3Controller.text;
       } else {
         playersPersonas[2].nickname = templatePersonas[2].nickname;
       }
     });
 
-    playerName4Controller.text = templatePersonas[3].nickname ?? "" ;
+    playerName4Controller.text = templatePersonas[3].nickname ?? "";
     playerName4Controller.addListener(() {
       if (playerName4Controller.text.isNotEmpty) {
-        playersPersonas[3].nickname =playerName4Controller.text;
+        playersPersonas[3].nickname = playerName4Controller.text;
       } else {
         playersPersonas[3].nickname = templatePersonas[3].nickname;
       }
     });
 
-    playerName5Controller.text = templatePersonas[4].nickname ?? "" ;
+    playerName5Controller.text = templatePersonas[4].nickname ?? "";
     playerName5Controller.addListener(() {
       if (playerName5Controller.text.isNotEmpty) {
-        playersPersonas[4].nickname =playerName5Controller.text;
+        playersPersonas[4].nickname = playerName5Controller.text;
       } else {
         playersPersonas[4].nickname = templatePersonas[4].nickname;
       }
@@ -147,24 +154,34 @@ class GroupPlayStepsController extends SuperController<bool> {
     template = e;
     playersPersonas.clear();
 
-    playersPersonas.addAll(templatePersonas.sublist(0 , e.numberOfPlayers));
+    playersPersonas.addAll(templatePersonas.sublist(0, e.numberOfPlayers));
   }
 
-  createGroupCompetition() {
-    // ser
-    // gc.GroupCompetition(
-    //   playersCount: template!.numberOfPlayers ,
-    //   playerCredit: template!.numberOfTurns ,
-    //   startWithFirstGame: true ,
-    //   duration: 60*24 ,
-    //   name: teamNameController.text ,
-    //   tickets: playersPersonas.mapIndexed((i , e) => gc.Ticket(avatar: e.avatar , nickname: e.nickname, playOrder: i)).toList(),
-    //   gameVariant: gc.GameVariant(id: selectedGame?.id)
-    //   // games: [gc.Game(id: selectedGame.value.)]
-    // ) ;
-    // Get.rootDelegate.toNamed(
-    //   Routes.SELECT_GAME_DIFFICULTY,
-    //   arguments: controller.selectedGameVarient.value,
-    // ) ;
+  createGroupCompetition() async{
+    var result = await repository.createGroupCompetition(gc.GroupCompetition(
+        playersCount: template!.numberOfPlayers,
+        playerCredit: template!.numberOfTurns,
+        startWithFirstGame: true,
+        duration: 60 * 24,
+        name: teamNameController.text,
+        tickets: playersPersonas
+            .mapIndexed((i, e) => gc.Ticket(
+                avatar: e.avatar,
+                nickname: e.nickname,
+                playOrder: i,
+                secret: "dsfdsfsdf",
+                credit: template!.numberOfTurns ,isEnabled: true ,isActivated: true))
+            .toList(),
+        gameVariant: GameVariant(id: selectedGame?.id),
+        games: [gc.Game(id: selectedGame?.id)],
+        type: "group",
+        isStarted: false,
+        isEnabled: true,
+        isEnded: false,
+        stations: [StationService.to.currentStation.id!]));
+    Get.rootDelegate.toNamed(
+      Routes.SELECT_GAME_DIFFICULTY,
+      arguments: result,
+    ) ;
   }
 }

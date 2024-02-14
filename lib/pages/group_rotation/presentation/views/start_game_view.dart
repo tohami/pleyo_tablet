@@ -14,7 +14,7 @@ class StartGame extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.attributes;
+    var selectedGameAttributes = controller.groupCompetition.gameVariant?.attributes;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -72,7 +72,7 @@ class StartGame extends GetView<GroupRotationController> {
                                 image: DecorationImage(
                                   image: NetworkImage(
                                     selectedGameAttributes!.image!.data!
-                                        .attributes!.formats!.thumbnail!.url!,
+                                        .attributes!.url!,
                                   ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(

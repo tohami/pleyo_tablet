@@ -16,7 +16,7 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.attributes;
+    var selectedGameAttributes = controller.groupCompetition.gameVariant?.attributes;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
+import 'package:pleyo_tablet_app/model/strapi/group_competition.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 
 class GroupRotationController extends SuperController<bool> {
-  GameVariant selectedGame = Get.rootDelegate.arguments();
+  GroupCompetition groupCompetition = Get.rootDelegate.arguments();
   final groupEmailController = TextEditingController();
   String playerName = 'Rossana';
   int playersNumber = 5;
@@ -63,8 +64,7 @@ class GroupRotationController extends SuperController<bool> {
     _timer = Timer.periodic(duration, (Timer timer) {
       if (remainingSeconds == 0) {
         timer.cancel();
-        setSelectedGameDifficulty(selectedGame
-            .attributes!.gameDifficulties!.data![0].attributes!.difficulty);
+        setSelectedGameDifficulty(groupCompetition.gameVariant!.attributes?.gameDifficulties?.data![0].attributes!.difficulty);
         Get.rootDelegate.toNamed(Routes.START_GAME);
       } else {
         int seconds = (remainingSeconds % 60);

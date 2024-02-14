@@ -49,6 +49,7 @@ class _Attributes {
   _Attributes({this.name, this.effort, this.description, this.subtitle, this.createdAt, this.updatedAt,this.image, this.gameDifficulties, this.game});
 
   _Attributes.fromJson(Map<String, dynamic> json) {
+    print(json) ;
     name = json['name'];
     effort = json['effort'];
     gamehubId = json['gamehubId'];

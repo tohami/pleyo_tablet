@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:pleyo_tablet_app/model/strapi/personas.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
+
+import 'game_variant.dart';
 
 class GroupCompetition {
   int? id;
@@ -18,9 +23,11 @@ class GroupCompetition {
   List<Game>? games;
   Ticket? currentPlayerTurn; // Added field
   bool? isEnded; // Added field
+  List<int>? stations ;
 
   GroupCompetition({
     this.id,
+    this.stations,
     this.name,
     this.type,
     this.startDate,
@@ -39,7 +46,9 @@ class GroupCompetition {
     this.isEnded, // Added constructor parameter
   });
 
-  GroupCompetition.fromJson(Map<String, dynamic> json) {
+  GroupCompetition.fromJson(dynamic data) {
+    print(data) ;
+    var json = data["data"] ;
     id = json['id'];
     name = json['attributes']['name'];
     type = json['attributes']['type'];
@@ -53,10 +62,35 @@ class GroupCompetition {
     duration = json['attributes']['duration'];
     scores = (json['attributes']['scores']['data'] as List).map((v) => Score.fromJson(v)).toList();
     tickets = (json['attributes']['tickets']['data'] as List).map((v) => Ticket.fromJson(v)).toList();
-    gameVariant = json['attributes']['game_variant']['data'] != null ? GameVariant.fromJson(json['attributes']['game_variant']['data']) : null;
+    gameVariant = json['attributes']['game_variant'] != null ? GameVariant.fromJson(json['attributes']['game_variant']['data']) : null;
     games = (json['attributes']['games']['data'] as List).map((v) => Game.fromJson(v)).toList();
-    currentPlayerTurn = json['attributes']['currentPlayerTurn'] != null ? Ticket.fromJson(json['attributes']['currentPlayerTurn']) : null; // Added field parsing
+    currentPlayerTurn = json['attributes']['currentPlayerTurn'] != null ? Ticket.fromJson(json['attributes']['currentPlayerTurn']['data']) : null; // Added field parsing
     isEnded = json['attributes']['isEnded']; // Added field parsing
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = this.id;
+    data['attributes'] = {
+      'name': this.name,
+      'type': this.type,
+      'startDate': this.startDate,
+      'endDate': this.endDate,
+      'playersCount': this.playersCount,
+      'playerCredit': this.playerCredit,
+      'isEnabled': this.isEnabled,
+      'startWithFirstGame': this.startWithFirstGame,
+      'isStarted': this.isStarted,
+      'duration': this.duration,
+      'scores': this.scores?.map((v) => v.toJson()).toList(),
+      'tickets': this.tickets?.map((v) => v.toJson()).toList(),
+      'game_variant': this.gameVariant?.id,
+      'games': this.games?.map((v) => v.id).toList(),
+      // 'currentPlayerTurn': this.currentPlayerTurn?.id,
+      'isEnded': this.isEnded,
+      "stations": stations
+    };
+    return data;
   }
 }
 
@@ -94,8 +128,25 @@ class Ticket {
     nickname = json['attributes']['nickname'];
     extraData = json['attributes']['extraData'];
     uid = json['attributes']['uid'];
-    avatar = json['avatar'] != null ? new Avatar.fromJson(json['avatar']) : null;
+    avatar = json['attributes']['avatar'] != null ? new Avatar.fromJson(json['attributes']['avatar']) : null;
     playOrder = json['attributes']['playOrder']; // Added field parsing
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'credit': this.credit,
+      'isEnabled': this.isEnabled,
+      'secret': this.secret,
+      'isActivated': this.isActivated,
+      'nickname': this.nickname,
+      'extraData': this.extraData,
+      'uid': this.uid,
+      'playOrder': this.playOrder,
+    };
+    if (this.avatar != null) {
+      data['avatar'] = this.avatar?.data?.id;
+    }
+    return data;
   }
 }
 
@@ -127,34 +178,22 @@ class Score {
     completed = json['attributes']['completed'];
     duration = json['attributes']['duration'];
   }
-}
 
-class GameVariant {
-  int? id;
-  String? name;
-  int? effort;
-  String? description;
-  String? subtitle;
-  int? gamehubId;
-
-  GameVariant({
-    this.id,
-    this.name,
-    this.effort,
-    this.description,
-    this.subtitle,
-    this.gamehubId,
-  });
-
-  GameVariant.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['attributes']['name'];
-    effort = json['attributes']['effort'];
-    description = json['attributes']['description'];
-    subtitle = json['attributes']['subtitle'];
-    gamehubId = json['attributes']['gamehubId'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = this.id;
+    data['attributes'] = {
+      'gameEndDate': this.gameEndDate,
+      'score': this.score,
+      'gameStartDate': this.gameStartDate,
+      'visible': this.visible,
+      'completed': this.completed,
+      'duration': this.duration,
+    };
+    return data;
   }
 }
+
 
 class Game {
   int? id;
@@ -174,5 +213,16 @@ class Game {
     name = json['attributes']['name'];
     location = json['attributes']['location'];
     gamehubId = json['attributes']['gamehubId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = this.id;
+    data['attributes'] = {
+      'name': this.name,
+      'location': this.location,
+      'gamehubId': this.gamehubId,
+    };
+    return data;
   }
 }
