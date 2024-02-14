@@ -276,8 +276,7 @@ class SelectGameDifficulty extends GetView<GroupRotationController> {
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(23.0),
                                     child: Image.network(
-                                      selectedGameAttributes!.image!.data!
-                                          .attributes!.formats!.thumbnail!.url!,
+                                      selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
                                       fit: BoxFit.fill,
                                     ),
                                   )

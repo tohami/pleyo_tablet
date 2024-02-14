@@ -71,8 +71,7 @@ class StartGame extends GetView<GroupRotationController> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    selectedGameAttributes!.image!.data!
-                                        .attributes!.url!,
+                                    selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
                                   ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(

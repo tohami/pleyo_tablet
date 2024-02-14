@@ -49,8 +49,7 @@ class GroupVideoWidget extends StatelessWidget {
                   ? ClipRRect(
                 borderRadius: BorderRadius.circular(23.0),
                 child: Image.network(
-                  variantModel.attributes!.image!.data!.attributes!
-                      .formats!.thumbnail!.url!,
+                  variantModel.attributes?.image?.data?.attributes?.formats?.small?.url??"",
                   fit: BoxFit.fill,
                 ),
               )
