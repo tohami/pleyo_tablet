@@ -6,17 +6,17 @@ import 'package:pleyo_tablet_app/pages/available_points/bindings/available_point
 import 'package:pleyo_tablet_app/pages/available_points/presentation/views/available_points_view.dart';
 import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.dart';
 import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/bindings/group_select_steps_binding.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/add_team_name_step_view.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/group_names_step_view.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_game_step_view.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/select_team_size_step_view.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/views/selected_game_details_view.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/bindings/group_rotation_binding.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/final_result_view.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/remake_playing_view.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/select_game_difficulty_view.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/views/start_game_view.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/bindings/group_select_steps_binding.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/add_team_name_step_view.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/group_names_step_view.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_game_step_view.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_team_size_step_view.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/selected_game_details_view.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/bindings/group_rotation_binding.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/final_result_view.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/game_playing_view.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/player_turn_view.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/game_status_view.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
@@ -63,17 +63,17 @@ class AppPages {
         binding: GroupSelectStepsBinding()),
     GetPage(
       name: Routes.SELECT_GAME_DIFFICULTY,
-      page: () => const SelectGameDifficulty(),
+      page: () => const PlayerTurn(),
       binding: GroupRotationBinding(),
     ),
     GetPage(
       name: Routes.START_GAME,
-      page: () => const StartGame(),
+      page: () => const GameStatus(),
       binding: GroupRotationBinding(),
     ),
     GetPage(
       name: Routes.REMAKE_PLAYING,
-      page: () => const RemakePlaying(),
+      page: () => const GamePlaying(),
       binding: GroupRotationBinding(),
     ),
     GetPage(

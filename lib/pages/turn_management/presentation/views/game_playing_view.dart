@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/controllers/group_rotation_controller.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/controllers/group_rotation_controller.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/alert_dialog.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_attempt_item.dart';
 import 'package:pleyo_tablet_app/widgets/remake_player_item.dart';
 
-class RemakePlaying extends GetView<GroupRotationController> {
-  const RemakePlaying({Key? key}) : super(key: key);
+class GamePlaying extends GetView<GroupRotationController> {
+  const GamePlaying({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

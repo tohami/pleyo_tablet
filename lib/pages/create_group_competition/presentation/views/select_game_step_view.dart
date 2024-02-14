@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/pages/group_play_select_steps/presentation/controllers/group_select_steps_controller.dart';
+import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/controllers/group_select_steps_controller.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';

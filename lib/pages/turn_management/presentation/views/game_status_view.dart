@@ -5,12 +5,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/pages/group_rotation/presentation/controllers/group_rotation_controller.dart';
+import 'package:pleyo_tablet_app/pages/turn_management/presentation/controllers/group_rotation_controller.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 
-class StartGame extends GetView<GroupRotationController> {
-  const StartGame({Key? key}) : super(key: key);
+class GameStatus extends GetView<GroupRotationController> {
+  const GameStatus({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
