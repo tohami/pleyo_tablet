@@ -4,6 +4,7 @@ import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/pages/group_rotation/presentation/controllers/group_rotation_controller.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/widgets/alert_dialog.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_attempt_item.dart';
 import 'package:pleyo_tablet_app/widgets/remake_player_item.dart';
@@ -85,7 +86,19 @@ class RemakePlaying extends GetView<GroupRotationController> {
                     height: 100,
                   ),
                   GestureDetector(
-                    onTap: () => Get.rootDelegate.toNamed(Routes.FINAL_RESULT),
+                    onTap: () {
+                      Get.dialog(
+                        AlertDialogWidget(
+                            content:
+                                'You will lose this game’s progress. Sure? ',
+                            actionCancelText: 'Quit',
+                            actionAcceptText: 'Resume',
+                            onCancelClicked: () => {Get.back(result: false)},
+                            onAcceptClicked: () => {
+                                  Get.rootDelegate.toNamed(Routes.FINAL_RESULT)
+                                }),
+                      );
+                    },
                     child: Container(
                       width: 200,
                       height: 100,
