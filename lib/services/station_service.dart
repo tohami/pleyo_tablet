@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/start_game.dart';
+import 'package:pleyo_tablet_app/model/strapi/personas.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
 import '../main.dart';
@@ -16,6 +17,7 @@ class StationService extends GetxService {
 
   late Ticket currentTicket ;
   late Station currentStation ;
+  late List<PersonaGroupData> personasGroups ;
   RxBool isReady = false.obs ;
   final Rx<GameStatus> gameStatus = GameStatus(GameStatusType.IDLE, {}).obs;
 
@@ -78,9 +80,12 @@ class StationService extends GetxService {
       try {
 
         var station = await Get.find<ISplashRepository>().findOrCreateStation(identifier);
+        var personas = await Get.find<ISplashRepository>().getPersonas();
 
         if(station.attributes?.gameVariants?.data?.isNotEmpty == true && station.attributes?.organization?.data != null ){
           currentStation = station ;
+          personasGroups = personas ;
+
           _initialize() ;
           isReady.value = true ;
           break ;

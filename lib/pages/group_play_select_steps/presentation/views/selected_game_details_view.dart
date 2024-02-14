@@ -12,7 +12,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.value.attributes;
+    var selectedGameAttributes = controller.selectedGameVariant.value.attributes;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -232,10 +232,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                       width: 6.0, color: const Color(ColorCode.aqua)),
                 ),
                 child: GestureDetector(
-                  onTap: () => Get.rootDelegate.toNamed(
-                    Routes.SELECT_GAME_DIFFICULTY,
-                    arguments: controller.selectedGame.value,
-                  ),
+                  onTap: () => controller.createGroupCompetition() ,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

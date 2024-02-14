@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/group_number_select_item.dart';
 
@@ -12,10 +13,32 @@ import '../controllers/group_select_steps_controller.dart';
 
 // ignore: must_be_immutable
 class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
-  const SelectTeamSizeStep({Key? key}) : super(key: key);
+  final imageAssets = [
+    'assets/images/group_number_yellow_arrow.png',
+    'assets/images/group_number_pink_arrow.png',
+    'assets/images/group_number_blue_arrow.png',
+    'assets/images/group_number_green_arrow.png',
+  ] ;
+  final titleColors = [
+    ColorCode.darkYellow ,
+    ColorCode.lightPink ,
+    ColorCode.darkBlue ,
+    ColorCode.lightGreen ,
+  ] ;
+
+  final borderColors = [
+    ColorCode.yellow ,
+    ColorCode.darkPink ,
+    ColorCode.lightBlue ,
+    ColorCode.darkGreen ,
+  ] ;
+
+  SelectTeamSizeStep({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var groupTemplated = StationService.to.currentStation.attributes?.organization?.data?.attributes?.configuration?.data?.attributes?.groupTemplates ;
+
     FocusManager.instance.primaryFocus?.unfocus();
     return SafeArea(
       child: Scaffold(
@@ -78,60 +101,21 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                   padding: const EdgeInsets.all(10.0),
                   mainAxisSpacing: 10.0,
                   crossAxisSpacing: 10.0,
-                  children: <Widget>[
-                    GroupNumberSelectItem(
-                      borderColor: Color(ColorCode.yellow),
-                      titleColor: Color(ColorCode.darkYellow),
-                      selectArrowAssetUrl:
-                          'assets/images/group_number_yellow_arrow.png',
-                      selectNumber: '2',
-                      turnsNumber: '2',
-                      gameDuration: '10',
+                  children: groupTemplated?.map((e) {
+                    var index = groupTemplated.indexOf(e) ;
+                    return GroupNumberSelectItem(
+                      borderColor: Color(borderColors[index]),
+                      titleColor: Color(titleColors[index]),
+                      selectArrowAssetUrl: imageAssets[index],
+                      selectNumber: e.numberOfPlayers.toString(),
+                      turnsNumber: e.numberOfTurns.toString(),
+                      gameDuration: (e.numberOfTurns! * e.numberOfPlayers! * 2.5).toString(),
                       onTap: () {
-                        controller.updateTeamSize(2);
+                        controller.updateTemplate(e);
                         Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
                       },
-                    ),
-                    GroupNumberSelectItem(
-                      borderColor: Color(ColorCode.darkPink),
-                      titleColor: Color(ColorCode.lightPink),
-                      selectArrowAssetUrl:
-                          'assets/images/group_number_pink_arrow.png',
-                      selectNumber: '3',
-                      turnsNumber: '2',
-                      gameDuration: '10',
-                      onTap: () {
-                        controller.updateTeamSize(3);
-                        Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
-                      },
-                    ),
-                    GroupNumberSelectItem(
-                      borderColor: Color(ColorCode.lightBlue),
-                      titleColor: Color(ColorCode.darkBlue),
-                      selectArrowAssetUrl:
-                          'assets/images/group_number_blue_arrow.png',
-                      selectNumber: '4',
-                      turnsNumber: '2',
-                      gameDuration: '10',
-                      onTap: () {
-                        controller.updateTeamSize(4);
-                        Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
-                      },
-                    ),
-                    GroupNumberSelectItem(
-                      borderColor: Color(ColorCode.darkGreen),
-                      titleColor: Color(ColorCode.lightGreen),
-                      selectArrowAssetUrl:
-                          'assets/images/group_number_green_arrow.png',
-                      selectNumber: '5',
-                      turnsNumber: '2',
-                      gameDuration: '10',
-                      onTap: () {
-                        controller.updateTeamSize(5);
-                        Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
-                      },
-                    ),
-                  ],
+                    ) ;
+                  }).toList() ?? []
                 ),
               )
             ],

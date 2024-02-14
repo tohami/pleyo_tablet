@@ -32,72 +32,70 @@ class SelectGameStep extends GetView<GroupPlayStepsController> {
             ),
           ),
         ),
+        backgroundColor: const Color(ColorCode.primaryBackground),
         body: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
-          child: Container(
-            color: const Color(ColorCode.primaryBackground),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                'Select Game',
+                textStyle: TextStyles.textMedium.copyWith(
+                  fontFamily: 'CoconPro',
+                  color: const Color(ColorCode.lightGrey6),
                 ),
-                CustomText(
-                  'Select Game',
-                  textStyle: TextStyles.textMedium.copyWith(
-                    fontFamily: 'CoconPro',
-                    color: const Color(ColorCode.lightGrey6),
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Obx(() {
-                  // isChampion must be called any where to force rebuild
-                  controller.isChampoinship.value;
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Obx(() {
+                // isChampion must be called any where to force rebuild
+                controller.isChampoinship.value;
 
-                  if (controller.games.isNotEmpty) {
-                    var games = controller.games.entries.toList();
+                if (controller.games.isNotEmpty) {
+                  var games = controller.games.entries.toList();
 
-                    games.sort(((a, b) =>
-                        a.key.attributes!.gamehubId! -
-                        b.key.attributes!.gamehubId!));
-                    return ListView.builder(
-                      itemCount: games.length,
-                      shrinkWrap: true,
-                      clipBehavior: Clip.none,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GroupGameWidget(
-                              game: games[index],
-                              isChampion: controller.isChampoinship.value,
-                              onGameSelected: (variant) {
-                                print(variant.toJson());
+                  games.sort(((a, b) =>
+                      a.key.attributes!.gamehubId! -
+                      b.key.attributes!.gamehubId!));
+                  return ListView.builder(
+                    itemCount: games.length,
+                    shrinkWrap: true,
+                    clipBehavior: Clip.none,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GroupGameWidget(
+                            game: games[index],
+                            isChampion: controller.isChampoinship.value,
+                            onGameSelected: (variant) {
+                              print(variant.toJson());
+                              controller.selectedGameVariant.value=variant;
+                              controller.selectedGame = games[index].key;
+                              Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
 
-                                controller.selectedGame.value=variant;
-                                Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
-                                
-                                /*showBottomSheetModal(context, variant,
-                                            (diff) {
-                                          controller.startGame(variant.id!, diff);
-                                        });*/
-                              },
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              ],
-            ),
+                              /*showBottomSheetModal(context, variant,
+                                          (diff) {
+                                        controller.startGame(variant.id!, diff);
+                                      });*/
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              }),
+            ],
           ),
         ),
       ),

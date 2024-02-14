@@ -75,7 +75,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                     height: 10,
                   ),
                   Column(
-                    children: List.generate(controller.players.length, (index) {
+                    children: List.generate(controller.playersPersonas.length, (index) {
                       if (index == 0) {
                         return GestureDetector(
                           onTap: () {

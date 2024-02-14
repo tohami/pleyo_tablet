@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
+import 'package:pleyo_tablet_app/widgets/group_video_widget.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
 import '../consts/colors.dart';
@@ -66,7 +67,7 @@ class GroupGameWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: game.value.length,
                   itemBuilder: (context, index) {
-                    return VideoWidget(
+                    return GroupVideoWidget(
                       game.value[index],
                       buttonColor: isChampion
                           ? ColorCode.customAccent2Background

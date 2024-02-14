@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_experience_select_item.dart';
 
@@ -15,6 +16,7 @@ class GameExperienceView extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     FocusManager.instance.primaryFocus?.unfocus();
+    var station = StationService.to.currentStation.attributes ;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -44,64 +46,94 @@ class GameExperienceView extends GetView<SplashController> {
                             color: const Color(ColorCode.lightGrey),
                           ),
                         ),
+
+                        Visibility(
+                          visible: station?.singlePlayerEnabled == true,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              GameExperienceSelectItem(
+                                borderColor: Color(ColorCode.yellow),
+                                titleColor: Color(ColorCode.darkYellow),
+                                selectItemAssetUrl: 'assets/images/single_play.png',
+                                selectArrowAssetUrl: 'assets/images/yellow_arrow.png',
+                                selectTitle: 'Single Play',
+                                selectDetails:
+                                    'Challenge yourself in a solo game and compete with others on the leaderboard.',
+                                onTap: () {
+                                  // Get.offNamed(Routes.SELECT_TEAM_SIZE);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Visibility(
+                          visible: station?.groupEnabled == true,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              GameExperienceSelectItem(
+                                borderColor: Color(ColorCode.lightBlue),
+                                titleColor: Color(ColorCode.darkBlue),
+                                selectItemAssetUrl: 'assets/images/group_play.png',
+                                selectArrowAssetUrl: 'assets/images/blue_arrow.png',
+                                selectTitle: 'Group Play',
+                                selectDetails:
+                                'Join with friends or family for a group gaming session.',
+                                onTap: () {
+                                  Get.rootDelegate.toNamed(Routes.SELECT_TEAM_SIZE);
+                                },
+                              ),
+
+                            ],
+                          ),
+                        ),
+
+                        Visibility(
+                          visible: station?.multiplayerEnabled == true,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              GameExperienceSelectItem(
+                                borderColor: Color(ColorCode.darkPink),
+                                titleColor: Color(ColorCode.lightPink),
+                                selectItemAssetUrl: 'assets/images/one_v_one.png',
+                                selectArrowAssetUrl: 'assets/images/pink_arrow.png',
+                                selectTitle: '1 vs 1 play',
+                                selectDetails:
+                                'Face off in a head-to-head battle. May the best player win!',
+                                onTap: () {  },),
+
+                            ],
+                          ),
+                        ),
+
                         const SizedBox(
                           height: 20,
                         ),
-                        GameExperienceSelectItem(
-                          borderColor: Color(ColorCode.yellow),
-                          titleColor: Color(ColorCode.darkYellow),
-                          selectItemAssetUrl: 'assets/images/single_play.png',
-                          selectArrowAssetUrl: 'assets/images/yellow_arrow.png',
-                          selectTitle: 'Single Play',
-                          selectDetails:
-                              'Challenge yourself in a solo game and compete with others on the leaderboard.',
-                          onTap: () {
-                            // Get.offNamed(Routes.SELECT_TEAM_SIZE);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        GameExperienceSelectItem(
-                          borderColor: Color(ColorCode.lightBlue),
-                          titleColor: Color(ColorCode.darkBlue),
-                          selectItemAssetUrl: 'assets/images/group_play.png',
-                          selectArrowAssetUrl: 'assets/images/blue_arrow.png',
-                          selectTitle: 'Group Play',
-                          selectDetails:
-                              'Join with friends or family for a group gaming session.',
-                          onTap: () {
-                            Get.rootDelegate.toNamed(Routes.SELECT_TEAM_SIZE);
-                          },
-                        ),
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
-                        // const GameExperienceSelectItem(
-                        //     borderColor: Color(ColorCode.darkPink),
-                        //     titleColor: Color(ColorCode.lightPink),
-                        //     selectItemAssetUrl: 'assets/images/one_v_one.png',
-                        //     selectArrowAssetUrl: 'assets/images/pink_arrow.png',
-                        //     selectTitle: '1 vs 1 play',
-                        //     selectDetails:
-                        //     'Face off in a head-to-head battle. May the best player win!'),
-                        //
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
                         Expanded(child: Container()),
-                        GameExperienceSelectItem(
-                            borderColor: Color(ColorCode.darkGreen),
-                            titleColor: Color(ColorCode.lightGreen),
-                            selectItemAssetUrl: 'assets/images/qr_code.png',
-                            selectArrowAssetUrl:
-                                'assets/images/green_arrow.png',
-                            selectTitle: 'Scan QR',
-                            selectDetails:
-                                'Start your game by scanning a QR code for preset games or competitions.',
-                            onTap: () {
-                              // Get.offNamed(Routes.SELECT_TEAM_SIZE);
-                            }),
+                        Visibility(
+                          visible: station?.competitionEnabled == true,
+                          child: GameExperienceSelectItem(
+                              borderColor: Color(ColorCode.darkGreen),
+                              titleColor: Color(ColorCode.lightGreen),
+                              selectItemAssetUrl: 'assets/images/new_qr_code.png',
+                              selectArrowAssetUrl:
+                                  'assets/images/green_arrow.png',
+                              selectTitle: 'Scan QR',
+                              selectDetails:
+                                  'Start your game by scanning a QR code for preset games or competitions.',
+                              onTap: () {
+                                // Get.offNamed(Routes.SELECT_TEAM_SIZE);
+                              }),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),

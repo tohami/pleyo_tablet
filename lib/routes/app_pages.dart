@@ -47,7 +47,7 @@ class AppPages {
         binding: SplashBinding()),
     GetPage(
         name: Routes.SELECT_TEAM_SIZE,
-        page: () => const SelectTeamSizeStep(),
+        page: () => SelectTeamSizeStep(),
         binding: GroupSelectStepsBinding()),
     GetPage(
         name: Routes.ADD_TEAM_NAME,
