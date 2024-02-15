@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -102,7 +103,7 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                     Positioned(
                       top: 140,
                       left: 270,
-                      child: GestureDetector(
+                      child: InkWell(
                         onTap: () => {
                           if (goPlaying.value)
                             Get.rootDelegate.toNamed(Routes.GROUP_NAMES_LIST)
@@ -126,7 +127,7 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                                       : ColorCode.lightGrey2,
                                 ),
                               ),
-                            )
+                            ).animate()
                           ],
                         ),
                       ),

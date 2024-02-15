@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -48,8 +49,8 @@ class GroupVideoWidget extends StatelessWidget {
               child: variantModel.attributes?.image?.data?.attributes != null
                   ? ClipRRect(
                 borderRadius: BorderRadius.circular(23.0),
-                child: Image.network(
-                  variantModel.attributes?.image?.data?.attributes?.formats?.small?.url??"",
+                child: CachedNetworkImage(
+                  imageUrl: variantModel.attributes?.image?.data?.attributes?.formats?.small?.url??"",
                   fit: BoxFit.fill,
                 ),
               )

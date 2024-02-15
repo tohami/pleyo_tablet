@@ -178,6 +178,7 @@ class GroupPlayStepsController extends SuperController<bool> {
         isStarted: false,
         isEnabled: true,
         isEnded: false,
+        organization: StationService.to.currentStation.attributes?.organization?.data?.id,
         stations: [StationService.to.currentStation.id!]));
     Get.rootDelegate.toNamed(
       Routes.SELECT_GAME_DIFFICULTY,

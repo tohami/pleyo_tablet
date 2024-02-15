@@ -25,7 +25,7 @@ class GamePlaying extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => controller.stopGame(),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
@@ -41,7 +41,7 @@ class GamePlaying extends GetView<GroupRotationController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
-                '${controller.playerName} Playing',
+                '${controller.currentPlayer.value?.nickname} Playing',
                 textStyle: TextStyles.textLarge.copyWith(
                   color: const Color(ColorCode.lightGrey),
                 ),
@@ -51,52 +51,25 @@ class GamePlaying extends GetView<GroupRotationController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: List.generate(controller.playersNumber, (index) {
-                      if (index == 0) {
-                        return RemakePlayerItem(
-                          playerImageURl:
-                              'assets/images/first_player_image.png',
-                          playerName: '${controller.playerName}',
-                          attemptNumber: controller.gameAttemptNumbers,
-                          isSelected: true,
-                          isAttemptFinished: true,
-                          isAttemptSelected: true,
-                        );
-                      }
+                    children : controller.players.map((player) {
+                      var scores = controller.getPlayerScores(player) ;
                       return RemakePlayerItem(
-                        playerImageURl: index == 1
-                            ? 'assets/images/second_player_image.png'
-                            : index == 2
-                                ? 'assets/images/third_player_image.png'
-                                : index == 3
-                                    ? 'assets/images/fourth_player_image.png'
-                                    : 'assets/images/fifth_player_image.png',
-                        playerName: '${controller.playerName}',
-                        attemptNumber: controller.gameAttemptNumbers,
-                        isSelected: false,
-                        isAttemptFinished: false,
-                        isAttemptSelected: false,
+                        playerImageURl: player.avatar?.data?.attributes?.url??"",
+                        playerName: '${player.nickname}',
+                        totalTurns: controller.numberOfTurns,
+                        currentTurn: scores.length,
+                        playing: controller.currentPlayer.value?.id == player.id,
                       );
-                    }),
+                    }).toList()
                   ),
                   const SizedBox(
                     height: 100,
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.dialog(
-                        AlertDialogWidget(
-                            content:
-                                'You will lose this game’s progress. Sure? ',
-                            actionCancelText: 'Quit',
-                            actionAcceptText: 'Resume',
-                            onCancelClicked: () => {Get.back(result: false)},
-                            onAcceptClicked: () => {
-                                  Get.rootDelegate.toNamed(Routes.FINAL_RESULT)
-                                }),
-                      );
+                      controller.stopGame() ;
                     },
                     child: Container(
                       width: 200,

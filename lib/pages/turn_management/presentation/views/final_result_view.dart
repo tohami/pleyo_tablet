@@ -58,7 +58,7 @@ class FinalResult extends GetView<GroupRotationController> {
                   visible: !controller.isEmailEnabled.value,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(controller.playersNumber, (index) {
+                    children: List.generate(controller.numberOfPlayers, (index) {
                       if (index == 0) {
                         return const PlayerScoreItem(
                           playerName: 'Rossana',
@@ -171,7 +171,7 @@ class FinalResult extends GetView<GroupRotationController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:
-                      List.generate(controller.playersNumber, (index) {
+                      List.generate(controller.numberOfPlayers, (index) {
                         return PlayerResultItem(
                           isEnabled: controller.isEmailAdded.value,
                           playerImageURl: index == 0

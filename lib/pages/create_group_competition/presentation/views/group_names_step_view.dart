@@ -76,7 +76,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                   ),
                   Column(
                     children: List.generate(controller.playersPersonas.length, (index) {
-                      final imageUrl = "http://via.placeholder.com/350x150" ;
+                      final imageUrl =  controller.playersPersonas[index].avatar?.data?.attributes?.url;
                       if (index == 0) {
                         return GestureDetector(
                           onTap: () {

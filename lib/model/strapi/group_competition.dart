@@ -17,13 +17,13 @@ class GroupCompetition {
   bool? startWithFirstGame;
   bool? isStarted;
   int? duration;
-  List<Score>? scores;
   List<Ticket>? tickets;
   GameVariant? gameVariant;
   List<Game>? games;
   Ticket? currentPlayerTurn; // Added field
   bool? isEnded; // Added field
   List<int>? stations ;
+  int? organization ;
 
   GroupCompetition({
     this.id,
@@ -38,12 +38,12 @@ class GroupCompetition {
     this.startWithFirstGame,
     this.isStarted,
     this.duration,
-    this.scores,
     this.tickets,
     this.gameVariant,
     this.games,
     this.currentPlayerTurn, // Added constructor parameter
-    this.isEnded, // Added constructor parameter
+    this.isEnded,
+    this.organization
   });
 
   GroupCompetition.fromJson(dynamic data) {
@@ -60,7 +60,6 @@ class GroupCompetition {
     startWithFirstGame = json['attributes']['startWithFirstGame'];
     isStarted = json['attributes']['isStarted'];
     duration = json['attributes']['duration'];
-    scores = (json['attributes']['scores']['data'] as List).map((v) => Score.fromJson(v)).toList();
     tickets = (json['attributes']['tickets']['data'] as List).map((v) => Ticket.fromJson(v)).toList();
     gameVariant = json['attributes']['game_variant'] != null ? GameVariant.fromJson(json['attributes']['game_variant']['data']) : null;
     games = (json['attributes']['games']['data'] as List).map((v) => Game.fromJson(v)).toList();
@@ -82,13 +81,13 @@ class GroupCompetition {
       'startWithFirstGame': this.startWithFirstGame,
       'isStarted': this.isStarted,
       'duration': this.duration,
-      'scores': this.scores?.map((v) => v.toJson()).toList(),
       'tickets': this.tickets?.map((v) => v.toJson()).toList(),
       'game_variant': this.gameVariant?.id,
       'games': this.games?.map((v) => v.id).toList(),
       // 'currentPlayerTurn': this.currentPlayerTurn?.id,
       'isEnded': this.isEnded,
-      "stations": stations
+      "stations": stations,
+      "organization":organization
     };
     return data;
   }
@@ -104,7 +103,9 @@ class Ticket {
   dynamic extraData;
   String? uid;
   Avatar? avatar;
-  int? playOrder; // Added field
+  int? playOrder;
+  List<Score>? scores;
+
 
   Ticket({
     this.id,
@@ -116,7 +117,8 @@ class Ticket {
     this.extraData,
     this.uid,
     this.avatar,
-    this.playOrder, // Added constructor parameter
+    this.playOrder,
+    this.scores// Added constructor parameter
   });
 
   Ticket.fromJson(Map<String, dynamic> json) {
@@ -129,7 +131,11 @@ class Ticket {
     extraData = json['attributes']['extraData'];
     uid = json['attributes']['uid'];
     avatar = json['attributes']['avatar'] != null ? new Avatar.fromJson(json['attributes']['avatar']) : null;
-    playOrder = json['attributes']['playOrder']; // Added field parsing
+    playOrder = json['attributes']['playOrder'];
+    if(json['attributes']['scores'] != null) {
+      scores = (json['attributes']['scores']['data'] as List).map((v) =>
+          Score.fromJson(v)).toList();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -169,7 +175,7 @@ class Score {
     this.duration,
   });
 
-  Score.fromJson(Map<String, dynamic> json) {
+  Score.fromJson(dynamic json) {
     id = json['id'];
     gameEndDate = json['attributes']['gameEndDate'];
     score = json['attributes']['score'];

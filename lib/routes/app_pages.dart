@@ -69,22 +69,22 @@ class AppPages {
       name: Routes.SELECT_GAME_DIFFICULTY,
       page: () => const PlayerTurn(),
       binding: GroupRotationBinding(),
+      children: [
+        GetPage(
+          name: Routes.START_GAME,
+          page: () => const GameStatus(),
+        ),
+        GetPage(
+          name: Routes.REMAKE_PLAYING,
+          page: () => const GamePlaying(),
+        ),
+        GetPage(
+          name: Routes.FINAL_RESULT,
+          page: () => const FinalResult(),
+        ),
+      ]
     ),
-    GetPage(
-      name: Routes.START_GAME,
-      page: () => const GameStatus(),
-      binding: GroupRotationBinding(),
-    ),
-    GetPage(
-      name: Routes.REMAKE_PLAYING,
-      page: () => const GamePlaying(),
-      binding: GroupRotationBinding(),
-    ),
-    GetPage(
-      name: Routes.FINAL_RESULT,
-      page: () => const FinalResult(),
-      binding: GroupRotationBinding(),
-    ),
+
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),

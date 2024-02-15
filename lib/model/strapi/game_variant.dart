@@ -5,13 +5,13 @@ import 'Image.dart';
 
 class GameVariant {
   int? id;
-  _Attributes? attributes;
+  Attributes? attributes;
 
   GameVariant({this.id, this.attributes});
 
   GameVariant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    attributes = json['attributes'] != null ? new _Attributes.fromJson(json['attributes']) : null;
+    attributes = json['attributes'] != null ? new Attributes.fromJson(json['attributes']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -34,7 +34,7 @@ class GameVariant {
 
 }
 
-class _Attributes {
+class Attributes {
   String? name;
   int? effort;
   int? gamehubId;
@@ -46,9 +46,9 @@ class _Attributes {
   GameDifficultyResponse? gameDifficulties;
   GameResponse? game;
 
-  _Attributes({this.name, this.effort, this.description, this.subtitle, this.createdAt, this.updatedAt,this.image, this.gameDifficulties, this.game});
+  Attributes({this.name, this.effort, this.description, this.subtitle, this.createdAt, this.updatedAt,this.image, this.gameDifficulties, this.game});
 
-  _Attributes.fromJson(Map<String, dynamic> json) {
+  Attributes.fromJson(Map<String, dynamic> json) {
     print(json) ;
     name = json['name'];
     effort = json['effort'];

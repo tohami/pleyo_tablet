@@ -17,13 +17,14 @@ class GroupsProvider extends BaseProvider implements IGroupsProvider {
     print(data.toJson()) ;
     return post<GroupCompetition>(
         'competitions', {"data": data.toJson()["attributes"]},
-        query: {"populate[0]": "scores",
+        query: {
           "populate[1]": "tickets.avatar",
-          "populate[2]": "game_variant.game",
-          "populate[3]": "game_variant.game_difficulties",
-          "populate[4]": "currentPlayerTurn",
-          "populate[5]": "games",
-          "populate[6]": "game_variant.image",
+          "populate[2]": "tickets.scores",
+          "populate[3]": "game_variant.game",
+          "populate[4]": "game_variant.game_difficulties",
+          "populate[5]": "currentPlayerTurn",
+          "populate[6]": "games",
+          "populate[7]": "game_variant.image",
         },
         decoder: GroupCompetition.fromJson);
   }

@@ -1,6 +1,7 @@
 
 import 'package:pleyo_tablet_app/base/base_repositroy.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
+import 'package:pleyo_tablet_app/model/strapi/group_competition.dart' as gc;
 import 'package:pleyo_tablet_app/model/strapi/score_response.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket_reponse.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_api_provider.dart';

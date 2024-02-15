@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -46,11 +47,12 @@ class VideoWidget extends StatelessWidget {
                 return state.value
                     ? VideoPlayer(_controller)
                     :*/ Container(
-                        child: variantModel.attributes?.image?.data?.attributes != null ? Image.network(
-                          variantModel.attributes!.image!.data!.attributes!.formats!.small!.url!,
-                        ):CircularProgressIndicator(
-                          color: Color(buttonColor),
-                        ),
+                        child:CachedNetworkImage(imageUrl: variantModel.attributes!.image!.data!.attributes!.formats!.small!.url!,
+                        placeholder: (context, url) {
+                          return CircularProgressIndicator(
+                            color: Color(buttonColor),
+                          );
+                        }),
                       )/*;
               }, isInitialized),*/
             ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -106,13 +107,13 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                                       null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(23.0),
-                                      child: Image.network(
-                                        selectedGameAttributes!
+                                      child: CachedNetworkImage(
+                                        imageUrl: selectedGameAttributes!
                                             .image!
                                             .data!
                                             .attributes!
                                             .formats!
-                                            .thumbnail!
+                                            .small!
                                             .url!,
                                         fit: BoxFit.fill,
                                       ),

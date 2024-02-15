@@ -77,18 +77,20 @@ class GameExperienceView extends GetView<SplashController> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              GameExperienceSelectItem(
-                                borderColor: Color(ColorCode.lightBlue),
-                                titleColor: Color(ColorCode.darkBlue),
-                                selectItemAssetUrl: 'assets/images/group_play.png',
-                                selectArrowAssetUrl: 'assets/images/blue_arrow.png',
-                                selectTitle: 'Group Play',
-                                selectDetails:
-                                'Join with friends or family for a group gaming session.',
-                                onTap: () {
-                                  Get.rootDelegate.toNamed(Routes.SELECT_TEAM_SIZE);
-                                },
-                              ),
+                              StatefulBuilder(builder: (context, setState) {
+                                return GameExperienceSelectItem(
+                                  borderColor: Color(ColorCode.lightBlue),
+                                  titleColor: Color(ColorCode.darkBlue),
+                                  selectItemAssetUrl: 'assets/images/group_play.png',
+                                  selectArrowAssetUrl: 'assets/images/blue_arrow.png',
+                                  selectTitle: 'Group Play',
+                                  selectDetails:
+                                  'Join with friends or family for a group gaming session.',
+                                  onTap: () {
+                                    Get.rootDelegate.toNamed(Routes.SELECT_TEAM_SIZE);
+                                  },
+                                );
+                              }),
 
                             ],
                           ),
