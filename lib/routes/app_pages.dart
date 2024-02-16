@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/pages/activate/bindings/activate_binding.dart';
 import 'package:pleyo_tablet_app/pages/activate/presentation/views/activate_view.dart';
 import 'package:pleyo_tablet_app/pages/available_points/bindings/available_points_binding.dart';
@@ -12,6 +11,9 @@ import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/vie
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_game_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/selected_game_details_view.dart';
+import 'package:pleyo_tablet_app/pages/single_player_mode/bindings/single_player_mode_binding.dart';
+import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/player_name_view.dart';
+import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/welcome_view.dart';
 import 'package:pleyo_tablet_app/pages/turn_management/bindings/group_rotation_binding.dart';
 import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/final_result_view.dart';
 import 'package:pleyo_tablet_app/pages/turn_management/presentation/views/game_playing_view.dart';
@@ -21,13 +23,11 @@ import 'package:pleyo_tablet_app/pages/scan_qr/bindings/scan_qr_binding.dart';
 import 'package:pleyo_tablet_app/pages/scan_qr/presentation/views/scan_qr_view.dart';
 import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense_view.dart';
 
-import '../middleware/auth_middleware.dart';
 import '../pages/home/bindings/home_binding.dart';
 import '../pages/home/presentation/views/home_view.dart';
 import '../pages/game_status/bindings/game_status_binding.dart';
 import '../pages/game_status/presentation/views/game_status_view.dart';
 import '../pages/splash/bindings/splash_binding.dart';
-import '../pages/splash/presentation/views/splash_view.dart';
 
 part 'app_routes.dart';
 
@@ -80,6 +80,16 @@ class AppPages {
       name: Routes.FINAL_RESULT,
       page: () => const FinalResult(),
       binding: GroupRotationBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_PLAYER_NAME,
+      page: () => const PlayerNameStep(),
+      binding: SinglePlayerModeBinding(),
+    ),
+    GetPage(
+      name: Routes.WELCOME,
+      page: () => const Welcome(),
+      binding: SinglePlayerModeBinding(),
     ),
     GetPage(
       name: Routes.SCAN_QR,

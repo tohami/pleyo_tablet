@@ -6,6 +6,7 @@ class ColorCode {
   static const grey2 = 0x80ffffff;
   static const grey3 = 0xb4c5cfd0;
   static const grey4 = 0xbeffffff;
+  static const grey5 = 0xa8c5cfd0;
   static const darkGrey = 0xff797979;
   static const lightGrey = 0xffb9b9b9;
   static const lightGrey2 = 0x7fc5cfd0;

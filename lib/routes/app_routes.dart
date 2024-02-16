@@ -15,6 +15,8 @@ abstract class Routes {
   static const START_GAME = _Paths.START_GAME;
   static const REMAKE_PLAYING = _Paths.REMAKE_PLAYING;
   static const FINAL_RESULT = _Paths.FINAL_RESULT;
+  static const ADD_PLAYER_NAME = _Paths.ADD_PLAYER_NAME;
+  static const WELCOME = _Paths.WELCOME;
   static const SCAN_QR = _Paths.SCAN_QR;
   static const ACTIVATE = _Paths.ACTIVATE;
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
@@ -34,6 +36,8 @@ abstract class _Paths {
   static const START_GAME = '/start_game';
   static const REMAKE_PLAYING = '/remake_playing';
   static const FINAL_RESULT = '/final_result';
+  static const ADD_PLAYER_NAME = '/add_player_name';
+  static const WELCOME = '/welcome';
   static const SCAN_QR = '/scan_qr';
   static const ACTIVATE = '/activate';
   static const AVAILABLE_POINTS = '/available_points';
