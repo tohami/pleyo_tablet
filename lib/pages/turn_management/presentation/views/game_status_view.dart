@@ -20,13 +20,13 @@ class GameStatus extends GetView<GroupRotationController> {
         appBar: AppBar(
           backgroundColor: const Color(ColorCode.primaryBackground),
           title: const CustomText(
-            'Back',
+            'Exit',
             textStyle: TextStyles.textSmall,
             textAlign: TextAlign.start,
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => controller.exitCompetition(),
             child: const Icon(
               Icons.arrow_back,
               color: Color(ColorCode.darkGrey),

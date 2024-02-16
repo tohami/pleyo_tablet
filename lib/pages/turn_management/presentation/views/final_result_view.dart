@@ -8,9 +8,26 @@ import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_field.dart';
 import 'package:pleyo_tablet_app/widgets/player_result_item.dart';
 import 'package:pleyo_tablet_app/widgets/player_score_item.dart';
+import "package:collection/collection.dart";
 
 class FinalResult extends GetView<GroupRotationController> {
-  const FinalResult({Key? key}) : super(key: key);
+  final List<Color> borderColors = [
+    Color(ColorCode.pink), // For Rossana
+    Color(ColorCode.aqua2), // For Spike
+    Color(ColorCode.yellow4), // For Bahhnaa
+    Color(ColorCode.red3), // For One
+    Color(ColorCode.green2), // For Erith
+  ];
+
+  final List<List<Color>> gradientColors = [
+    [Color(ColorCode.pink2), Color(ColorCode.pink3)], // For Rossana
+    [Color(ColorCode.aqua3), Color(ColorCode.aqua4)], // For Spike
+    [Color(ColorCode.yellow2), Color(ColorCode.yellow3)], // For Bahhnaa
+    [Color(ColorCode.red), Color(ColorCode.red2)], // For One
+    [Color(ColorCode.green3), Color(ColorCode.green4)], // For Erith
+  ];
+
+  FinalResult({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +42,7 @@ class FinalResult extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => Get.rootDelegate.backUntil(Routes.FINAL_RESULT),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
@@ -58,112 +75,25 @@ class FinalResult extends GetView<GroupRotationController> {
                   visible: !controller.isEmailEnabled.value,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(controller.numberOfPlayers, (index) {
-                      if (index == 0) {
-                        return const PlayerScoreItem(
-                          playerName: 'Rossana',
-                          playerScore: '5000',
+                    children: controller.leaderBoardList.mapIndexed((index, item) {
+
+                        return PlayerScoreItem(
+                          playerName: item.playerNickName??"",
+                          playerScore: item.score.toString(),
                           containerGradient: LinearGradient(
                             begin: Alignment(-0.778, 0.0),
                             end: Alignment(1.19, 0.0),
-                            colors: [
-                              Color(ColorCode.pink2),
-                              Color(ColorCode.pink3)
-                            ],
+                            colors: gradientColors[index],
                             stops: [0.0, 1.0],
                           ),
-                          imageBorderColor: Color(ColorCode.pink),
-                          imageUrl: 'assets/images/first_player_image.png',
-                        );
-                      }
-                      if (index == 1) {
-                        return const PlayerScoreItem(
-                          playerName: 'Spike',
-                          playerScore: '4000',
-                          containerGradient: LinearGradient(
-                            begin: Alignment(-0.955, 0.0),
-                            end: Alignment(1.15, 0.0),
-                            colors: [
-                              Color(ColorCode.aqua3),
-                              Color(ColorCode.aqua4)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          imageBorderColor: Color(ColorCode.aqua2),
-                          imageUrl: 'assets/images/second_player_image.png',
-                        );
-                      }
-
-                      if (index == 2) {
-                        return const PlayerScoreItem(
-                          playerName: 'Bahhnaa',
-                          playerScore: '3000',
-                          containerGradient: LinearGradient(
-                            begin: Alignment(-0.958, 0.0),
-                            end: Alignment(1.249, 0.0),
-                            colors: [
-                              Color(ColorCode.yellow2),
-                              Color(ColorCode.yellow3)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          imageBorderColor: Color(ColorCode.yellow4),
-                          imageUrl: 'assets/images/third_player_image.png',
-                        );
-                      }
-                      if (index == 3) {
-                        return const PlayerScoreItem(
-                          playerName: 'One',
-                          playerScore: '2200',
-                          containerGradient: LinearGradient(
-                            begin: Alignment(-1.0, 0.0),
-                            end: Alignment(1.265, 0.0),
-                            colors: [
-                              Color(ColorCode.red),
-                              Color(ColorCode.red2)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          imageBorderColor: Color(ColorCode.red3),
-                          imageUrl: 'assets/images/fourth_player_image.png',
-                        );
-                      }
-                      if (index == 4) {
-                        return const PlayerScoreItem(
-                          playerName: 'Erith',
-                          playerScore: '1500',
-                          containerGradient: LinearGradient(
-                            begin: Alignment(-0.968, 0.0),
-                            end: Alignment(1.206, 0.0),
-                            colors: [
-                              Color(ColorCode.green3),
-                              Color(ColorCode.green4)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          imageBorderColor: const Color(ColorCode.green2),
-                          imageUrl: 'assets/images/fifth_player_image.png',
-                        );
-                      }
-
-                      return const PlayerScoreItem(
-                        playerName: 'Rossana',
-                        playerScore: '5000',
-                        containerGradient: LinearGradient(
-                          begin: Alignment(-0.778, 0.0),
-                          end: Alignment(1.19, 0.0),
-                          colors: [
-                            Color(ColorCode.pink2),
-                            Color(ColorCode.pink3)
-                          ],
-                          stops: [0.0, 1.0],
-                        ),
-                        imageBorderColor: Color(ColorCode.pink),
-                        imageUrl: 'assets/images/first_player_image.png',
+                          imageBorderColor: borderColors[index],
+                        imageUrl: item.avatarUrl ??
+                            "",
                       );
-                    }),
+                    }).toList(),
                   ),
                 ),
+                Expanded(child: Container()) ,
                 Visibility(
                   visible: controller.isEmailEnabled.value,
                   child: Container(

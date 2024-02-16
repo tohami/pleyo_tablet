@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/model/strapi/group_competition.dart';
 import 'package:pleyo_tablet_app/model/strapi/score_response.dart' as sr;
+import 'package:pleyo_tablet_app/model/strapi/scores_response.dart' as ld;
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 
 import '../../../../model/start_game.dart';
@@ -40,6 +42,8 @@ class GroupRotationController extends SuperController<bool> {
   GroupRotationController({required this.gamesRepository}) ;
   late StreamSubscription subscription ;
   RxInt gameStatus = 0.obs;
+
+  late RxList<ld.Score> leaderBoardList = RxList<ld.Score>([]);
 
   @override
   void onInit() {
@@ -77,8 +81,10 @@ class GroupRotationController extends SuperController<bool> {
 
           var newScore = sr.Score(id: status.data["id"] , attributes: sr.Attributes.fromJson(status.data)) ;
           if(newScore.attributes?.competitions?[0].isEnded == true){
+
             Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
-            await Future.delayed(1.seconds);
+            await Future.delayed(500.milliseconds);
+            getLeaderboard() ;
             Get.rootDelegate.toNamed("${Routes.SELECT_GAME_DIFFICULTY}/${Routes.FINAL_RESULT}") ;
             return ;
           }
@@ -235,6 +241,30 @@ class GroupRotationController extends SuperController<bool> {
     //     .set({"CommandeId": "GAME_STOP", "Data": gameData?.toJson()});
   }
 
+
+  void exitCompetition () async{
+    var exit = await Get.dialog(
+      AlertDialogWidget(
+          content:
+          'You will exit the competition, all the progress will be lost? ',
+          actionCancelText: 'Quit',
+          actionAcceptText: 'Resume',
+          onCancelClicked: () => {
+            Get.back(result: true)
+          },
+          onAcceptClicked: () => {
+            Get.back(result: false)
+          }),
+    );
+    if(exit) {
+      Get.rootDelegate.backUntil(Routes.MODE);
+    }
+  }
+
+  void getLeaderboard() async{
+    var scores = await gamesRepository.listScores(_groupCompetition.id.toString(), gameVariant?.game?.data?.attributes?.gamehubId?.toString()??"");
+    leaderBoardList.value = scores.leaderBoard! ;
+  }
 
   @override
   void didChangeMetrics() {

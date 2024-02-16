@@ -80,7 +80,7 @@ class AppPages {
         ),
         GetPage(
           name: Routes.FINAL_RESULT,
-          page: () => const FinalResult(),
+          page: () => FinalResult(),
         ),
       ]
     ),

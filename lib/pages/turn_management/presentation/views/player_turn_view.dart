@@ -33,7 +33,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => controller.exitCompetition(),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
