@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -120,7 +121,9 @@ class PlayerNameItem extends StatelessWidget {
                         color: imageBorderColor,
                       ),
                     ),
-                    child: Image.asset(imageUrl),
+                    child: CachedNetworkImage(imageUrl: imageUrl ,
+                        placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error)),
                   ),
                 ),
               ],
@@ -156,8 +159,9 @@ class PlayerNameItem extends StatelessWidget {
                             color: imageBorderColor,
                           ),
                         ),
-                        child: Image.asset(imageUrl),
-                      ),
+                        child: CachedNetworkImage(imageUrl: imageUrl ,
+                            placeholder: (context, url) => CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => Icon(Icons.error)),                      ),
                     ),
                     Positioned(
                       left: 200,
@@ -214,8 +218,9 @@ class PlayerNameItem extends StatelessWidget {
                             color: imageBorderColor,
                           ),
                         ),
-                        child: Image.asset(imageUrl),
-                      ),
+                        child: CachedNetworkImage(imageUrl: imageUrl ,
+                            placeholder: (context, url) => CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => Icon(Icons.error)),                      ),
                     ),
                     Positioned(
                       left: 160,

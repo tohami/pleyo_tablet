@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -50,7 +51,7 @@ class PlayerScoreItem extends StatelessWidget {
                   color: imageBorderColor,
                 ),
               ),
-              child: Image.asset(imageUrl),
+              child: CachedNetworkImage(imageUrl:imageUrl),
             ),
           ),
           Positioned(

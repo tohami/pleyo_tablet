@@ -75,7 +75,8 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                     height: 10,
                   ),
                   Column(
-                    children: List.generate(controller.players.length, (index) {
+                    children: List.generate(controller.playersPersonas.length, (index) {
+                      final imageUrl =  controller.playersPersonas[index].avatar?.data?.attributes?.url;
                       if (index == 0) {
                         return GestureDetector(
                           onTap: () {
@@ -93,7 +94,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             ),
                             imageBorderColor: const Color(ColorCode.pink),
                             nameColor: const Color(ColorCode.pink4),
-                            imageUrl: 'assets/images/first_player_image.png',
+                            imageUrl: imageUrl??"",
                             playerNumber: 1,
                             name: controller.playerName1Controller.text.isEmpty
                                 ? "Rosana"
@@ -122,7 +123,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             ),
                             imageBorderColor: const Color(ColorCode.aqua2),
                             nameColor: const Color(ColorCode.aqua2),
-                            imageUrl: 'assets/images/second_player_image.png',
+                            imageUrl: imageUrl??"",
                             playerNumber: 2,
                             name: controller.playerName2Controller.text.isEmpty
                                 ? "Spike"
@@ -152,7 +153,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             ),
                             imageBorderColor: const Color(ColorCode.yellow4),
                             nameColor: const Color(ColorCode.yellow5),
-                            imageUrl: 'assets/images/third_player_image.png',
+                            imageUrl: imageUrl??"",
                             playerNumber: 3,
                             name: controller.playerName3Controller.text.isEmpty
                                 ? "Bahhnaa"
@@ -182,7 +183,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             ),
                             imageBorderColor: const Color(ColorCode.red3),
                             nameColor: const Color(ColorCode.red4),
-                            imageUrl: 'assets/images/fourth_player_image.png',
+                            imageUrl: imageUrl??"",
                             playerNumber: 4,
                             name: controller.playerName4Controller.text.isEmpty
                                 ? "One"
@@ -212,7 +213,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             ),
                             imageBorderColor: const Color(ColorCode.green2),
                             nameColor: const Color(ColorCode.green),
-                            imageUrl: 'assets/images/fifth_player_image.png',
+                            imageUrl: imageUrl??"",
                             playerNumber: 5,
                             name: controller.playerName5Controller.text.isEmpty
                                 ? "Erith"

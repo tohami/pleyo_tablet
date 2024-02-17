@@ -4,7 +4,7 @@ A new Flutter application.
 
 ## Getting Started
 ### Build app for station 
-`flutter build apk --dart-define ID="ID"`
+`flutter build appbundle --flavor prod --dart-define channel=prod`
 
 This project is a starting point for a Flutter application.
 

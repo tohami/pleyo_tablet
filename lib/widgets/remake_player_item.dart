@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -8,19 +9,17 @@ import 'package:pleyo_tablet_app/widgets/game_attempt_item.dart';
 class RemakePlayerItem extends StatelessWidget {
   final String playerImageURl;
   final String playerName;
-  final int attemptNumber;
-  final bool isAttemptFinished;
-  final bool isAttemptSelected;
-  final bool isSelected;
+  final int currentTurn;
+  final int totalTurns;
+  final bool playing;
 
   const RemakePlayerItem(
       {Key? key,
       required this.playerImageURl,
-      required this.isSelected,
-      required this.attemptNumber,
+      required this.currentTurn,
+      required this.totalTurns,
       required this.playerName,
-      required this.isAttemptFinished,
-      required this.isAttemptSelected})
+      required this.playing})
       : super(key: key);
 
   @override
@@ -36,13 +35,13 @@ class RemakePlayerItem extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Image.asset(
-                  playerImageURl,
+                CachedNetworkImage(
+                  imageUrl: playerImageURl,
                   width: 80,
                   height: 80,
                 ),
                 Visibility(
-                  visible: !isSelected,
+                  visible: !playing,
                   child: Container(
                     width: 80,
                     height: 80,
@@ -56,9 +55,9 @@ class RemakePlayerItem extends StatelessWidget {
                   ),
                 ),
                 Visibility(
-                  visible: isSelected,
+                  visible: playing,
                   child: Image.asset(
-                    'assets/images/icon_downloading.png',
+                     'assets/images/icon_downloading.png',
                     width: 100,
                     height: 100,
                   )
@@ -80,14 +79,17 @@ class RemakePlayerItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: List.generate(attemptNumber, (index) {
-              if (index == 0) {
+            children: List.generate(totalTurns, (index) {
+              if (index < currentTurn) {
                 return GameAttemptItem(
-                  isSelected: isAttemptSelected,
-                  isAttemptFinished: isAttemptFinished,
+                  isSelected: playing,
+                  isAttemptFinished: true,
                 );
               }
-              return const GameAttemptItem();
+              return GameAttemptItem(
+                isSelected: playing,
+                isAttemptFinished: false,
+              );
             }),
           ),
           CustomText(

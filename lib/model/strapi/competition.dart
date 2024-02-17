@@ -15,6 +15,7 @@ class Competition {
   bool? isStarted;
   List<Games>? games;
   ActivationScreen? activationScreen ;
+  int? duration;
 
   Competition(
       {this.id,

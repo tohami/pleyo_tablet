@@ -39,11 +39,15 @@ class AppPages {
   static final routes = [
     GetPage(
         name: Routes.SPLASH,
+        page: () => const SplashView(),
+        binding: SplashBinding()),
+    GetPage(
+        name: Routes.MODE,
         page: () => const GameExperienceView(),
         binding: SplashBinding()),
     GetPage(
         name: Routes.SELECT_TEAM_SIZE,
-        page: () => const SelectTeamSizeStep(),
+        page: () => SelectTeamSizeStep(),
         binding: GroupSelectStepsBinding()),
     GetPage(
         name: Routes.ADD_TEAM_NAME,
@@ -65,22 +69,22 @@ class AppPages {
       name: Routes.SELECT_GAME_DIFFICULTY,
       page: () => const PlayerTurn(),
       binding: GroupRotationBinding(),
+      children: [
+        GetPage(
+          name: Routes.START_GAME,
+          page: () => const GameStatus(),
+        ),
+        GetPage(
+          name: Routes.REMAKE_PLAYING,
+          page: () => const GamePlaying(),
+        ),
+        GetPage(
+          name: Routes.FINAL_RESULT,
+          page: () => FinalResult(),
+        ),
+      ]
     ),
-    GetPage(
-      name: Routes.START_GAME,
-      page: () => const GameStatus(),
-      binding: GroupRotationBinding(),
-    ),
-    GetPage(
-      name: Routes.REMAKE_PLAYING,
-      page: () => const GamePlaying(),
-      binding: GroupRotationBinding(),
-    ),
-    GetPage(
-      name: Routes.FINAL_RESULT,
-      page: () => const FinalResult(),
-      binding: GroupRotationBinding(),
-    ),
+
     GetPage(
       name: Routes.ADD_PLAYER_NAME,
       page: () => const PlayerNameStep(),

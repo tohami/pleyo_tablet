@@ -14,19 +14,19 @@ class GameStatus extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.attributes;
+    var selectedGameAttributes = controller.gameVariant;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(ColorCode.primaryBackground),
           title: const CustomText(
-            'Back',
+            'Exit',
             textStyle: TextStyles.textSmall,
             textAlign: TextAlign.start,
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => controller.exitCompetition(),
             child: const Icon(
               Icons.arrow_back,
               color: Color(ColorCode.darkGrey),
@@ -71,8 +71,7 @@ class GameStatus extends GetView<GroupRotationController> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    selectedGameAttributes!.image!.data!
-                                        .attributes!.formats!.thumbnail!.url!,
+                                    selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
                                   ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
@@ -95,29 +94,32 @@ class GameStatus extends GetView<GroupRotationController> {
                       gameFail.value
                           ? Positioned(
                               top: 300,
-                              child: Container(
-                                width: 200,
-                                height: 100,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment(-1.0, 0.055),
-                                    end: Alignment(0.699, 0.0),
-                                    colors: [
-                                      Color(ColorCode.black),
-                                      Color(ColorCode.primaryBackground)
-                                    ],
-                                    stops: [0.0, 1.0],
+                              child: InkWell(
+                                onTap: ()=> controller.startGame(controller.defaultDifficulty!.id!),
+                                child: Container(
+                                  width: 200,
+                                  height: 100,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment(-1.0, 0.055),
+                                      end: Alignment(0.699, 0.0),
+                                      colors: [
+                                        Color(ColorCode.black),
+                                        Color(ColorCode.primaryBackground)
+                                      ],
+                                      stops: [0.0, 1.0],
+                                    ),
+                                    borderRadius: BorderRadius.circular(36.0),
+                                    border: Border.all(
+                                        width: 5.0,
+                                        color: const Color(0xff2ff7f7)),
                                   ),
-                                  borderRadius: BorderRadius.circular(36.0),
-                                  border: Border.all(
-                                      width: 5.0,
-                                      color: const Color(0xff2ff7f7)),
-                                ),
-                                child: CustomText(
-                                  'Retry',
-                                  textStyle: TextStyles.textXXLarge.copyWith(
-                                    color: const Color(ColorCode.lightGrey6),
+                                  child: CustomText(
+                                    'Retry',
+                                    textStyle: TextStyles.textXXLarge.copyWith(
+                                      color: const Color(ColorCode.lightGrey6),
+                                    ),
                                   ),
                                 ),
                               ),

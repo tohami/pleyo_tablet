@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -20,7 +21,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.attributes;
+    var selectedGameAttributes = controller.gameVariant;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -32,7 +33,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => controller.exitCompetition(),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
@@ -56,12 +57,15 @@ class PlayerTurn extends GetView<GroupRotationController> {
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  CustomText(
-                    ' 1.RayMak',
-                    textStyle: TextStyles.textMedium.copyWith(
-                      fontFamily: 'CoconPro',
-                      color: const Color(ColorCode.lightGrey4),
-                    ),
+                  Obx(() {
+                      return CustomText(
+                        ' ${(controller.currentPlayer.value?.playOrder??0)+1}.${controller.currentPlayer.value?.nickname}',
+                        textStyle: TextStyles.textMedium.copyWith(
+                          fontFamily: 'CoconPro',
+                          color: const Color(ColorCode.lightGrey4),
+                        ),
+                      );
+                    }
                   ),
                 ],
               ),
@@ -75,50 +79,59 @@ class PlayerTurn extends GetView<GroupRotationController> {
                     Container(
                       width: 160,
                       height: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/first_player_image_large.png',
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 80,
-                            height: 15,
-                            margin: const EdgeInsets.only(left: 20),
-                            decoration: BoxDecoration(
-                              color: const Color(0x24a3959f),
-                              borderRadius: BorderRadius.circular(9.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: List.generate(
-                                  controller.gameAttemptNumbers, (index) {
-                                if (index == 0) {
-                                  return const GameAttemptItem(
-                                      isSelected: true);
-                                }
-                                return const GameAttemptItem();
-                              }),
-                            ),
-                          ),
-                        ],
+                      child: Obx(() {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: controller.currentPlayer.value?.avatar?.data?.attributes?.url??"",
+                                placeholder: (context, url) {
+                                  return Image.asset( 'assets/images/first_player_image_large.png');
+                                },
+                                errorWidget: (context, url, error) {
+                                  return Image.asset( 'assets/images/first_player_image_large.png');
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 80,
+                                height: 15,
+                                margin: const EdgeInsets.only(left: 20),
+                                decoration: BoxDecoration(
+                                  color: const Color(0x24a3959f),
+                                  borderRadius: BorderRadius.circular(9.0),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: List.generate(
+                                      controller.getPlayerScores(controller.currentPlayer.value!).length, (index) {
+                                    if (index == 0) {
+                                      return const GameAttemptItem(
+                                        isAttemptFinished: true);
+                                    }
+                                    return const GameAttemptItem();
+                                  }),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
                       ),
                     ),
                     // TODO this stack for timer text
                     Positioned(
                       bottom: 85,
-                      child: ObxValue<RxString>((state) {
+                      child: ObxValue<RxInt>((state) {
                         return Visibility(
-                          visible: !controller.chooseGameDifficulty.value,
+                          visible: controller.remainingSeconds.value < 11,
                           child: Stack(
                             children: [
                               CustomText(
-                                '${controller.time.value}',
+                                '${controller.remainingSeconds.value}',
                                 maxLines: 2,
                                 textStyle: TextStyles.textXXXLarge.copyWith(
                                   fontSize: 115,
@@ -128,7 +141,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                 textAlign: TextAlign.center,
                               ),
                               CustomText(
-                                '${controller.time.value}',
+                                '${controller.remainingSeconds.value}',
                                 maxLines: 2,
                                 textStyle: TextStyles.textXXXLarge.copyWith(
                                   fontWeight: FontWeight.w400,
@@ -159,7 +172,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                   // delay: 800.ms,
                                   duration: 400.ms),
                         );
-                      }, controller.time),
+                      }, controller.remainingSeconds),
                     ),
                     //TODO this stack for player number text
                     Positioned(
@@ -170,32 +183,36 @@ class PlayerTurn extends GetView<GroupRotationController> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Stack(
-                            children: [
-                              CustomText(
-                                "1",
-                                maxLines: 1,
-                                textStyle: TextStyles.textXXXLarge.copyWith(
-                                  color: const Color(ColorCode.pink5),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Helvetica',
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              CustomText(
-                                '1',
-                                maxLines: 1,
-                                textStyle: TextStyles.textXXXLarge.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Helvetica',
-                                  foreground: Paint()
-                                    ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 1.5
-                                    ..color = const Color(ColorCode.black),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          Obx((){
+                            var playOrder = (controller.currentPlayer.value?.playOrder??0) + 1;
+                              return Stack(
+                                children: [
+                                  CustomText(
+                                    playOrder.toString(),
+                                    maxLines: 1,
+                                    textStyle: TextStyles.textXXXLarge.copyWith(
+                                      color: const Color(ColorCode.pink5),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Helvetica',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  CustomText(
+                                    playOrder.toString(),
+                                    maxLines: 1,
+                                    textStyle: TextStyles.textXXXLarge.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Helvetica',
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 1.5
+                                        ..color = const Color(ColorCode.black),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            }
                           ),
                         ],
                       ),
@@ -275,9 +292,8 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                     null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(23.0),
-                                    child: Image.network(
-                                      selectedGameAttributes!.image!.data!
-                                          .attributes!.formats!.thumbnail!.url!,
+                                    child: CachedNetworkImage(
+                                      imageUrl:selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
                                       fit: BoxFit.fill,
                                     ),
                                   )
@@ -341,13 +357,11 @@ class PlayerTurn extends GetView<GroupRotationController> {
                     ),
                     Positioned(
                       bottom: 220,
-                      child: selectedGameAttributes!
-                              .gameDifficulties!.data!.isNotEmpty
+                      child: controller.gameDifficulties!.isNotEmpty
                           ? Container(
                               height: 130,
                               child: ListView.builder(
-                                itemCount: selectedGameAttributes
-                                    .gameDifficulties!.data!.length,
+                                itemCount: controller.gameDifficulties!.length,
                                 shrinkWrap: true,
                                 clipBehavior: Clip.none,
                                 scrollDirection: Axis.horizontal,
@@ -355,16 +369,9 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      controller.chooseGameDifficulty.value =
-                                          true;
-                                      controller.setSelectedGameDifficulty(
-                                          selectedGameAttributes
-                                              .gameDifficulties!
-                                              .data![index]
-                                              .attributes!
-                                              .difficulty);
-                                      Get.rootDelegate
-                                          .toNamed(Routes.START_GAME);
+
+                                      controller.startGame(
+                                          controller.gameDifficulties![index].id!);
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -372,7 +379,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                       child: GameDifficultyItem(
                                           imageSize: 110,
                                           imageUrl: selectedGameAttributes
-                                                      .gameDifficulties!
+                                                      !.gameDifficulties!
                                                       .data![index]
                                                       .attributes
                                                       ?.difficulty ==

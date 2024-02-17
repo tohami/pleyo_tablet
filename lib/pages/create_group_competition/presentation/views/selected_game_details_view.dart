@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -12,7 +13,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedGameAttributes = controller.selectedGame.value.attributes;
+    var selectedGameAttributes = controller.selectedGameVariant.value.attributes;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -106,13 +107,13 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                                       null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(23.0),
-                                      child: Image.network(
-                                        selectedGameAttributes!
+                                      child: CachedNetworkImage(
+                                        imageUrl: selectedGameAttributes!
                                             .image!
                                             .data!
                                             .attributes!
                                             .formats!
-                                            .thumbnail!
+                                            .small!
                                             .url!,
                                         fit: BoxFit.fill,
                                       ),
@@ -232,10 +233,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                       width: 6.0, color: const Color(ColorCode.aqua)),
                 ),
                 child: GestureDetector(
-                  onTap: () => Get.rootDelegate.toNamed(
-                    Routes.SELECT_GAME_DIFFICULTY,
-                    arguments: controller.selectedGame.value,
-                  ),
+                  onTap: () => controller.createGroupCompetition() ,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
