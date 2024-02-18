@@ -32,6 +32,7 @@ class ColorCode {
   static const white3 = 0x40ffffff;
   static const white4 = 0xeeffffff;
   static const white5 = 0xfff8f8f8;
+  static const white6 = 0xb4ffffff;
   static const black = 0xff20262d;
   static const black2 = 0x00808080;
   static const black3 = 0xff293038;

@@ -21,7 +21,13 @@ class SinglePlayerModeController extends SuperController<bool> {
       station.attributes!.gameVariants!.data!,
       (GameVariant item) => item.attributes!.game!.data!);
 
-  Rx<GameVariant> selectedGame = GameVariant().obs;
+  Rx<GameVariant?> selectedVariant = Rx(null);
+
+  Rx<Game?> selectedGame = Rx(null);
+
+  int? selectedGameDifficulty;
+  RxBool gameFail = false.obs;
+
 
   @override
   void onInit() {
@@ -49,7 +55,9 @@ class SinglePlayerModeController extends SuperController<bool> {
   void changeMode(bool val) {
     isChampoinship.value = val;
   }
-
+  void setSelectedGameDifficulty(int? selectedDifficulty) {
+    selectedGameDifficulty = selectedDifficulty;
+  }
   @override
   void onReady() {
     super.onReady();
