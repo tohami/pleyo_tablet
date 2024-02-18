@@ -42,7 +42,7 @@ class FinalResult extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.rootDelegate.backUntil(Routes.FINAL_RESULT),
+            onTap: () => Get.rootDelegate.backUntil(Routes.GROUP_TURN_RESULT),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),

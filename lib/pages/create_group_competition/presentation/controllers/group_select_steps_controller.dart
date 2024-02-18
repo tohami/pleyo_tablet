@@ -169,7 +169,6 @@ class GroupPlayStepsController extends SuperController<bool> {
                 avatar: e.avatar,
                 nickname: e.nickname,
                 playOrder: i,
-                secret: "dsfdsfsdf",
                 credit: template!.numberOfTurns ,isEnabled: true ,isActivated: true))
             .toList(),
         gameVariant: GameVariant(id: selectedGame?.id),
@@ -181,7 +180,7 @@ class GroupPlayStepsController extends SuperController<bool> {
         organization: StationService.to.currentStation.attributes?.organization?.data?.id,
         stations: [StationService.to.currentStation.id!]));
     Get.rootDelegate.toNamed(
-      Routes.SELECT_GAME_DIFFICULTY,
+      Routes.GROUP_TURN_LANDING,
       arguments: result,
     ) ;
   }

@@ -128,7 +128,7 @@ class GameStatus extends GetView<GroupRotationController> {
                               top: 300,
                               child: GestureDetector(
                                 onTap: () => Get.rootDelegate
-                                    .toNamed(Routes.REMAKE_PLAYING),
+                                    .toNamed(Routes.GROUP_TURN_GAME_PLAY),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [

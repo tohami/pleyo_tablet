@@ -25,7 +25,7 @@ class SelectGame extends GetView<SinglePlayerModeController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => Get.rootDelegate.backUntil(Routes.MODE ,popMode: PopMode.History),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
@@ -33,78 +33,76 @@ class SelectGame extends GetView<SinglePlayerModeController> {
             ),
           ),
         ),
+        backgroundColor:  Color(ColorCode.primaryBackground),
         body: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
-          child: Container(
-            color: const Color(ColorCode.primaryBackground),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                'Select Game',
+                textStyle: TextStyles.textMedium.copyWith(
+                  fontFamily: 'CoconPro',
+                  color: const Color(ColorCode.lightGrey6),
                 ),
-                CustomText(
-                  'Select Game',
-                  textStyle: TextStyles.textMedium.copyWith(
-                    fontFamily: 'CoconPro',
-                    color: const Color(ColorCode.lightGrey6),
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Obx(() {
-                  // isChampion must be called any where to force rebuild
-                  controller.selectedVariant.value;
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Obx(() {
+                // isChampion must be called any where to force rebuild
+                controller.selectedVariant.value;
 
-                  if (controller.games.isNotEmpty) {
-                    var games = controller.games.entries.toList();
+                if (controller.games.isNotEmpty) {
+                  var games = controller.games.entries.toList();
 
-                    games.sort(((a, b) =>
-                        a.key.attributes!.gamehubId! -
-                        b.key.attributes!.gamehubId!));
-                    return ListView.builder(
-                      itemCount: games.length,
-                      shrinkWrap: true,
-                      clipBehavior: Clip.none,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GameWidgetSingleMode(
-                              game: games[index],
-                              isChampion: controller.isChampoinship.value,
-                              selectedVariant: controller.selectedVariant.value,
-                              onExitClicked: () =>
-                                  {controller.selectedVariant.value = null},
-                              onGameSelected: (variant) {
-                                print(variant.id);
-                                controller.selectedGame.value =
-                                    games[index].key;
-                                controller.selectedVariant.value = variant;
-                                // Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
-                              },
-                              onSelectDifficulty: (int selectedDifficulty) {
-                                controller.setSelectedGameDifficulty(
-                                    selectedDifficulty);
-                                Get.rootDelegate
-                                    .toNamed(Routes.SINGLE_MODE_GAME_STATUS);
-                              },
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              ],
-            ),
+                  games.sort(((a, b) =>
+                      a.key.attributes!.gamehubId! -
+                      b.key.attributes!.gamehubId!));
+                  return ListView.builder(
+                    itemCount: games.length,
+                    shrinkWrap: true,
+                    clipBehavior: Clip.none,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GameWidgetSingleMode(
+                            game: games[index],
+                            isChampion: true,
+                            selectedVariant: controller.selectedVariant.value,
+                            onExitClicked: () =>
+                                {controller.selectedVariant.value = null},
+                            onGameSelected: (variant) {
+                              print(variant.id);
+                              controller.selectedGame.value =
+                                  games[index].key;
+                              controller.selectedVariant.value = variant;
+                              // Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
+                            },
+                            onSelectDifficulty: (int selectedDifficulty) {
+                              controller.startGame(
+                                  selectedDifficulty);
+                              Get.rootDelegate
+                                  .toNamed(Routes.SINGLE_PLAY_GAME_STATUS);
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              }),
+            ],
           ),
         ),
       ),

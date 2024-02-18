@@ -63,7 +63,7 @@ class GameExperienceView extends GetView<SplashController> {
                                 selectDetails:
                                     'Challenge yourself in a solo game and compete with others on the leaderboard.',
                                 onTap: () {
-                                  Get.rootDelegate.toNamed(Routes.ADD_PLAYER_NAME);
+                                  Get.rootDelegate.toNamed(Routes.SINGLE_PLAY_LANDING);
                                 },
                               ),
                             ],
@@ -87,7 +87,7 @@ class GameExperienceView extends GetView<SplashController> {
                                   selectDetails:
                                   'Join with friends or family for a group gaming session.',
                                   onTap: () {
-                                    Get.rootDelegate.toNamed(Routes.SELECT_TEAM_SIZE);
+                                    Get.rootDelegate.toNamed(Routes.GROUP_LANDING);
                                   },
                                 );
                               }),

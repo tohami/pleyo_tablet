@@ -32,7 +32,7 @@ class Welcome extends GetView<SinglePlayerModeController> {
           ),
         ),
         body: GestureDetector(
-          onTap: () => Get.rootDelegate.toNamed(Routes.SINGLE_MODE_SELECT_GAME),
+          // onTap: () => Get.rootDelegate.toNamed(Routes.SINGLE_PLAY_SELECT_GAME),
           child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 60),

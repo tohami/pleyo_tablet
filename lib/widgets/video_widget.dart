@@ -35,7 +35,7 @@ class VideoWidget extends StatelessWidget {
       },
       child: Container(
         width: 315,
-        height: 256,
+        height: 276,
         margin: EdgeInsets.only(right: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +49,10 @@ class VideoWidget extends StatelessWidget {
                     :*/ Container(
                         child:CachedNetworkImage(imageUrl: variantModel.attributes!.image!.data!.attributes!.formats!.small!.url!,
                         placeholder: (context, url) {
-                          return CircularProgressIndicator(
-                            color: Color(buttonColor),
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Color(buttonColor),
+                            ),
                           );
                         }),
                       )/*;

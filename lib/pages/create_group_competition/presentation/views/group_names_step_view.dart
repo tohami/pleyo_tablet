@@ -271,7 +271,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                   Expanded(child: Container()),
                   InkWell(
                     onTap: () {
-                      Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.GROUP_SELECT_GAME}");
+                      Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_SELECT_GAME}");
                     },
                     child: Container(
                       height: 75,

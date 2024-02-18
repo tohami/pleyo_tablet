@@ -108,7 +108,7 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                         onTap: () {
                           print("go playnig") ;
                           if (goPlaying.value)
-                            Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.GROUP_NAMES_LIST}");
+                            Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_PLAYER_NAMES}");
                         },
                         child: Container(
                           width: 171,

@@ -21,22 +21,22 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://10.0.2.2:1337");
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp(
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
-    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(const MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
-  // Isolate.current.addErrorListener(RawReceivePort((pair) async {
-  //   final List<dynamic> errorAndStacktrace = pair;
-  //   await FirebaseCrashlytics.instance.recordError(
-  //     errorAndStacktrace.first,
-  //     errorAndStacktrace.last,
-  //   );
-  // }).sendPort);
+  Isolate.current.addErrorListener(RawReceivePort((pair) async {
+    final List<dynamic> errorAndStacktrace = pair;
+    await FirebaseCrashlytics.instance.recordError(
+      errorAndStacktrace.first,
+      errorAndStacktrace.last,
+    );
+  }).sendPort);
 }
 
 class MyApp extends StatelessWidget {

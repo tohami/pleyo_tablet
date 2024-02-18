@@ -49,16 +49,16 @@ class AppPages {
         page: () => const GameExperienceView(),
         binding: SplashBinding()),
     GetPage(
-        name: Routes.SELECT_TEAM_SIZE,
+        name: Routes.GROUP_LANDING,
         page: () => SelectTeamSizeStep(),
         binding: GroupSelectStepsBinding(),
         children: [
           GetPage(
-            name: Routes.ADD_TEAM_NAME,
+            name: Routes.GROUP_TEAM_NAME,
             page: () => const AddTeamNameStep(),
           ),
           GetPage(
-            name: Routes.GROUP_NAMES_LIST,
+            name: Routes.GROUP_PLAYER_NAMES,
             page: () => const GroupNamesStep(),
           ),
           GetPage(
@@ -66,48 +66,48 @@ class AppPages {
             page: () => const SelectGameStep(),
           ),
           GetPage(
-            name: Routes.SELECTED_GAME,
+            name: Routes.GROUP_SELECTED_GAME_DETAILS,
             page: () => const SelectedGameDetails(),
           ),
         ]),
     GetPage(
-        name: Routes.SELECT_GAME_DIFFICULTY,
+        name: Routes.GROUP_TURN_LANDING,
         page: () => const PlayerTurn(),
         binding: GroupRotationBinding(),
         children: [
           GetPage(
-            name: Routes.START_GAME,
+            name: Routes.GROUP_TURN_GAME_STATUS,
             page: () => const GameStatus(),
           ),
           GetPage(
-            name: Routes.REMAKE_PLAYING,
+            name: Routes.GROUP_TURN_GAME_PLAY,
             page: () => const GamePlaying(),
           ),
           GetPage(
-            name: Routes.FINAL_RESULT,
+            name: Routes.GROUP_TURN_RESULT,
             page: () => FinalResult(),
           ),
         ]),
     GetPage(
-      name: Routes.ADD_PLAYER_NAME,
+      name: Routes.SINGLE_PLAY_LANDING,
       page: () => const PlayerNameStep(),
       binding: SinglePlayerModeBinding(),
+      children: [
+        GetPage(
+          name: Routes.SINGLE_PLAY_WELCOME,
+          page: () => const Welcome(),
+        ),
+        GetPage(
+          name: Routes.SINGLE_PLAY_SELECT_GAME,
+          page: () => const SelectGame(),
+        ),
+        GetPage(
+          name: Routes.SINGLE_PLAY_GAME_STATUS,
+          page: () => const SingleModeGameStatus(),
+        ),
+      ]
     ),
-    GetPage(
-      name: Routes.WELCOME,
-      page: () => const Welcome(),
-      binding: SinglePlayerModeBinding(),
-    ),
-    GetPage(
-      name: Routes.SINGLE_MODE_SELECT_GAME,
-      page: () => const SelectGame(),
-      binding: SinglePlayerModeBinding(),
-    ),
-    GetPage(
-      name: Routes.SINGLE_MODE_GAME_STATUS,
-      page: () => const SingleModeGameStatus(),
-      binding: SinglePlayerModeBinding(),
-    ),
+
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),

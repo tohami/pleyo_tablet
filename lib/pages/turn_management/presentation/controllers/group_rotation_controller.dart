@@ -73,7 +73,7 @@ class GroupRotationController extends SuperController<bool> {
           break;
         case GameStatusType.STARTED:
           // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
-          Get.rootDelegate.toNamed("${Routes.SELECT_GAME_DIFFICULTY}/${Routes.REMAKE_PLAYING}");
+          Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_GAME_PLAY}");
           gameStatus.value = 0 ;
           FirebaseCrashlytics.instance.log("Game started") ;
           break;
@@ -82,23 +82,23 @@ class GroupRotationController extends SuperController<bool> {
           var newScore = sr.Score(id: status.data["id"] , attributes: sr.Attributes.fromJson(status.data)) ;
           if(newScore.attributes?.competitions?[0].isEnded == true){
 
-            Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
+            Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
             await Future.delayed(500.milliseconds);
             getLeaderboard() ;
-            Get.rootDelegate.toNamed("${Routes.SELECT_GAME_DIFFICULTY}/${Routes.FINAL_RESULT}") ;
+            Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_RESULT}") ;
             return ;
           }
           players.value = newScore.attributes?.competitions?[0].tickets?.map((e) => e.mapTicketsToTicket()).toList() ?? [] ;
           currentPlayer.value = newScore.attributes?.competitions?[0].currentPlayerTurn?.mapTicketsToTicket() ;
 
-          Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
+          Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
           startTimer() ;
           break ;
         case GameStatusType.CLOSED:
         case GameStatusType.CRASHED:
           FirebaseCrashlytics.instance.log("Game stopped by gamehub durring game starting") ;
           gameStatus.value = 0 ;
-          Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
+          Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
           startTimer() ;
           break;
       }
@@ -147,7 +147,7 @@ class GroupRotationController extends SuperController<bool> {
     gameFail.value = false ;
     int variant = _groupCompetition.gameVariant!.id! ;
     FirebaseCrashlytics.instance.log("Starting new game v $variant ,d $diff") ;
-    Get.rootDelegate.toNamed("${Routes.SELECT_GAME_DIFFICULTY}/${Routes.START_GAME}");
+    Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_GAME_STATUS}");
     var now = DateTime.now();
     gameStatus.value = 1;
     await Future.delayed(const Duration(seconds: 1));
@@ -216,12 +216,12 @@ class GroupRotationController extends SuperController<bool> {
       currentPlayer.value = newScore.attributes?.competitions?[0].currentPlayerTurn?.mapTicketsToTicket() ;
 
       if(newScore.attributes?.competitions?[0].isEnded == true){
-        Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
-        Get.rootDelegate.toNamed(Routes.FINAL_RESULT) ;
+        Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
+        Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_RESULT}") ;
         return ;
       }
 
-      Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY);
+      Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING);
       startTimer() ;
       // _groupCompetition = await gamesRepository.getCompetition(_groupCompetition.id!);
     }catch (e){
