@@ -63,7 +63,7 @@ class GameExperienceView extends GetView<SplashController> {
                                 selectDetails:
                                     'Challenge yourself in a solo game and compete with others on the leaderboard.',
                                 onTap: () {
-                                  // Get.offNamed(Routes.SELECT_TEAM_SIZE);
+                                  Get.rootDelegate.toNamed(Routes.ADD_PLAYER_NAME);
                                 },
                               ),
                             ],

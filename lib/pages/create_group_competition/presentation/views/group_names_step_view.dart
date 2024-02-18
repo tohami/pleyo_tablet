@@ -269,28 +269,28 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                     ),
                   ),
                   Expanded(child: Container()),
-                  Container(
-                    height: 75,
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment(-1.0, 0.0),
-                        end: Alignment(1.0, 0.0),
-                        colors: [
-                          Color(ColorCode.white3),
-                          Color(ColorCode.black2)
-                        ],
-                        stops: [0.0, 1.0],
+                  InkWell(
+                    onTap: () {
+                      Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.GROUP_SELECT_GAME}");
+                    },
+                    child: Container(
+                      height: 75,
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(-1.0, 0.0),
+                          end: Alignment(1.0, 0.0),
+                          colors: [
+                            Color(ColorCode.white3),
+                            Color(ColorCode.black2)
+                          ],
+                          stops: [0.0, 1.0],
+                        ),
+                        borderRadius: BorderRadius.circular(56.0),
+                        border: Border.all(
+                            width: 6.0, color: const Color(ColorCode.aqua)),
                       ),
-                      borderRadius: BorderRadius.circular(56.0),
-                      border: Border.all(
-                          width: 6.0, color: const Color(ColorCode.aqua)),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                          Get.rootDelegate.toNamed(Routes.GROUP_SELECT_GAME);
-                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

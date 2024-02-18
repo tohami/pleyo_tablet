@@ -112,7 +112,7 @@ class SelectTeamSizeStep extends GetView<GroupPlayStepsController> {
                       gameDuration: (e.numberOfTurns! * e.numberOfPlayers! * 2.5).toString(),
                       onTap: () {
                         controller.updateTemplate(e);
-                        Get.rootDelegate.toNamed(Routes.ADD_TEAM_NAME);
+                        Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.ADD_TEAM_NAME}");
                       },
                     ) ;
                   }).toList() ?? []

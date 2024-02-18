@@ -76,7 +76,7 @@ class SelectGameStep extends GetView<GroupPlayStepsController> {
                               print(variant.toJson());
                               controller.selectedGameVariant.value=variant;
                               controller.selectedGame = games[index].key;
-                              Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
+                              Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.SELECTED_GAME}");
 
                               /*showBottomSheetModal(context, variant,
                                           (diff) {

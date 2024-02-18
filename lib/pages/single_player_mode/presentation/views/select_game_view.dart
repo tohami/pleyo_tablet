@@ -51,9 +51,6 @@ class SelectGame extends GetView<SinglePlayerModeController> {
                   height: 30,
                 ),
                 Obx(() {
-                  // isChampion must be called any where to force rebuild
-                  controller.isChampoinship.value;
-
                   if (controller.games.isNotEmpty) {
                     var games = controller.games.entries.toList();
 
@@ -71,8 +68,8 @@ class SelectGame extends GetView<SinglePlayerModeController> {
                           children: [
                             GameWidget(
                               game: games[index],
-                              isChampion: controller.isChampoinship.value,
-                              onGameSelected: (variant) {
+                              isChampion: false,
+                              onPlayClicked: (variant) {
                                 print(variant.toJson());
 
                                 controller.selectedGame.value = variant;

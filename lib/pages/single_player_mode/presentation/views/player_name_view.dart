@@ -128,7 +128,7 @@ class PlayerNameStep extends GetView<SinglePlayerModeController> {
                       child: GestureDetector(
                         onTap: () => {
                           if (goPlaying.value)
-                            Get.rootDelegate.toNamed(Routes.WELCOME)
+                            controller.createTicket()
                         },
                         child: Stack(
                           alignment: Alignment.center,

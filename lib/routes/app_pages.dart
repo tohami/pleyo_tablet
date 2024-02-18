@@ -29,6 +29,7 @@ import '../pages/home/presentation/views/home_view.dart';
 import '../pages/game_status/bindings/game_status_binding.dart';
 import '../pages/game_status/presentation/views/game_status_view.dart';
 import '../pages/splash/bindings/splash_binding.dart';
+import '../pages/splash/presentation/views/splash_view.dart';
 
 part 'app_routes.dart';
 
@@ -49,43 +50,43 @@ class AppPages {
     GetPage(
         name: Routes.SELECT_TEAM_SIZE,
         page: () => SelectTeamSizeStep(),
-        binding: GroupSelectStepsBinding()),
+        binding: GroupSelectStepsBinding(),
+        children: [
+          GetPage(
+            name: Routes.ADD_TEAM_NAME,
+            page: () => const AddTeamNameStep(),
+          ),
+          GetPage(
+            name: Routes.GROUP_NAMES_LIST,
+            page: () => const GroupNamesStep(),
+          ),
+          GetPage(
+            name: Routes.GROUP_SELECT_GAME,
+            page: () => const SelectGameStep(),
+          ),
+          GetPage(
+            name: Routes.SELECTED_GAME,
+            page: () => const SelectedGameDetails(),
+          ),
+        ]),
     GetPage(
-        name: Routes.ADD_TEAM_NAME,
-        page: () => const AddTeamNameStep(),
-        binding: GroupSelectStepsBinding()),
-    GetPage(
-        name: Routes.GROUP_NAMES_LIST,
-        page: () => const GroupNamesStep(),
-        binding: GroupSelectStepsBinding()),
-    GetPage(
-        name: Routes.GROUP_SELECT_GAME,
-        page: () => const SelectGameStep(),
-        binding: GroupSelectStepsBinding()),
-    GetPage(
-        name: Routes.SELECTED_GAME,
-        page: () => const SelectedGameDetails(),
-        binding: GroupSelectStepsBinding()),
-    GetPage(
-      name: Routes.SELECT_GAME_DIFFICULTY,
-      page: () => const PlayerTurn(),
-      binding: GroupRotationBinding(),
-      children: [
-        GetPage(
-          name: Routes.START_GAME,
-          page: () => const GameStatus(),
-        ),
-        GetPage(
-          name: Routes.REMAKE_PLAYING,
-          page: () => const GamePlaying(),
-        ),
-        GetPage(
-          name: Routes.FINAL_RESULT,
-          page: () => FinalResult(),
-        ),
-      ]
-    ),
-
+        name: Routes.SELECT_GAME_DIFFICULTY,
+        page: () => const PlayerTurn(),
+        binding: GroupRotationBinding(),
+        children: [
+          GetPage(
+            name: Routes.START_GAME,
+            page: () => const GameStatus(),
+          ),
+          GetPage(
+            name: Routes.REMAKE_PLAYING,
+            page: () => const GamePlaying(),
+          ),
+          GetPage(
+            name: Routes.FINAL_RESULT,
+            page: () => FinalResult(),
+          ),
+        ]),
     GetPage(
       name: Routes.ADD_PLAYER_NAME,
       page: () => const PlayerNameStep(),

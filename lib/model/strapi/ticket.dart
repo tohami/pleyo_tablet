@@ -2,14 +2,14 @@ import 'package:pleyo_tablet_app/model/strapi/competition.dart';
 
 class Ticket {
   int? id;
-  Attributes? attributes;
+  TicketAttributes? attributes;
 
   Ticket({this.id, this.attributes});
 
   Ticket.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     attributes = json['attributes'] != null
-        ? new Attributes.fromJson(json['attributes'])
+        ? new TicketAttributes.fromJson(json['attributes'])
         : null;
   }
 
@@ -23,31 +23,26 @@ class Ticket {
   }
 }
 
-class Attributes {
+class TicketAttributes {
   int? credit;
   bool? isEnabled;
   String? secret;
   bool? isActivated;
   String? nickname;
   dynamic? extraData;
-  String? createdAt;
-  String? updatedAt;
-  String? publishedAt;
   Competition? competition;
+  int? organization ;
 
-  Attributes(
-      {this.credit, this.isEnabled, this.secret, this.isActivated, this.nickname, this.extraData, this.createdAt, this.updatedAt, this.publishedAt, this.competition});
+  TicketAttributes(
+      {this.credit, this.isEnabled, this.secret, this.isActivated, this.nickname, this.extraData, this.competition, this.organization});
 
-  Attributes.fromJson(Map<String, dynamic> json) {
+  TicketAttributes.fromJson(Map<String, dynamic> json) {
     credit = json['credit'];
     isEnabled = json['isEnabled'];
     secret = json['secret'];
     isActivated = json['isActivated'];
     nickname = json['nickname'];
     extraData = json['extraData'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    publishedAt = json['publishedAt'];
     competition = json['competition'] != null
         ? new Competition.fromJson(json['competition'])
         : null;
@@ -61,9 +56,7 @@ class Attributes {
     data['isActivated'] = isActivated;
     data['nickname'] = nickname;
     data['extraData'] = extraData;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['publishedAt'] = publishedAt;
+    data['organization'] = organization;
     if (competition != null) {
       data['competition'] = competition!.toJson();
     }

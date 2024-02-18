@@ -92,32 +92,38 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                       ),
                     ),
                     Positioned(
-                      bottom: 160,
+                      bottom: 220,
                       child: Image.asset('assets/images/group_play.png',
                           color: goPlaying.value
                               ? null
                               : const Color(ColorCode.grey),
-                          height: 165,
-                          width: 171),
+                          height: 140,),
                     ),
-                    Positioned(
-                      top: 140,
-                      left: 270,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 180,
+                        left: 270,),
+
                       child: InkWell(
-                        onTap: () => {
+                        onTap: () {
+                          print("go playnig") ;
                           if (goPlaying.value)
-                            Get.rootDelegate.toNamed(Routes.GROUP_NAMES_LIST)
+                            Get.rootDelegate.toNamed("${Routes.SELECT_TEAM_SIZE}/${Routes.GROUP_NAMES_LIST}");
                         },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                                goPlaying.value
-                                    ? 'assets/images/go_button_active_bg.png'
-                                    : 'assets/images/go_button_inactive_bg.png',
-                                height: 165,
-                                width: 171),
-                            CustomText(
+                        child: Container(
+                          width: 171,
+                          height: 95,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  goPlaying.value
+                                      ? 'assets/images/go_button_active_bg.png'
+                                      : 'assets/images/go_button_inactive_bg.png',
+                              ),
+                            )
+                          ),
+                          child: Center(
+                            child: CustomText(
                               'Go',
                               textStyle: TextStyles.textXLarge.copyWith(
                                 fontFamily: 'CoconPro',
@@ -127,9 +133,31 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                                       : ColorCode.lightGrey2,
                                 ),
                               ),
-                            ).animate()
-                          ],
-                        ),
+                            ),
+                          ),
+                ),
+                        // child: Stack(
+                        //   alignment: Alignment.center,
+                        //   children: [
+                        //     Image.asset(
+                        //         goPlaying.value
+                        //             ? 'assets/images/go_button_active_bg.png'
+                        //             : 'assets/images/go_button_inactive_bg.png',
+                        //         height: 165,
+                        //         width: 171),
+                        //     CustomText(
+                        //       'Go',
+                        //       textStyle: TextStyles.textXLarge.copyWith(
+                        //         fontFamily: 'CoconPro',
+                        //         color: Color(
+                        //           goPlaying.value
+                        //               ? ColorCode.aqua
+                        //               : ColorCode.lightGrey2,
+                        //         ),
+                        //       ),
+                        //     ).animate()
+                        //   ],
+                        // ),
                       ),
                     ),
                   ],
