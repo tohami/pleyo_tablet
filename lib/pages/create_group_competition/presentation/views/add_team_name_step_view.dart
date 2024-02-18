@@ -76,6 +76,10 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
                               color: Colors.white,
                               fontWeight: FontWeight.w300,
                             ),
+                            onDoneClick: (text) {
+                              if (goPlaying.value)
+                                Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_PLAYER_NAMES}");
+                            },
                           ),
                           const SizedBox(
                             height: 20,
@@ -106,7 +110,7 @@ class AddTeamNameStep extends GetView<GroupPlayStepsController> {
 
                       child: InkWell(
                         onTap: () {
-                          print("go playnig") ;
+                          FocusManager.instance.primaryFocus?.unfocus();
                           if (goPlaying.value)
                             Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_PLAYER_NAMES}");
                         },

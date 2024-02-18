@@ -12,6 +12,7 @@ import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/vie
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/selected_game_details_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/bindings/single_player_mode_binding.dart';
+import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_status_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/player_name_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/select_game_view.dart';
@@ -104,6 +105,10 @@ class AppPages {
         GetPage(
           name: Routes.SINGLE_PLAY_GAME_STATUS,
           page: () => const SingleModeGameStatus(),
+        ),
+        GetPage(
+          name: Routes.SINGLE_PLAY_GAME_PLAY,
+          page: () => const SinglePlayerGamePlay(),
         ),
       ]
     ),

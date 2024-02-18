@@ -133,6 +133,7 @@ class GameExperienceView extends GetView<SplashController> {
                               selectDetails:
                                   'Start your game by scanning a QR code for preset games or competitions.',
                               onTap: () {
+                                Get.rootDelegate.offNamed(Routes.SCAN_QR);
                                 // Get.offNamed(Routes.SELECT_TEAM_SIZE);
                               }),
                         ),

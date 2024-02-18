@@ -35,7 +35,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
         body: GestureDetector(
           onTap: () {
             FocusScopeNode currentFocus = FocusScope.of(context);
-            controller.selectedItem.value = -1;
+            controller.selectedPleyerNameIndex.value = -1;
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -80,7 +80,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                       if (index == 0) {
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedItem.value = 0;
+                            controller.selectedPleyerNameIndex.value = 0;
                           },
                           child: PlayerNameItem(
                             containerGradient: const LinearGradient(
@@ -92,6 +92,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                               ],
                               stops: [0.0, 1.0],
                             ),
+                            onKeyBoardDoneClicked: (){
+                              controller.selectedPleyerNameIndex.value = -1;
+                            },
                             imageBorderColor: const Color(ColorCode.pink),
                             nameColor: const Color(ColorCode.pink4),
                             imageUrl: imageUrl??"",
@@ -100,16 +103,16 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                                 ? "Rosana"
                                 : controller.playerName1Controller.text,
                             controller: controller.playerName1Controller,
-                            isItemSelected: controller.selectedItem.value == 0,
+                            isItemSelected: controller.selectedPleyerNameIndex.value == 0,
                             hasSelectedItem:
-                                controller.selectedItem.value != -1,
+                                controller.selectedPleyerNameIndex.value != -1,
                           ),
                         );
                       }
                       if (index == 1) {
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedItem.value = 1;
+                            controller.selectedPleyerNameIndex.value = 1;
                           },
                           child: PlayerNameItem(
                             containerGradient: const LinearGradient(
@@ -121,6 +124,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                               ],
                               stops: [0.0, 1.0],
                             ),
+                            onKeyBoardDoneClicked: (){
+                              controller.selectedPleyerNameIndex.value = -1;
+                            },
                             imageBorderColor: const Color(ColorCode.aqua2),
                             nameColor: const Color(ColorCode.aqua2),
                             imageUrl: imageUrl??"",
@@ -129,9 +135,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                                 ? "Spike"
                                 : controller.playerName2Controller.text,
                             controller: controller.playerName2Controller,
-                            isItemSelected: controller.selectedItem.value == 1,
+                            isItemSelected: controller.selectedPleyerNameIndex.value == 1,
                             hasSelectedItem:
-                                controller.selectedItem.value != -1,
+                                controller.selectedPleyerNameIndex.value != -1,
                           ),
                         );
                       }
@@ -139,7 +145,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                       if (index == 2) {
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedItem.value = 2;
+                            controller.selectedPleyerNameIndex.value = 2;
                           },
                           child: PlayerNameItem(
                             containerGradient: const LinearGradient(
@@ -155,13 +161,16 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                             nameColor: const Color(ColorCode.yellow5),
                             imageUrl: imageUrl??"",
                             playerNumber: 3,
+                            onKeyBoardDoneClicked: (){
+                              controller.selectedPleyerNameIndex.value = -1;
+                            },
                             name: controller.playerName3Controller.text.isEmpty
                                 ? "Bahhnaa"
                                 : controller.playerName3Controller.text,
                             controller: controller.playerName3Controller,
-                            isItemSelected: controller.selectedItem.value == 2,
+                            isItemSelected: controller.selectedPleyerNameIndex.value == 2,
                             hasSelectedItem:
-                                controller.selectedItem.value != -1,
+                                controller.selectedPleyerNameIndex.value != -1,
                           ),
                         );
                       }
@@ -169,7 +178,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                       if (index == 3) {
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedItem.value = 3;
+                            controller.selectedPleyerNameIndex.value = 3;
                           },
                           child: PlayerNameItem(
                             containerGradient: const LinearGradient(
@@ -181,6 +190,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                               ],
                               stops: [0.0, 1.0],
                             ),
+                            onKeyBoardDoneClicked: (){
+                              controller.selectedPleyerNameIndex.value = -1;
+                            },
                             imageBorderColor: const Color(ColorCode.red3),
                             nameColor: const Color(ColorCode.red4),
                             imageUrl: imageUrl??"",
@@ -189,9 +201,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                                 ? "One"
                                 : controller.playerName4Controller.text,
                             controller: controller.playerName4Controller,
-                            isItemSelected: controller.selectedItem.value == 3,
+                            isItemSelected: controller.selectedPleyerNameIndex.value == 3,
                             hasSelectedItem:
-                                controller.selectedItem.value != -1,
+                                controller.selectedPleyerNameIndex.value != -1,
                           ),
                         );
                       }
@@ -199,7 +211,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                       if (index == 4) {
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedItem.value = 4;
+                            controller.selectedPleyerNameIndex.value = 4;
                           },
                           child: PlayerNameItem(
                             containerGradient: const LinearGradient(
@@ -211,6 +223,9 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                               ],
                               stops: [0.0, 1.0],
                             ),
+                            onKeyBoardDoneClicked: (){
+                              controller.selectedPleyerNameIndex.value = -1;
+                            },
                             imageBorderColor: const Color(ColorCode.green2),
                             nameColor: const Color(ColorCode.green),
                             imageUrl: imageUrl??"",
@@ -219,16 +234,16 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                                 ? "Erith"
                                 : controller.playerName5Controller.text,
                             controller: controller.playerName5Controller,
-                            isItemSelected: controller.selectedItem.value == 4,
+                            isItemSelected: controller.selectedPleyerNameIndex.value == 4,
                             hasSelectedItem:
-                                controller.selectedItem.value != -1,
+                                controller.selectedPleyerNameIndex.value != -1,
                           ),
                         );
                       }
 
                       return GestureDetector(
                         onTap: () {
-                          controller.selectedItem.value = 0;
+                          controller.selectedPleyerNameIndex.value = 0;
                         },
                         child: PlayerNameItem(
                           containerGradient: const LinearGradient(
@@ -248,8 +263,8 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                               ? "Rosana"
                               : controller.playerName1Controller.text,
                           controller: controller.playerName1Controller,
-                          isItemSelected: controller.selectedItem.value == 0,
-                          hasSelectedItem: controller.selectedItem.value != -1,
+                          isItemSelected: controller.selectedPleyerNameIndex.value == 0,
+                          hasSelectedItem: controller.selectedPleyerNameIndex.value != -1,
                         ),
                       );
                     }),
@@ -271,6 +286,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                   Expanded(child: Container()),
                   InkWell(
                     onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_SELECT_GAME}");
                     },
                     child: Container(
@@ -315,7 +331,7 @@ class GroupNamesStep extends GetView<GroupPlayStepsController> {
                   )
                 ],
               );
-            }, controller.selectedItem),
+            }, controller.selectedPleyerNameIndex),
           ),
         ),
       ),

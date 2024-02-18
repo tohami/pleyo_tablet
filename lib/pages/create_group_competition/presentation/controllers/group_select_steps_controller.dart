@@ -12,6 +12,7 @@ import 'package:pleyo_tablet_app/model/strapi/station.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../routes/app_pages.dart';
+import '../../../../widgets/alert.dart';
 import '../../data/group_repository.dart';
 
 class GroupPlayStepsController extends SuperController<bool> {
@@ -22,7 +23,7 @@ class GroupPlayStepsController extends SuperController<bool> {
   final playerName4Controller = TextEditingController();
   final playerName5Controller = TextEditingController();
   RxBool goPlaying = false.obs;
-  RxInt selectedItem = (-1).obs;
+  RxInt selectedPleyerNameIndex = (-1).obs;
 
   GroupTemplates? template = null;
 
@@ -157,31 +158,44 @@ class GroupPlayStepsController extends SuperController<bool> {
     playersPersonas.addAll(templatePersonas.sublist(0, e.numberOfPlayers));
   }
 
-  createGroupCompetition() async{
-    var result = await repository.createGroupCompetition(gc.GroupCompetition(
-        playersCount: template!.numberOfPlayers,
-        playerCredit: template!.numberOfTurns,
-        startWithFirstGame: true,
-        duration: 60 * 24,
-        name: teamNameController.text,
-        tickets: playersPersonas
-            .mapIndexed((i, e) => gc.Ticket(
-                avatar: e.avatar,
-                nickname: e.nickname,
-                playOrder: i,
-                credit: template!.numberOfTurns ,isEnabled: true ,isActivated: true))
-            .toList(),
-        gameVariant: GameVariant(id: selectedGame?.id),
-        games: [gc.Game(id: selectedGame?.id)],
-        type: "group",
-        isStarted: false,
-        isEnabled: true,
-        isEnded: false,
-        organization: StationService.to.currentStation.attributes?.organization?.data?.id,
-        stations: [StationService.to.currentStation.id!]));
-    Get.rootDelegate.toNamed(
-      Routes.GROUP_TURN_LANDING,
-      arguments: result,
-    ) ;
+  RxBool createGroupLoading = false.obs ;
+
+  void createGroupCompetition() async{
+    try {
+      createGroupLoading.value = true;
+      var result = await repository.createGroupCompetition(gc.GroupCompetition(
+          playersCount: template!.numberOfPlayers,
+          playerCredit: template!.numberOfTurns,
+          startWithFirstGame: true,
+          duration: 60 * 24,
+          name: teamNameController.text,
+          tickets: playersPersonas
+              .mapIndexed((i, e) =>
+              gc.Ticket(
+                  avatar: e.avatar,
+                  nickname: e.nickname,
+                  playOrder: i,
+                  credit: template!.numberOfTurns,
+                  isEnabled: true,
+                  isActivated: true))
+              .toList(),
+          gameVariant: GameVariant(id: selectedGame?.id),
+          games: [gc.Game(id: selectedGame?.id)],
+          type: "group",
+          isStarted: false,
+          isEnabled: true,
+          isEnded: false,
+          organization: StationService.to.currentStation.attributes
+              ?.organization?.data?.id,
+          stations: [StationService.to.currentStation.id!]));
+      Get.rootDelegate.toNamed(
+        Routes.GROUP_TURN_LANDING,
+        arguments: result,
+      );
+    }catch (e) {
+      showAlert("Error", "Connection error");
+    } finally {
+      createGroupLoading.value = false;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -217,43 +218,50 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                 ),
               ),
               Expanded(child: Container()),
-              Container(
-                height: 90,
-                margin: const EdgeInsets.symmetric(horizontal: 50),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment(-1.0, 0.0),
-                    end: Alignment(1.0, 0.0),
-                    colors: [Color(ColorCode.white3), Color(ColorCode.black2)],
-                    stops: [0.0, 1.0],
-                  ),
-                  borderRadius: BorderRadius.circular(56.0),
-                  border: Border.all(
-                      width: 6.0, color: const Color(ColorCode.aqua)),
-                ),
-                child: GestureDetector(
-                  onTap: () => controller.createGroupCompetition() ,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomText(
-                        'Let\'s Play ',
-                        textStyle: TextStyles.textMedium.copyWith(
-                          fontFamily: 'CoconPro',
-                          color: const Color(ColorCode.aqua),
+              GestureDetector(
+                onTap: () {
+                  if(!controller.createGroupLoading.value){
+                    controller.createGroupCompetition();
+                  }
+                },
+                child: ObxValue<RxBool>((state) {
+                    return Container(
+                      height: 90,
+                      margin: const EdgeInsets.symmetric(horizontal: 50),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(-1.0, 0.0),
+                          end: Alignment(1.0, 0.0),
+                          colors: [Color(ColorCode.white3), Color(ColorCode.black2)],
+                          stops: [0.0, 1.0],
                         ),
+                        borderRadius: BorderRadius.circular(56.0),
+                        border: Border.all(
+                            width: 6.0, color: const Color(ColorCode.aqua)),
                       ),
-                      const SizedBox(
-                        width: 20,
+                      child:  state.value? CircularProgressIndicator(color: Colors.white) :Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                         CustomText(
+                            'Let\'s Play ',
+                            textStyle: TextStyles.textMedium.copyWith(
+                              fontFamily: 'CoconPro',
+                              color: const Color(ColorCode.aqua),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Image.asset(
+                            'assets/images/lets_play_arrow.png',
+                            width: 40,
+                            height: 25,
+                          ),
+                        ],
                       ),
-                      Image.asset(
-                        'assets/images/lets_play_arrow.png',
-                        width: 40,
-                        height: 25,
-                      ),
-                    ],
-                  ),
+                    ).animate(target: state.value?1:0);
+                  } , controller.createGroupLoading
                 ),
               )
             ],

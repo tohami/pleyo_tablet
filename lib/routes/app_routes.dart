@@ -20,6 +20,7 @@ abstract class Routes {
   static const SINGLE_PLAY_WELCOME = _Paths.WELCOME;
   static const SINGLE_PLAY_SELECT_GAME = _Paths.SINGLE_MODE_SELECT_GAME;
   static const SINGLE_PLAY_GAME_STATUS = _Paths.SINGLE_MODE_GAME_STATUS;
+  static const SINGLE_PLAY_GAME_PLAY = _Paths.SINGLE_PLAY_GAME_PLAY;
   static const SCAN_QR = _Paths.SCAN_QR;
   static const ACTIVATE = _Paths.ACTIVATE;
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
@@ -50,4 +51,6 @@ abstract class _Paths {
   static const HOME = '/home';
   static const GAME_STATUS = '/game_status';
   static const GAME_RESULT = '/game_result';
+
+  static const SINGLE_PLAY_GAME_PLAY = '/single_play_game_play';
 }

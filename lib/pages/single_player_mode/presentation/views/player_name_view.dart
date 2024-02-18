@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -71,10 +72,12 @@ class PlayerNameStep extends GetView<SinglePlayerModeController> {
                                   hintText: 'Type your Name',
                                   controller: controller.playerNameController,
                                   keyboardType: TextInputType.text,
+                                  onDoneClick: (text) => controller.createTicket(),
                                   fontStyle: TextStyles.textSmall.copyWith(
                                     fontFamily: 'CoconPro',
                                     color: Colors.white,
                                     fontWeight: FontWeight.w300,
+
                                   ),
                                 ),
                               ),
@@ -125,33 +128,37 @@ class PlayerNameStep extends GetView<SinglePlayerModeController> {
                     Positioned(
                       top: 140,
                       left: 270,
-                      child: GestureDetector(
-                        onTap: () => {
-                          if (goPlaying.value)
-                            controller.createTicket()
-                        },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                                goPlaying.value
-                                    ? 'assets/images/go_button_active_bg.png'
-                                    : 'assets/images/go_button_inactive_bg.png',
-                                height: 165,
-                                width: 171),
-                            CustomText(
-                              'Go',
-                              textStyle: TextStyles.textXLarge.copyWith(
-                                fontFamily: 'CoconPro',
-                                color: Color(
-                                  goPlaying.value
-                                      ? ColorCode.aqua
-                                      : ColorCode.lightGrey2,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                      child: ObxValue<RxBool>((state) {
+                          return GestureDetector(
+                            onTap: ()  {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              if (goPlaying.value && !state.value)
+                                controller.createTicket();
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset(
+                                    goPlaying.value
+                                        ? 'assets/images/go_button_active_bg.png'
+                                        : 'assets/images/go_button_inactive_bg.png',
+                                    height: 165,
+                                    width: 171).animate(target: state.value?1:0).scaleX(duration: GetNumUtils(500).milliseconds , begin: 1 , end: 0.8 ),
+                                state.value? CircularProgressIndicator(color: Colors.white) :CustomText(
+                                  'Go',
+                                  textStyle: TextStyles.textXLarge.copyWith(
+                                    fontFamily: 'CoconPro',
+                                    color: Color(
+                                      goPlaying.value
+                                          ? ColorCode.aqua
+                                          : ColorCode.lightGrey2,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        } , controller.createTicketLoading
                       ),
                     ),
                   ],

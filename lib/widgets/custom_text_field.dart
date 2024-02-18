@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle fontStyle;
   final EdgeInsets padding;
   final bool? isEnabled;
+  final Function(String)? onDoneClick ;
 
   const CustomTextField({
     Key? key,
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     required this.keyboardType,
     required this.fontStyle,
+    this.onDoneClick ,
     this.padding =
         const EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
     this.isEnabled = true,
@@ -25,6 +27,7 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("inside build") ;
     return Container(
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
@@ -45,6 +48,9 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         style: fontStyle,
         enableSuggestions: false,
+        onSubmitted: (query) {
+          onDoneClick?.call(query);
+        },
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyles.textSmall.copyWith(

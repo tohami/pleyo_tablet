@@ -17,6 +17,8 @@ class PlayerNameItem extends StatelessWidget {
   final bool hasSelectedItem;
   final TextEditingController controller;
 
+  final VoidCallback? onKeyBoardDoneClicked;
+
   const PlayerNameItem(
       {Key? key,
       required this.containerGradient,
@@ -27,7 +29,9 @@ class PlayerNameItem extends StatelessWidget {
       required this.name,
       required this.isItemSelected,
       required this.hasSelectedItem,
-      required this.controller})
+      required this.controller,
+        this.onKeyBoardDoneClicked
+      })
       : super(key: key);
 
   @override
@@ -88,6 +92,9 @@ class PlayerNameItem extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                             ),
+                            onSubmitted: (text) {
+                              onKeyBoardDoneClicked?.call() ;
+                            },
                             cursorColor: Colors.white,
                             cursorWidth: 2.5,
                             decoration: InputDecoration(
