@@ -35,10 +35,16 @@ class RemakePlayerItem extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CachedNetworkImage(
-                  imageUrl: playerImageURl,
-                  width: 80,
-                  height: 80,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: CachedNetworkImage(
+                      imageUrl: playerImageURl,
+                      width: 80,
+                      height: 80,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error)),
                 ),
                 Visibility(
                   visible: !playing,
@@ -92,11 +98,14 @@ class RemakePlayerItem extends StatelessWidget {
               );
             }),
           ),
-          CustomText(
-            playerName,
-            textStyle: TextStyles.textMedium.copyWith(
-              fontFamily: 'Helvetica',
-              color: const Color(ColorCode.extraLightGrey),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: CustomText(
+              playerName,
+              textStyle: TextStyles.textMedium.copyWith(
+                fontFamily: 'Helvetica',
+                color: const Color(ColorCode.extraLightGrey),
+              ),
             ),
           )
         ],

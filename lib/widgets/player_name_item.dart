@@ -128,9 +128,15 @@ class PlayerNameItem extends StatelessWidget {
                         color: imageBorderColor,
                       ),
                     ),
-                    child: CachedNetworkImage(imageUrl: imageUrl ,
-                        placeholder: (context, url) => CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(45),
+                      child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error)),
+                    ),
                   ),
                 ),
               ],
@@ -166,9 +172,16 @@ class PlayerNameItem extends StatelessWidget {
                             color: imageBorderColor,
                           ),
                         ),
-                        child: CachedNetworkImage(imageUrl: imageUrl ,
-                            placeholder: (context, url) => CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => Icon(Icons.error)),                      ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(45),
+                          child: CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error)),
+                        ),
+                      ),
                     ),
                     Positioned(
                       left: 200,
@@ -225,9 +238,16 @@ class PlayerNameItem extends StatelessWidget {
                             color: imageBorderColor,
                           ),
                         ),
-                        child: CachedNetworkImage(imageUrl: imageUrl ,
-                            placeholder: (context, url) => CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => Icon(Icons.error)),                      ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(45),
+                          child: CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error)),
+                        ),
+                      ),
                     ),
                     Positioned(
                       left: 160,

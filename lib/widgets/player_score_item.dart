@@ -51,7 +51,10 @@ class PlayerScoreItem extends StatelessWidget {
                   color: imageBorderColor,
                 ),
               ),
-              child: CachedNetworkImage(imageUrl:imageUrl),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: CachedNetworkImage(imageUrl:imageUrl)
+              ),
             ),
           ),
           Positioned(

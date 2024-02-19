@@ -99,7 +99,7 @@ class FinalResult extends GetView<GroupRotationController> {
                 //Exit button redirect to splash
                 GestureDetector(
                   onTap: () => {
-                    Get.rootDelegate.toNamed(Routes.MODE)
+                    controller.exitCompetition(showAlert: false)
                   },
                   child: Container(
                     width: 130,

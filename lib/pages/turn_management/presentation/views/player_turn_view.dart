@@ -33,7 +33,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
           ),
           titleSpacing: 5,
           leading: GestureDetector(
-            onTap: () => controller.exitCompetition(),
+            onTap: () => controller.exitCompetition(showAlert: true),
             child: const Icon(
               Icons.cancel_outlined,
               color: Color(ColorCode.darkGrey),
@@ -84,14 +84,16 @@ class PlayerTurn extends GetView<GroupRotationController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CachedNetworkImage(
-                                imageUrl: controller.currentPlayer.value?.avatar?.data?.attributes?.url??"",
-                                placeholder: (context, url) {
-                                  return Image.asset( 'assets/images/first_player_image_large.png');
-                                },
-                                errorWidget: (context, url, error) {
-                                  return Image.asset( 'assets/images/first_player_image_large.png');
-                                },
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(999.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: controller.currentPlayer.value?.avatar?.data?.attributes?.url??"",
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) {
+                                    return Image.asset( 'assets/images/first_player_image_large.png');
+                                  },
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,

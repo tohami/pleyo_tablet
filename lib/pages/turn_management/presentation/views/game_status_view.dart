@@ -19,20 +19,20 @@ class GameStatus extends GetView<GroupRotationController> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(ColorCode.primaryBackground),
-          title: const CustomText(
-            'Exit',
-            textStyle: TextStyles.textSmall,
-            textAlign: TextAlign.start,
-          ),
-          titleSpacing: 5,
-          leading: GestureDetector(
-            onTap: () => controller.exitCompetition(),
-            child: const Icon(
-              Icons.arrow_back,
-              color: Color(ColorCode.darkGrey),
-              size: 35,
-            ),
-          ),
+          // title: const CustomText(
+          //   'Exit',
+          //   textStyle: TextStyles.textSmall,
+          //   textAlign: TextAlign.start,
+          // ),
+          // titleSpacing: 5,
+          // leading: GestureDetector(
+          //   onTap: () => controller.stopGame(),
+          //   child: const Icon(
+          //     Icons.arrow_back,
+          //     color: Color(ColorCode.darkGrey),
+          //     size: 35,
+          //   ),
+          // ),
         ),
         body: Container(
           color: const Color(ColorCode.primaryBackground),

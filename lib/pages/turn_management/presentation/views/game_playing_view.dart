@@ -18,20 +18,20 @@ class GamePlaying extends GetView<GroupRotationController> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(ColorCode.primaryBackground),
-          title: const CustomText(
-            'Quit',
-            textStyle: TextStyles.textSmall,
-            textAlign: TextAlign.start,
-          ),
-          titleSpacing: 5,
-          leading: GestureDetector(
-            onTap: () => controller.stopGame(),
-            child: const Icon(
-              Icons.cancel_outlined,
-              color: Color(ColorCode.darkGrey),
-              size: 35,
-            ),
-          ),
+          // title: const CustomText(
+          //   'Quit',
+          //   textStyle: TextStyles.textSmall,
+          //   textAlign: TextAlign.start,
+          // ),
+          // titleSpacing: 5,
+          // leading: GestureDetector(
+          //   onTap: () => controller.stopGame(),
+          //   child: const Icon(
+          //     Icons.cancel_outlined,
+          //     color: Color(ColorCode.darkGrey),
+          //     size: 35,
+          //   ),
+          // ),
         ),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 10),

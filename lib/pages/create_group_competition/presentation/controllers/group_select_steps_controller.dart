@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,8 +49,9 @@ class GroupPlayStepsController extends SuperController<bool> {
   void onInit() {
     super.onInit();
     templatePersonas.clear();
+    var personaRandomIndex = Random().nextInt(StationService.to.personasGroups.length) ;
     templatePersonas
-        .addAll(StationService.to.personasGroups[0].attributes!.personas!);
+        .addAll(StationService.to.personasGroups[personaRandomIndex].attributes!.personas!);
 
     teamNameController.addListener(() {
       if (teamNameController.text.isNotEmpty &&

@@ -14,6 +14,11 @@ class GroupVideoWidget extends StatelessWidget {
   final VoidCallback onTap;
   final RxBool isInitialized = false.obs;
 
+  final Map<int, String> difficultyImagePaths = {
+    1: 'assets/images/game_easy.png',
+    2: 'assets/images/game_medium.png',
+    3: 'assets/images/game_diffcult.png'
+  };
   GroupVideoWidget(this.variantModel,
       {required this.onTap, Key? key})
       : super(key: key) {}
@@ -21,6 +26,18 @@ class GroupVideoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var gameDifficulties = variantModel.attributes?.gameDifficulties?.data;
+    if (gameDifficulties != null) {
+      gameDifficulties.sort((a, b) {
+        // Assuming 'gamehubId' is a numeric type (int). If it's a string, you might need to use compareTo directly
+        // without parsing them as integers.
+        var idA = a.attributes?.gamehubId;
+        var idB = b.attributes?.gamehubId;
+        if(idA ==null || idB == null)
+          return -1 ;
+
+        return idA.compareTo(idB);
+      });
+    }
     return GestureDetector(
       onTap: onTap,
       child: Stack(
@@ -115,19 +132,8 @@ class GroupVideoWidget extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return GameDifficultyItem(
-                      imageUrl: gameDifficulties[index]
-                          .attributes
-                          ?.difficulty ==
-                          1
-                          ? 'assets/images/game_easy.png'
-                          : gameDifficulties[index]
-                          .attributes
-                          ?.difficulty ==
-                          2
-                          ? 'assets/images/game_medium.png'
-                          : 'assets/images/game_diffcult.png',
-                      difficultyName:
-                      gameDifficulties[index].attributes?.name ?? "");
+                      imageUrl: difficultyImagePaths[gameDifficulties[index].attributes?.difficulty] ?? 'assets/images/game_difficult.png',
+                      difficultyName: gameDifficulties[index].attributes?.name ?? "");
                 },
               ),
             )
