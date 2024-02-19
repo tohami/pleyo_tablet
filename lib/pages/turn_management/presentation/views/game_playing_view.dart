@@ -53,7 +53,7 @@ class GamePlaying extends GetView<GroupRotationController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children : controller.players.map((player) {
+                    children : (controller.players..sort((a , p) => a.playOrder! - p.playOrder!)).map((player) {
                       var scores = controller.getPlayerScores(player) ;
                       return RemakePlayerItem(
                         playerImageURl: player.avatar?.data?.attributes?.url??"",

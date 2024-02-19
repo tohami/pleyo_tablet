@@ -166,7 +166,7 @@ class ScanQRView extends GetView<TicketController> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: 420,
+                            height: 370,
                             child: QRView(
                               key: qrKey,
                               onQRViewCreated: controller.onQRViewCreated,
@@ -177,6 +177,7 @@ class ScanQRView extends GetView<TicketController> {
                       ),
               );
             }, controller.isQrScan),
+            numPadItem("H"),
             DeviceInfo()
           ],
         ),
@@ -201,6 +202,8 @@ class ScanQRView extends GetView<TicketController> {
             } else if (number == "X") {
               text.value = text.substring(
                   0, text.value.length - (text.value.length == 5 ? 2 : 1));
+            }else if(number == "H") {
+              Get.rootDelegate.popRoute();
             } else {
               if (text.value.length == 9) {
                 return;
@@ -216,8 +219,8 @@ class ScanQRView extends GetView<TicketController> {
           },
           child: Container(
             margin: const EdgeInsets.all(4),
-            width: 150,
-            height: 130,
+            width: 140,
+            height: 120,
             decoration: BoxDecoration(
               // color: const Color(0xff585858),
               borderRadius: BorderRadius.circular(12.0),
@@ -253,11 +256,18 @@ class ScanQRView extends GetView<TicketController> {
                           size: 88,
                           color: Color(0xc4ffffff),
                         )
-                      : Text(
-                          number,
+                      : (number == "H")
+                          ? Icon(
+                              Icons.home,
+                              size: 88,
+                              color: Color(0xc4ffffff),
+                            )
+                          : Text(
+                              number,
                           style: const TextStyle(
                             fontFamily: 'Helvetica Neue',
-                            fontSize: 118,
+                            fontSize: 100,
+                            fontWeight: FontWeight.w600,
                             color: Color(0xc4ffffff),
                           ),
                           softWrap: false,
