@@ -41,7 +41,7 @@ class ScaledGameWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25.0),
                     border: Border.all(
                       width: 3.0,
-                      color: const Color(ColorCode.grey),
+                      color: const Color(ColorCode.accentLightColor),
                     ),
                     boxShadow: const [
                       BoxShadow(

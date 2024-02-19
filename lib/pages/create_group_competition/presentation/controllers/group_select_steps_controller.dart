@@ -179,7 +179,7 @@ class GroupPlayStepsController extends SuperController<bool> {
                   isEnabled: true,
                   isActivated: true))
               .toList(),
-          gameVariant: GameVariant(id: selectedGame?.id),
+          gameVariant: GameVariant(id: selectedGameVariant.value.id),
           games: [gc.Game(id: selectedGame?.id)],
           type: "group",
           isStarted: false,

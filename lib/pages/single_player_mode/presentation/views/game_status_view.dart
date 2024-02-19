@@ -72,8 +72,7 @@ class SingleModeGameStatus extends GetView<SinglePlayerModeController> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    selectedGameAttributes.image!.data!
-                                        .attributes!.formats!.thumbnail!.url!,
+                                    selectedGameAttributes.image?.data?.attributes?.url??"",
                                   ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(

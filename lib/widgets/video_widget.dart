@@ -47,7 +47,7 @@ class VideoWidget extends StatelessWidget {
                 return state.value
                     ? VideoPlayer(_controller)
                     :*/ Container(
-                        child:CachedNetworkImage(imageUrl: variantModel.attributes!.image!.data!.attributes!.formats!.small!.url!,
+                        child:CachedNetworkImage(imageUrl: variantModel.attributes?.image?.data?.attributes?.url??"",
                         placeholder: (context, url) {
                           return Center(
                             child: CircularProgressIndicator(

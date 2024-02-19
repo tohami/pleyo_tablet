@@ -76,8 +76,7 @@ class GameWidgetSingleMode extends StatelessWidget {
                       return Container(
                         padding: EdgeInsets.only(right: 10),
                         child: ScaledGameWidget(
-                          gameImageUrl: gameVariant.attributes!.image!.data!
-                              .attributes!.formats!.thumbnail!.url!,
+                          gameImageUrl: gameVariant.attributes?.image?.data?.attributes?.url??"",
                           gameName: gameVariant.attributes!.name!,
                           gameDifficultiesList:
                               gameVariant.attributes!.gameDifficulties!.data,

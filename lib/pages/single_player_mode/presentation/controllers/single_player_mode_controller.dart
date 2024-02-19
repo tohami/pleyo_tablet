@@ -217,7 +217,7 @@ class SinglePlayerModeController extends SuperController<bool> {
         actionCancelText: 'Exit',
         actionAcceptText: 'Play again',
         onCancelClicked: () => {Get.back(result: true)},
-        onAcceptClicked: () => {Get.back(result: true)}));
+        onAcceptClicked: () => {Get.back(result: false)}));
     if (exit) {
       Get.rootDelegate.backUntil(Routes.MODE);
     } else {

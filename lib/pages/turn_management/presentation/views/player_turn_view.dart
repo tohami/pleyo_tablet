@@ -293,7 +293,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(23.0),
                                     child: CachedNetworkImage(
-                                      imageUrl:selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
+                                      imageUrl:selectedGameAttributes?.image?.data?.attributes?.url??"",
                                       fit: BoxFit.fill,
                                     ),
                                   )

@@ -71,7 +71,7 @@ class GameStatus extends GetView<GroupRotationController> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    selectedGameAttributes?.image?.data?.attributes?.formats?.small?.url??"",
+                                    selectedGameAttributes?.image?.data?.attributes?.url??"",
                                   ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(

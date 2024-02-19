@@ -33,7 +33,7 @@ class GroupVideoWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
               border: Border.all(
                 width: 3.0,
-                color: const Color(ColorCode.accentLightColor),
+                color: const Color(ColorCode.grey),
               ),
               boxShadow: const [
                 BoxShadow(
@@ -49,7 +49,7 @@ class GroupVideoWidget extends StatelessWidget {
                   ? ClipRRect(
                 borderRadius: BorderRadius.circular(23.0),
                 child: CachedNetworkImage(
-                  imageUrl: variantModel.attributes?.image?.data?.attributes?.formats?.small?.url??"",
+                  imageUrl: variantModel.attributes?.image?.data?.attributes?.url??"",
                   fit: BoxFit.fill,
                 ),
               )

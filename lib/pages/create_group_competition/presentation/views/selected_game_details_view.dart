@@ -19,18 +19,25 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(ColorCode.primaryBackground),
-          title: const CustomText(
-            'Games',
-            textStyle: TextStyles.textSmall,
-            textAlign: TextAlign.start,
+          title: GestureDetector(
+            onTap: () => Get.back(),
+            child: const CustomText(
+              'Games',
+              textStyle: TextStyles.textSmall,
+              textAlign: TextAlign.start,
+            ),
           ),
           titleSpacing: 5,
           leading: GestureDetector(
             onTap: () => Get.back(),
-            child: const Icon(
-              Icons.arrow_back,
-              color: Color(ColorCode.darkGrey),
-              size: 35,
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.arrow_back,
+                  color: Color(ColorCode.darkGrey),
+                  size: 35,
+                ),
+              ],
             ),
           ),
         ),
@@ -91,7 +98,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                           borderRadius: BorderRadius.circular(25.0),
                           border: Border.all(
                             width: 3.0,
-                            color: const Color(ColorCode.grey),
+                            color: const Color(ColorCode.accentLightColor),
                           ),
                           boxShadow: const [
                             BoxShadow(
@@ -103,25 +110,18 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                         ),
                         margin: const EdgeInsets.symmetric(horizontal: 50),
                         child: Container(
-                          child:
-                              selectedGameAttributes?.image?.data?.attributes !=
-                                      null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(23.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: selectedGameAttributes!
-                                            .image!
-                                            .data!
-                                            .attributes!
-                                            .formats!
-                                            .small!
-                                            .url!,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    )
-                                  : const CircularProgressIndicator(
-                                      color: Color(ColorCode.grey),
-                                    ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(23.0),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                selectedGameAttributes!
+                                    .image!
+                                    .data!
+                                    .attributes?.url??"",
+                              )
+                            )
+                          ),
                         ),
                       ),
                       Container(
