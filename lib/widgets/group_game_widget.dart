@@ -17,9 +17,9 @@ class GroupGameWidget extends StatelessWidget {
 
   const GroupGameWidget(
       {required this.isChampion,
-        required this.game,
-        required this.onGameSelected,
-        Key? key})
+      required this.game,
+      required this.onGameSelected,
+      Key? key})
       : super(key: key);
 
   @override
@@ -59,7 +59,6 @@ class GroupGameWidget extends StatelessWidget {
                   ),
                 ),
               ),
-
               Container(
                 height: 175,
                 child: ListView.builder(
@@ -69,9 +68,6 @@ class GroupGameWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GroupVideoWidget(
                       game.value[index],
-                      buttonColor: isChampion
-                          ? ColorCode.customAccent2Background
-                          : ColorCode.yellow3Background,
                       onTap: () {
                         onGameSelected(game.value[index]);
                       },

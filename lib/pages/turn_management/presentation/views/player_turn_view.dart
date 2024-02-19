@@ -425,55 +425,55 @@ class PlayerTurn extends GetView<GroupRotationController> {
                 ),
               ),
               Expanded(child: Container()),
-              GestureDetector(
-                onTap: () {
-                  Get.dialog(
-                    AlertDialogWidget(
-                        content:
-                            'If you skip, you will lose this turn and can’t undo. Proceed?',
-                        actionCancelText: 'Skip',
-                        actionAcceptText: 'Resume',
-                        onCancelClicked: () => {Get.back(result: false)},
-                        onAcceptClicked: () => {Get.back(result: false)}),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        height: 50,
-                        width: 250,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment(-1.0, 0.055),
-                            end: Alignment(0.699, 0.0),
-                            colors: [
-                              Color(ColorCode.black),
-                              Color(ColorCode.primaryBackground)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          borderRadius: BorderRadius.circular(56.0),
-                          border: Border.all(
-                              width: 4.0, color: const Color(ColorCode.aqua)),
-                        ),
-                        child: CustomText(
-                          'Skip to next player',
-                          textStyle: TextStyles.textMedium.copyWith(
-                            fontFamily: 'CoconPro',
-                            color: const Color(ColorCode.lightGrey6),
-                            fontWeight: FontWeight.w300,
-                          ),
-                          textAlign: TextAlign.center,
-                        )),
-                    const SizedBox(
-                      width: 45,
-                    ),
-                  ],
-                ),
-              )
+              // GestureDetector(
+              //   onTap: () {
+              //     Get.dialog(
+              //       AlertDialogWidget(
+              //           content:
+              //               'If you skip, you will lose this turn and can’t undo. Proceed?',
+              //           actionCancelText: 'Skip',
+              //           actionAcceptText: 'Resume',
+              //           onCancelClicked: () => {Get.back(result: false)},
+              //           onAcceptClicked: () => {Get.back(result: false)}),
+              //     );
+              //   },
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.end,
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       Container(
+              //           height: 50,
+              //           width: 250,
+              //           alignment: Alignment.center,
+              //           decoration: BoxDecoration(
+              //             gradient: const LinearGradient(
+              //               begin: Alignment(-1.0, 0.055),
+              //               end: Alignment(0.699, 0.0),
+              //               colors: [
+              //                 Color(ColorCode.black),
+              //                 Color(ColorCode.primaryBackground)
+              //               ],
+              //               stops: [0.0, 1.0],
+              //             ),
+              //             borderRadius: BorderRadius.circular(56.0),
+              //             border: Border.all(
+              //                 width: 4.0, color: const Color(ColorCode.aqua)),
+              //           ),
+              //           child: CustomText(
+              //             'Skip to next player',
+              //             textStyle: TextStyles.textMedium.copyWith(
+              //               fontFamily: 'CoconPro',
+              //               color: const Color(ColorCode.lightGrey6),
+              //               fontWeight: FontWeight.w300,
+              //             ),
+              //             textAlign: TextAlign.center,
+              //           )),
+              //       const SizedBox(
+              //         width: 45,
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),

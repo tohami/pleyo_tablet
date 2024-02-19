@@ -10,13 +10,12 @@ import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_difficulty_item.dart';
 
 class GroupVideoWidget extends StatelessWidget {
-  final int buttonColor;
   final GameVariant variantModel;
   final VoidCallback onTap;
   final RxBool isInitialized = false.obs;
 
   GroupVideoWidget(this.variantModel,
-      {required this.onTap, required this.buttonColor, Key? key})
+      {required this.onTap, Key? key})
       : super(key: key) {}
 
   @override
@@ -54,8 +53,8 @@ class GroupVideoWidget extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               )
-                  : CircularProgressIndicator(
-                color: Color(buttonColor),
+                  : const CircularProgressIndicator(
+                color: Color(ColorCode.customAccent2Background),
               ),
             ),
           ),

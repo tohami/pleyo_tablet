@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
+import 'package:pleyo_tablet_app/widgets/group_video_widget.dart';
 import 'package:pleyo_tablet_app/widgets/scaled_game_widget.dart';
 import 'package:pleyo_tablet_app/widgets/video_widget.dart';
 
@@ -89,14 +90,12 @@ class GameWidgetSingleMode extends StatelessWidget {
                     } else {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 60.0),
-                        child: VideoWidget(
+                        child: GroupVideoWidget(
                           gameVariant,
-                          buttonColor: isChampion
-                              ? ColorCode.customAccent2Background
-                              : ColorCode.yellow3Background,
                           onTap: () {
                             onGameSelected(gameVariant);
                           },
+                          key: const ValueKey(1),
                         ),
                       );
                     }
