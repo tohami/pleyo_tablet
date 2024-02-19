@@ -95,7 +95,7 @@ class ScanQRView extends GetView<TicketController> {
                                 .padRight(4, ' -'),
                             style: const TextStyle(
                               fontFamily: 'Helvetica Neue',
-                              fontSize: 80,
+                              fontSize: 70,
                               color: Color(0xc4ffffff),
                             ),
                             softWrap: false,
@@ -117,7 +117,7 @@ class ScanQRView extends GetView<TicketController> {
                                 .padRight(4, ' -'),
                             style: const TextStyle(
                               fontFamily: 'Helvetica Neue',
-                              fontSize: 80,
+                              fontSize: 70,
                               color: Color(0xc4ffffff),
                             ),
                             softWrap: false,

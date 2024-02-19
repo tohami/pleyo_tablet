@@ -48,7 +48,12 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
 
     StationService.to.isReady.listenAndPump((event) {
       if(event){
-        Get.rootDelegate.offNamed(Routes.MODE);
+        var currentStation = StationService.to.currentStation.attributes ;
+        if(currentStation?.singlePlayerEnabled == true || currentStation?.multiplayerEnabled == true || currentStation?.groupEnabled == true) {
+          Get.rootDelegate.offNamed(Routes.MODE);
+        }else {
+          Get.rootDelegate.offNamed(Routes.SCAN_QR);
+        }
       }
     });
   }
