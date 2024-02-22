@@ -49,7 +49,6 @@ class Attributes {
   Attributes({this.name, this.effort, this.description, this.subtitle, this.createdAt, this.updatedAt,this.image, this.gameDifficulties, this.game});
 
   Attributes.fromJson(Map<String, dynamic> json) {
-    print(json) ;
     name = json['name'];
     effort = json['effort'];
     gamehubId = json['gamehubId'];

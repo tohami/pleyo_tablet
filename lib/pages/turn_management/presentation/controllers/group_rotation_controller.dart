@@ -243,6 +243,7 @@ class GroupRotationController extends SuperController<bool> {
 
       if(newScore.attributes?.competitions?[0].isEnded == true){
         print("--------------------------------------------> BACK TO LANDING") ;
+        getLeaderboard();
         Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
         await Future.delayed(500.milliseconds);
         print("--------------------------------------------> GO TO RESULT") ;

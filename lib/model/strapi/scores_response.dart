@@ -53,11 +53,9 @@ class TeamsScore {
 class Score {
   int? id;
   String? dateTime;
-  num? gameDuration;
   bool? isPartyMode;
   String? partyName;
   String? playerNickName;
-  String? publicHashtag;
   num? score;
   String? team;
   String? avatarUrl ;
@@ -65,11 +63,9 @@ class Score {
   Score(
       {this.id,
         this.dateTime,
-        this.gameDuration,
         this.isPartyMode,
         this.partyName,
         this.playerNickName,
-        this.publicHashtag,
         this.score,
         this.team,
       this.avatarUrl});
@@ -77,11 +73,9 @@ class Score {
   Score.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
     dateTime = json['DateTime'];
-    gameDuration = json['GameDuration'];
     isPartyMode = json['IsPartyMode'];
     partyName = json['PartyName'];
     playerNickName = json['PlayerNickName'];
-    publicHashtag = json['PublicHashtag'];
     score = json['Score'];
     team = json['team'];
     avatarUrl = json['avatarUrl'];
@@ -91,11 +85,9 @@ class Score {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Id'] = this.id;
     data['DateTime'] = this.dateTime;
-    data['GameDuration'] = this.gameDuration;
     data['IsPartyMode'] = this.isPartyMode;
     data['PartyName'] = this.partyName;
     data['PlayerNickName'] = this.playerNickName;
-    data['PublicHashtag'] = this.publicHashtag;
     data['Score'] = this.score;
     data['team'] = this.team;
     data['avatarUrl'] = this.avatarUrl;

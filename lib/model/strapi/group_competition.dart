@@ -158,43 +158,31 @@ class Ticket {
 
 class Score {
   int? id;
-  String? gameEndDate;
   int? score;
-  String? gameStartDate;
   bool? visible;
   bool? completed;
-  int? duration;
 
   Score({
     this.id,
-    this.gameEndDate,
     this.score,
-    this.gameStartDate,
     this.visible,
     this.completed,
-    this.duration,
   });
 
   Score.fromJson(dynamic json) {
     id = json['id'];
-    gameEndDate = json['attributes']['gameEndDate'];
     score = json['attributes']['score'];
-    gameStartDate = json['attributes']['gameStartDate'];
     visible = json['attributes']['visible'];
     completed = json['attributes']['completed'];
-    duration = json['attributes']['duration'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['id'] = this.id;
     data['attributes'] = {
-      'gameEndDate': this.gameEndDate,
       'score': this.score,
-      'gameStartDate': this.gameStartDate,
       'visible': this.visible,
       'completed': this.completed,
-      'duration': this.duration,
     };
     return data;
   }
@@ -204,20 +192,17 @@ class Score {
 class Game {
   int? id;
   String? name;
-  dynamic location;
   int? gamehubId;
 
   Game({
     this.id,
     this.name,
-    this.location,
     this.gamehubId,
   });
 
   Game.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['attributes']['name'];
-    location = json['attributes']['location'];
     gamehubId = json['attributes']['gamehubId'];
   }
 
@@ -226,7 +211,6 @@ class Game {
     data['id'] = this.id;
     data['attributes'] = {
       'name': this.name,
-      'location': this.location,
       'gamehubId': this.gamehubId,
     };
     return data;
