@@ -90,6 +90,7 @@ android {
             }
         }
     }
+    namespace 'com.pleyo_tablet_app'
 }
 
 flutter {
