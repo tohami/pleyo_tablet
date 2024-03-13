@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -228,6 +227,7 @@ class GroupRotationController extends SuperController<bool> {
           onAcceptClicked: () => {
             Get.back(result: true)
           }),
+     barrierDismissible: false
     );
    if(exit == true)
      return ;

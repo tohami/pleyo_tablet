@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -184,6 +183,7 @@ class SinglePlayerModeController extends SuperController<bool> {
           actionAcceptText: 'Resume',
           onCancelClicked: () => {Get.back(result: true)},
           onAcceptClicked: () => {Get.back(result: false)}),
+      barrierDismissible: false
     );
     if (!exit) return;
 
