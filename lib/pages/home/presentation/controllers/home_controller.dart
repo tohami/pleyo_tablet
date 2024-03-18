@@ -146,12 +146,12 @@ class HomeController extends SuperController<bool> {
   }
 
   void onLogoutClicked() {
-    if (isLogoutActive.value) {
+    // if (isLogoutActive.value) {
       //logout the player
-      Get.rootDelegate.offNamed(Routes.SPLASH);
-    } else {
-      isLogoutActive.value = true;
-    }
+      Get.rootDelegate.offNamed(Routes.SCAN_QR);
+    // } else {
+    //   isLogoutActive.value = true;
+    // }
   }
 
   void onAddPlayerClicked() {
