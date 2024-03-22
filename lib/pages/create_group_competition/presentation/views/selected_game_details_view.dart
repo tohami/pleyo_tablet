@@ -113,7 +113,7 @@ class SelectedGameDetails extends GetView<GroupPlayStepsController> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(23.0),
                               image: DecorationImage(
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               image: CachedNetworkImageProvider(
                                 selectedGameAttributes!
                                     .image!

@@ -67,7 +67,7 @@ class GroupVideoWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(23.0),
                 child: CachedNetworkImage(
                   imageUrl: variantModel.attributes?.image?.data?.attributes?.url??"",
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               )
                   : const CircularProgressIndicator(

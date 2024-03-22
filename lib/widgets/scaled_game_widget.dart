@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
@@ -55,9 +56,9 @@ class ScaledGameWidget extends StatelessWidget {
                     child: gameImageUrl != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(23.0),
-                            child: Image.network(
-                              gameImageUrl,
-                              fit: BoxFit.fill,
+                            child: CachedNetworkImage(
+                              imageUrl: gameImageUrl,
+                              fit: BoxFit.cover,
                             ),
                           )
                         : const CircularProgressIndicator(

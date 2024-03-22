@@ -298,7 +298,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
                                       borderRadius: BorderRadius.circular(23.0),
                                       child: CachedNetworkImage(
                                         imageUrl:selectedGameAttributes?.image?.data?.attributes?.url??"",
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                       ),
                                     )
                                   : const CircularProgressIndicator(
