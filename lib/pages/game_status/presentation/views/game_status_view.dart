@@ -32,13 +32,10 @@ class GameStatusView extends GetView<GameStatusController> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    playerPointsWidget(),
                     const SizedBox(
                       height: 15,
                     ),
-                    playerNameWidget(playerName: controller.playerName! , onLogoutClicked: ()=>{
-                      showLogoutGameDialog(context)
-                    }),
+                    playerNameWidget(playerName: controller.currentTicket.attributes!.nickname! , onLogoutClicked: ()=>{}),
                   ],
                 ),
                 Expanded(child: Container()),
@@ -69,7 +66,7 @@ class GameStatusView extends GetView<GameStatusController> {
                         ),
                         child: Center(
                           child: CustomText(
-                            'Quitter',
+                            'Quit',
                             textStyle: TextStyles.textXLarge.copyWith(
                               color: controller.isChampion
                                   ? const Color(ColorCode.accentLightColor)
@@ -92,89 +89,6 @@ class GameStatusView extends GetView<GameStatusController> {
     );
   }
 
-  Widget playerPointsWidget() {
-    return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 60,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: const Color(ColorCode.darkGrayBackground),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-              ),
-              border: Border.all(
-                  width: 3.0,
-                  color: controller.isChampion
-                      ? const Color(ColorCode.accentLightColor)
-                      : const Color(ColorCode.yellowBackground)),
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/icon_coins.svg',
-                  fit: BoxFit.cover,
-                  width: 30,
-                  height: 30,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Container(
-                  width: 70,
-                  child: CustomText(
-                    controller.points.toString(),
-                    textAlign: TextAlign.start,
-                    textStyle: TextStyles.textMedium.copyWith(
-                      fontSize: 20,
-                      shadows: [
-                        const Shadow(
-                          color: Color(ColorCode.textShadowBackground),
-                          offset: Offset(0, 3),
-                          blurRadius: 10,
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
-              ),
-              border: Border.all(
-                  width: 3.0,
-                  color: controller.isChampion
-                      ? const Color(ColorCode.accentLightColor)
-                      : const Color(ColorCode.yellowBackground)),
-              color: controller.isChampion
-                  ? const Color(ColorCode.accentLightColor)
-                  : const Color(ColorCode.yellowBackground),
-            ),
-            child: SvgPicture.asset(
-              'assets/images/icon_logout.svg',
-              fit: BoxFit.fill,
-            ),
-          )
-        ],
-      ),
-    );
-  }
   void showLogoutGameDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -192,7 +106,7 @@ class GameStatusView extends GetView<GameStatusController> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomText(
-                    'Voulez-vous vraiment\nquitter la partie ?',
+                    'Are you sure you want to\nquit the game?',
                     textStyle: TextStyles.textLarge.copyWith(
                       fontSize: 24,
                     ),
@@ -201,7 +115,7 @@ class GameStatusView extends GetView<GameStatusController> {
                     height: 17,
                   ),
                   CustomText(
-                    '(Vos crédits ne vous seront pas remboursés)',
+                    '(Your score will not be added)',
                     textStyle: TextStyles.textMedium.copyWith(
                         fontFamily: 'Parisine Plus Std Clair',
                         fontSize: 18,
@@ -214,13 +128,13 @@ class GameStatusView extends GetView<GameStatusController> {
               CustomButtonContainer(
                 CustomButton(
                   CustomText(
-                    'Non',
+                    'No',
                     textStyle: TextStyles.textMedium.copyWith(
                         color: const Color(ColorCode.black2Background),
                         fontSize: 25),
                     textAlign: TextAlign.center,
                   ),
-                  () {
+                      () {
                     Navigator.of(context).pop();
                   },
                   backGroundColor: const Color(ColorCode.white3Background),
@@ -235,7 +149,7 @@ class GameStatusView extends GetView<GameStatusController> {
               CustomButtonContainer(
                 CustomButton(
                   CustomText(
-                    'Oui',
+                    'Yes',
                     textStyle: TextStyles.textMedium.copyWith(
                         color: controller.isChampion
                             ? const Color(ColorCode.accentLightColor)
@@ -243,7 +157,7 @@ class GameStatusView extends GetView<GameStatusController> {
                         fontSize: 25),
                     textAlign: TextAlign.center,
                   ),
-                  () {
+                      () {
                     controller.stopGame() ;
                     Navigator.of(context).pop();
                   },

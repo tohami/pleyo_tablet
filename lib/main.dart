@@ -3,30 +3,32 @@ import 'dart:isolate';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 
 import 'bindings.dart';
+import 'consts/colors.dart';
 import 'firebase_options.dart';
 import 'lang/translation_service.dart';
 import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-const MACHINE_ID = String.fromEnvironment('ID' , defaultValue: "1");
-const MACHINE_USERNAME = String.fromEnvironment('U');
-const MACHINE_PASSWORD = String.fromEnvironment('P');
+// const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin-staging.pleyohub.com");
+// const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://192.168.137.1:1337");
+const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin.pleyohub.com");
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
-    runApp(const MyApp());
+  runApp(const MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
@@ -43,6 +45,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GetMaterialApp.router(
       builder: (context, widget) => ResponsiveWrapper.builder(
           BouncingScrollWrapper.builder(context, widget!),

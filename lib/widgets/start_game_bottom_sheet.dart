@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
-import 'package:pleyo_tablet_app/model/game_model.dart';
+import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/pages/home/presentation/controllers/home_controller.dart';
 import 'package:pleyo_tablet_app/widgets/custom_button.dart';
 import 'package:pleyo_tablet_app/widgets/custom_button_container.dart';
@@ -14,7 +14,7 @@ import 'package:pleyo_tablet_app/widgets/player_widget.dart';
 
 class StartGameBottomSheet extends StatelessWidget {
   final HomeController controller;
-  final VariationList gameVariation;
+  final GameVariant gameVariation;
   final Function(int) onDifficultSelected;
   StartGameBottomSheet(
       {required this.controller,
@@ -26,7 +26,7 @@ class StartGameBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var gameDifficulties =
-        gameVariation.difficultyAvailable!.map((e) => e.difficulty ?? "");
+        gameVariation.attributes?.gameDifficulties?.data;
     print(gameDifficulties);
     return Container(
           margin: const EdgeInsets.symmetric(horizontal: 56, vertical: 66),
@@ -39,74 +39,45 @@ class StartGameBottomSheet extends StatelessWidget {
                 curve: Curves.fastOutSlowIn,
                 child: SizedBox(
                       width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(
-                              height: 50,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          CustomText(
+                            'Choose your level',
+                            textStyle: TextStyles.textMedium.copyWith(
+                              fontFamily: 'Parisine Plus Std Clair',
+                              fontSize: 20,
+                              color: const Color(ColorCode.white3Background),
+                              height: 0.6,
                             ),
-                            CustomText(
-                              'Choix de la difficulté',
-                              textStyle: TextStyles.textMedium.copyWith(
-                                fontFamily: 'Parisine Plus Std Clair',
-                                fontSize: 20,
-                                color: const Color(ColorCode.white3Background),
-                                height: 0.6,
-                              ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          CustomText(
+                            'Which level?',
+                            textStyle: TextStyles.textLarge.copyWith(
+                              fontSize: 40,
+                              height: 0.3,
                             ),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                            CustomText(
-                              'Quelle difficulté ?',
-                              textStyle: TextStyles.textLarge.copyWith(
-                                fontSize: 40,
-                                height: 0.3,
-                              ),
-                            ),
-                            gameDifficulties.contains("0")
-                                ? GameDifficultyWidget(
-                                    title: 'Débutant',
-                                    color: ColorCode.greenBackground,
-                                    onTap: () {
-                                    onDifficultSelected(0);
-                                    },
-                                  )
-                                : Container(),
-                            gameDifficulties.contains("1")
-                                ? GameDifficultyWidget(
-                                    title: 'Initié',
-                                    color: ColorCode.yellow2Background,
-                                    onTap: () {
-                                      onDifficultSelected(
-                                        1);
-                                    },
-                                  )
-                                : Container(),
-                            gameDifficulties.contains("2")
-                                ? GameDifficultyWidget(
-                                    title: 'Difficile',
-                                    color: Colors.deepOrange.value,
-                                    onTap: () {
-                                      onDifficultSelected(
-                                        2);
-                                    },
-                                  )
-                                : Container(),
-                            gameDifficulties.contains("3")
-                                ? GameDifficultyWidget(
-                                    title: 'Très difficile',
-                                    color: ColorCode.redBackground,
-                                    onTap: () {
-                                      onDifficultSelected(
-                                        3);
-                                    },
-                                  )
-                                : Container(),
-                          ],
-                        ),
+                          ),
+                          ...gameDifficulties!.map((e)  {
+                            String color = e.attributes!.color!.replaceAll('#', '0xff');
+
+                            return GameDifficultyWidget(
+                                title: e.attributes!.name!,
+                                color:  int.parse(color),
+                                onTap: () {
+                                  onDifficultSelected(e.id!);
+                                }) ;
+                          }).toList() ,
+                        ],
                       ),
+                    ),
               )
             ],
           ),

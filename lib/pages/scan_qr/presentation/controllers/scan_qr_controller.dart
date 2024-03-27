@@ -1,28 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'dart:convert';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pleyo_tablet_app/model/qrcode_model.dart';
+import 'package:pleyo_tablet_app/pages/scan_qr/data/tickets_repository.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
+import 'package:pleyo_tablet_app/widgets/alert.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 import '../../../../routes/app_pages.dart';
 
-class ScanQRController extends SuperController<bool>
+class TicketController extends SuperController<bool>
     with GetSingleTickerProviderStateMixin {
   late AnimationController _boxAnimationController;
   late Animation<double> boxAnimation;
+  final isQrScan = true.obs ;
 
-  String username = "";
 
-  ScanQRController();
+  TicketController({required this.repository});
+
+  final ITicketRepository repository;
 
   QRViewController? controller;
-  RxBool isScanned = false.obs;
 
+  final RxString inputCode = "".obs;
+  RxBool isScanned = false.obs;
+  RxBool isLoading = false.obs ;
+  RxString errorMsg = "".obs ;
   TextEditingController emailController = TextEditingController();
 
   @override
-  void onInit() {
+  void onInit() async {
+    ScreenBrightness().setScreenBrightness(1);
     super.onInit();
     _boxAnimationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
@@ -42,6 +52,84 @@ class ScanQRController extends SuperController<bool>
     change(null, status: RxStatus.success());
   }
 
+  Future checkTicketWithPinCode(String code) async{
+    if(isLoading.value)
+      return ;
+
+    errorMsg.value = "" ;
+    try {
+      isLoading.value = true ;
+      var ticket = await repository.checkTicket(code, "");
+      StationService.to.currentTicket = ticket ;
+      if (ticket.attributes?.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME);
+        FirebaseCrashlytics.instance.setUserIdentifier(ticket.id.toString()) ;
+      } else {
+        print("ticket ticket" + ticket.id.toString()) ;
+        Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
+      }
+    } catch (e) {
+      print(e) ;
+      if(e is MapEntry){
+        errorMsg.value = e.value ;
+      }else {
+        errorMsg.value = "Invalid ticket" ;
+      }
+      FirebaseCrashlytics.instance.log("Get ticket Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
+    } finally {
+      inputCode.value = "" ;
+      isLoading.value = false ;
+    }
+  }
+
+  Future onTicketScanned(String url) async {
+    try {
+      errorMsg.value = "" ;
+      controller?.pauseCamera() ;
+      var data = url.split("/") ;
+      if(data.length != 6) {
+        var result = await showAlert("Error", "Invalid QrCode") ;
+        controller?.resumeCamera() ;
+        return ;
+      }
+      var codeText = data[4].padLeft(8 , "0");
+      inputCode.value = codeText.substring(0, 4) + "-" + codeText.substring(4, 8);
+
+      var ticket = await repository.checkTicket(data[4], data[5]);
+      StationService.to.currentTicket = ticket ;
+      if (ticket.attributes?.isActivated == true) {
+        Get.rootDelegate.offNamed(Routes.HOME);
+        FirebaseCrashlytics.instance.setUserIdentifier(ticket.id.toString()) ;
+      } else {
+        print("ticket ticket" + ticket.id.toString()) ;
+        Get.rootDelegate.offNamed(Routes.ACTIVATE , arguments: ticket);
+      }
+    } catch (e) {
+      inputCode.value = "" ;
+      if(e is MapEntry){
+        errorMsg.value = e.value ;
+      }else {
+        errorMsg.value = "Invalid ticket" ;
+      }
+      controller?.resumeCamera() ;
+      FirebaseCrashlytics.instance.log("Get ticket Error") ;
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          null,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
+    }
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -49,12 +137,14 @@ class ScanQRController extends SuperController<bool>
 
   @override
   void onClose() {
+    ScreenBrightness().resetScreenBrightness();
     // ignore: avoid_print
     print('onClose called');
     controller?.dispose();
     _boxAnimationController.dispose();
     super.onClose();
   }
+
 
   @override
   void didChangeMetrics() {
@@ -108,81 +198,32 @@ class ScanQRController extends SuperController<bool>
     print('onResumed called');
   }
 
-  DatabaseReference qrCodeRef = FirebaseDatabase.instance.ref("QRCode");
-
   void onQRViewCreated(QRViewController controller) async {
+    if (kDebugMode) {
+      await onTicketScanned(
+          "https://pleyo-operator-frontend.vercel.app/activate/20873/0f2c19f3-9c0b-4805-9c48-b83950ee5f66");
+      return;
+    }
+
     this.controller = controller;
     controller.resumeCamera();
 
     CameraFacing cameraInfo = await controller.getCameraInfo();
-    if (cameraInfo == CameraFacing.back) {
+    if (!kDebugMode && cameraInfo == CameraFacing.back) {
       await controller.flipCamera();
     }
 
-    if (kDebugMode) {
-      print("reading qr coe ");
-      final code = "-MzQWdLFUQnEYYNlmrV4";
-      var qrCodeEntity = await qrCodeRef.child(code).get();
-      final qrCodeValue = qrCodeEntity.value is List
-          ? (qrCodeEntity.value as List)[0]
-          : qrCodeEntity.value;
-
-      print(qrCodeValue);
-      var qrCode = QrCodeModel.fromJson(qrCodeValue);
-      print(qrCode.isActivated);
-      if (qrCode.isActivated == true) {
-        Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
-        return;
-      }else {
-        Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: qrCode);
-      }
-    }
+    var loading = false;
     controller.scannedDataStream.listen((scanData) async {
-      controller.stopCamera();
-      try {
-        isScanned.value = true;
-        final code = scanData.code?.split("?id=").last;
-        var qrCodeEntity = await qrCodeRef.child(code!).get();
-        if (qrCodeEntity.exists) {
-          final qrCodeValue = qrCodeEntity.value is List
-              ? (qrCodeEntity.value as List)[0]
-              : qrCodeEntity.value;
-
-          var qrCode = QrCodeModel.fromJson(qrCodeValue);
-          if (qrCode.isActivated == true) {
-            Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCode);
-          } else {
-            Get.rootDelegate.offNamed(Routes.ACTIVATE, arguments: qrCode);
-            // await Get.defaultDialog(
-            //     title: "Error",
-            //     content: Text(
-            //         "Ticket not activated yet, please activate your ticket first "),
-            //     onConfirm: () {
-            //       Get.back();
-            //     });
-          }
-        }
-      } catch (e) {
-        Get.snackbar("Error", "Invalid Qr code");
-        print(e);
-      } finally {
-        controller.resumeCamera();
-        isScanned.value = false;
+      if (loading) {
+        return;
       }
+      loading = true;
+      isScanned.value = true;
+      final data = scanData.code;
+      await onTicketScanned(data!);
+      loading = false;
+      isScanned.value = false;
     });
-  }
-
-  void activateTicket(String val) async{
-    if(val.trim().length < 4 ) {
-      Get.snackbar("Error", "Nickname must be more than 4 characters") ;
-      return ;
-    }
-    QrCodeModel qrCodeModel = Get.rootDelegate.arguments() ;
-    qrCodeModel.isActivated = true ;
-    qrCodeModel.customerName = val ;
-    var currentQrCodeRef = qrCodeRef.child(qrCodeModel.publicHashTag!);
-
-    await currentQrCodeRef.set(qrCodeModel.toJson());
-    Get.rootDelegate.offNamed(Routes.HOME, arguments: qrCodeModel);
   }
 }
