@@ -17,14 +17,20 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -37,34 +43,11 @@ class DefaultFirebaseOptions {
     );
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBG2Jxyl1PlQbe4S3IvNlo7cNbPAZmSPJ8',
-    appId: '1:843733599056:web:70f4909b687d5f3577e255',
-    messagingSenderId: '843733599056',
-    projectId: 'spacejumpevreux-4820c',
-    authDomain: 'spacejumpevreux-4820c.firebaseapp.com',
-    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'spacejumpevreux-4820c.appspot.com',
-    measurementId: 'G-786QZ0CP7P',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAqAte8mr6VlaLRgB96pgFLslaVpaFhxg8',
-    appId: '1:843733599056:android:5d4fb995376a94cb77e255',
-    messagingSenderId: '843733599056',
-    projectId: 'spacejumpevreux-4820c',
-    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'spacejumpevreux-4820c.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD2CY_MUVJAYY6K08GSKwv80A6VXiFWxgE',
-    appId: '1:843733599056:ios:d3fa6293b0b314a977e255',
-    messagingSenderId: '843733599056',
-    projectId: 'spacejumpevreux-4820c',
-    databaseURL: 'https://spacejumpevreux-4820c-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'spacejumpevreux-4820c.appspot.com',
-    iosClientId: '843733599056-djc5lrhefpfjlq96iv68mk3i21ilqlp6.apps.googleusercontent.com',
-    iosBundleId: 'com.pleyo.tablet',
+    apiKey: 'AIzaSyAE87-eMDSr6UsEuabGJVADMr2fN-8DsEQ',
+    appId: '1:587312422114:android:867f544e55266158c092bb',
+    messagingSenderId: '587312422114',
+    projectId: 'pleyo-operator',
+    storageBucket: 'pleyo-operator.appspot.com',
   );
 }

@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/main.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
+import 'package:pleyo_tablet_app/widgets/alert.dart';
 
 import '../../../../routes/app_pages.dart';
 import '../../data/splash_repository.dart';
@@ -11,7 +13,6 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   late AnimationController _buttonAnimationController;
   RxBool isButtonTapDown = false.obs ;
   late Animation<double> buttonAnimation;
-
   SplashController({required this.splashRepository});
 
   final ISplashRepository splashRepository;
@@ -44,7 +45,17 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
     }on TickerCanceled catch (e) {
 
     }
-    FirebaseAuth.instance.signInWithEmailAndPassword(email: MACHINE_USERNAME, password: MACHINE_PASSWORD) ;
+
+    StationService.to.isReady.listenAndPump((event) {
+      if(event){
+        var currentStation = StationService.to.currentStation.attributes ;
+        if(currentStation?.singlePlayerEnabled == true || currentStation?.multiplayerEnabled == true || currentStation?.groupEnabled == true) {
+          Get.rootDelegate.offNamed(Routes.MODE);
+        }else {
+          Get.rootDelegate.offNamed(Routes.SCAN_QR);
+        }
+      }
+    });
   }
 
   @override
@@ -59,9 +70,4 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onResumed() {}
 
-  onStartClicked() {
-    if(FirebaseAuth.instance.currentUser != null) {
-      Get.rootDelegate.offNamed(Routes.SCAN_QR);
-    }
-  }
 }

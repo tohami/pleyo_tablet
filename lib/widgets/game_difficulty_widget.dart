@@ -69,7 +69,7 @@ class GameDifficultyWidget extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomText(
-                              "Annuler",
+                              "Cancel",
                               textStyle: TextStyles.textMedium.copyWith(
                                 fontSize: 20,
                                 color: Color(ColorCode.black2Background)

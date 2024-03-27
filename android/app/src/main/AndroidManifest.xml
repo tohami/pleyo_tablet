@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pleyo_tablet_app">
-   <application
-        android:label="pleyo_tablet_app"
+    <uses-permission android:name="android.permission.CAMERA" />
+    <application
+        android:label="Pleyo controller"
         android:name="${applicationName}"
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher">

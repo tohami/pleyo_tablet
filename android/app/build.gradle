@@ -21,6 +21,16 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dartEnvironmentVariables = []
+if (project.hasProperty('dart-defines')) {
+    dartEnvironmentVariables = project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                [(pair.first()): pair.last()]
+            }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -43,20 +53,44 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.pleyo_tablet_app"
+        applicationId "com.pleyo_controller"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            storeFile file('../pleyo.jks')
+            storePassword 'Pleyo2022!'
+            keyAlias 'pleyo-operator'
+            keyPassword 'Pleyo2022!'
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def appName = "Pleyo_controller"
+                    def buildType = variant.buildType.name
+                    def newName
+                    if (buildType == 'debug'){
+                        newName = "app-debug.apk"
+                    } else {
+                        newName = "${appName}_${buildType}_${flutterVersionName}_S${dartEnvironmentVariables.ID}.apk"
+                    }
+                    output.outputFileName = newName
+                }
+            }
         }
     }
+    namespace 'com.pleyo_tablet_app'
 }
 
 flutter {

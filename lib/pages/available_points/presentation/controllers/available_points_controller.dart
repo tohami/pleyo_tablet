@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
-import 'package:pleyo_tablet_app/model/qrcode_model.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/station_service.dart';
+
+import '../../../../model/strapi/ticket.dart';
 
 class AvailablePointsController extends SuperController<dynamic> {
 
-  QrCodeModel qrCodeModel = Get.rootDelegate.arguments() ;
+  Ticket ticket = StationService.to.currentTicket;
 
   AvailablePointsController();
 
@@ -13,7 +15,7 @@ class AvailablePointsController extends SuperController<dynamic> {
     super.onInit();
 
     Future.delayed(const Duration(seconds: 6)).then((value) {
-      Get.rootDelegate.offNamed(Routes.HOME , arguments: qrCodeModel);
+      Get.rootDelegate.offNamed(Routes.HOME);
     });
   }
 

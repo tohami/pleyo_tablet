@@ -7,12 +7,15 @@ class CustomText extends StatelessWidget {
   final int maxLines;
   final TextStyle textStyle;
   final TextAlign textAlign;
+  final TextHeightBehavior? textHeightBehavior;
 
   const CustomText(this.text,
       {Key? key,
       this.textStyle = TextStyles.textMedium,
       this.maxLines = 2,
-      this.textAlign = TextAlign.center})
+      this.textAlign = TextAlign.center,
+      this.textHeightBehavior,
+      })
       : super(key: key);
 
   @override
@@ -24,6 +27,7 @@ class CustomText extends StatelessWidget {
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       softWrap: true,
+      textHeightBehavior: textHeightBehavior,
     );
   }
 }
