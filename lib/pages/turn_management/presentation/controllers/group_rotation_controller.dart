@@ -175,7 +175,7 @@ class GroupRotationController extends SuperController<bool> {
       var result = await gamesRepository.startGame(diff, variant, currentPlayer.value!.id!) ;
       FirebaseCrashlytics.instance.log("START NEW GAME $variant ,d $diff API RESULT ${result.id}") ;
 
-      await Future.delayed(Duration(seconds: 30)) ;
+      await Future.delayed(Duration(seconds: 60)) ;
       if(gameStatus.value == 1) {
         gameStatus.value = 0 ;
         gameFail.value = true ;

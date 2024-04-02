@@ -130,7 +130,7 @@ class SinglePlayerModeController extends SuperController<bool> {
           await gamesRepository.startGame(diff, variant, currentPlayer!.id!);
       FirebaseCrashlytics.instance.log("Sending start game success");
       print("Sending start game success");
-      await Future.delayed(Duration(seconds: 40));
+      await Future.delayed(Duration(seconds: 60));
       if (gameStatus.value == 1) {
         gameStatus.value = 0;
         gameFail.value = true;
