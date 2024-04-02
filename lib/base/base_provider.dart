@@ -19,7 +19,7 @@ class BaseProvider extends GetConnect {
 
     httpClient.addResponseModifier((request, response) {
       printInfo(info: request.url.toString()) ;
-      printInfo(info: response.bodyString!) ;
+      // printInfo(info: response.bodyString!) ;
       return response ;
     });
   }

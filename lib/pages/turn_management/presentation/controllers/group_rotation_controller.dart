@@ -67,6 +67,9 @@ class GroupRotationController extends SuperController<bool> {
           attributes: sr.Attributes.fromJson(status.data));
       var competitions = newScore.attributes?.competitions ;
 
+      print("---------------------- NEW EVENT --------------------------") ;
+      print("${status.type} ${newScore.id} ") ;
+
       if(competitions == null || competitions.indexWhere((element) => element.id == _groupCompetition.id) == -1){
         print("---------------------- THIS EVENT IS NOT OURS --------------------------") ;
         FirebaseCrashlytics.instance.log("THIS EVENT IS NOT OURS") ;

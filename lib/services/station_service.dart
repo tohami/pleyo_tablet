@@ -48,10 +48,10 @@ class StationService extends GetxService {
       //     if(gameStatus.value.type != GameStatusType.STARTED)
       //   })
       // }
-      debugPrint("new event -----------") ;
-      debugPrint(event);
-      debugPrint(args.toString()) ;
-      debugPrint("---------------------") ;
+      // debugPrint("new event -----------") ;
+      // debugPrint(event);
+      // debugPrint(args[]) ;
+      // debugPrint("---------------------") ;
 
     });
     // socket.on('startGame',

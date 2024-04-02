@@ -38,7 +38,7 @@ class GamePlaying extends GetView<GroupRotationController> {
             // ),
           ),
           body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10 , vertical: 40),
             color: const Color(ColorCode.primaryBackground),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

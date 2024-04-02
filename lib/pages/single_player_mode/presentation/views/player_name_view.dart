@@ -33,7 +33,7 @@ class PlayerNameStep extends GetView<SinglePlayerModeController> {
           ),
         ),
         body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 60),
+          padding: const EdgeInsets.symmetric(horizontal: 60 , vertical: 20),
           color: const Color(ColorCode.primaryBackground),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

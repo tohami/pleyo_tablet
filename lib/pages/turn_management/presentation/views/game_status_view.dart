@@ -41,6 +41,7 @@ class GameStatus extends GetView<GroupRotationController> {
           ),
           body: Container(
             color: const Color(ColorCode.primaryBackground),
+            padding: EdgeInsets.only(top: 40 , bottom: 40),
             child: Column(
               children: [
                 const SizedBox(

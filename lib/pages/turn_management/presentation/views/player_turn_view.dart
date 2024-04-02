@@ -46,6 +46,7 @@ class PlayerTurn extends GetView<GroupRotationController> {
             ),
           ),
           body: Container(
+            padding: EdgeInsets.only(top: 40 , bottom: 40),
             color: const Color(ColorCode.primaryBackground),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

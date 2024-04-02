@@ -56,7 +56,7 @@ class FinalResult extends GetView<GroupRotationController> {
           ),
           body: Obx(() {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
               color: const Color(ColorCode.primaryBackground),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

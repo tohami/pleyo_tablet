@@ -41,12 +41,10 @@ class SingleModeGameStatus extends GetView<SinglePlayerModeController> {
             ),
           ),
           body: Container(
+            padding: const EdgeInsets.only(top: 60 ,bottom: 80),
             color: const Color(ColorCode.primaryBackground),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
                 ObxValue<RxBool>((gameFail) {
                   return CustomText(
                     'Go',
@@ -172,9 +170,6 @@ class SingleModeGameStatus extends GetView<SinglePlayerModeController> {
                     ),
                   );
                 }, controller.gameFail),
-                const SizedBox(
-                  height: 80,
-                ),
               ],
             ),
           ),

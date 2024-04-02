@@ -40,7 +40,7 @@ class SinglePlayerGamePlay extends GetView<SinglePlayerModeController> {
             ),
           ),
           body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10 , vertical: 20),
             color: const Color(ColorCode.primaryBackground),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
