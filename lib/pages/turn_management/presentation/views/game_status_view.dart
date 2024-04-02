@@ -15,10 +15,10 @@ class GameStatus extends GetView<GroupRotationController> {
   @override
   Widget build(BuildContext context) {
     var selectedGameAttributes = controller.gameVariant;
-    return WillPopScope(
-      onWillPop: () async {
-        controller.stopGame() ;
-        return false;
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        controller.stopGame("GroupGameStatusScreen:user click on back button");
+        return true;
       },
       child: SafeArea(
         child: Scaffold(

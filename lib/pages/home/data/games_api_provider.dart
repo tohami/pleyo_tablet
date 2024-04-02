@@ -9,7 +9,7 @@ import '../../../model/strapi/scores_response.dart';
 
 abstract class IGamesProvider {
   Future<Response<ScoreResponse>> startGame(gameDifficulty, gameVariant, ticketId) ;
-  Future<Response<ScoreResponse>> updateScoreStatus(String status,int scoreId) ;
+  Future<Response<ScoreResponse>> updateScoreStatus(String status,int scoreId, {String? reason}) ;
   Future<Response<LeaderboardApiResponse>> listScores(String competition, String game) ;
 }
 
@@ -30,7 +30,7 @@ class GamesProvider extends BaseProvider
 
   @override
   Future<Response<ScoreResponse>> updateScoreStatus(
-      String status, int scoreId) {
+      String status, int scoreId , {String? reason}) {
     int? stationId = StationService.to.currentStation.id ;
 
     return post<ScoreResponse>(
@@ -38,6 +38,7 @@ class GamesProvider extends BaseProvider
         {
           "CommandeId": status,
           "ScoreId": scoreId,
+          "Reason" : reason
         },
         decoder: ScoreResponse.fromJson);
   }

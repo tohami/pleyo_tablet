@@ -10,6 +10,7 @@ import "package:collection/collection.dart";
 import 'package:pleyo_tablet_app/model/strapi/station.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/data/single_play_repository.dart';
+import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:pleyo_tablet_app/model/strapi/score_response.dart' as sr;
 
@@ -51,6 +52,7 @@ class SinglePlayerModeController extends SuperController<bool> {
   void onInit() {
     super.onInit();
     playerNameController.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerNameController.text.isNotEmpty &&
           playerNameController.text.length >= 3) {
         goPlaying.value = true;
@@ -59,7 +61,6 @@ class SinglePlayerModeController extends SuperController<bool> {
       }
     });
     generatePIN();
-
     subscription = StationService.to.gameStatus.listen((status) async {
       print("from game playing ${status.type}");
       switch (status.type) {
@@ -109,6 +110,7 @@ class SinglePlayerModeController extends SuperController<bool> {
   }
 
   void startGame(int diff) async {
+    Get.find<InactivityRedirectService>().userInteracted() ;
     this.selectedDifficulty = diff;
     gameFail.value = false;
     int variant = selectedVariant.value!.id!;
@@ -168,6 +170,8 @@ class SinglePlayerModeController extends SuperController<bool> {
       await Future.delayed(4.seconds);
       Get.rootDelegate.toNamed(
           "${Routes.SINGLE_PLAY_LANDING}/${Routes.SINGLE_PLAY_SELECT_GAME}");
+
+      Get.find<InactivityRedirectService>().userInteracted() ;
     } catch (e) {
       showAlert("Error", "Connection error");
     } finally {
@@ -175,7 +179,7 @@ class SinglePlayerModeController extends SuperController<bool> {
     }
   }
 
-  void stopGame() async {
+  void stopGame(String reason) async {
     var exit = await Get.dialog(
       AlertDialogWidget(
           content: 'You will lose this game’s progress. Sure? ',
@@ -194,7 +198,7 @@ class SinglePlayerModeController extends SuperController<bool> {
           popMode: PopMode.History);
 
       gamesRepository.updateScoreStatus(
-          "GAME_STOP", StationService.to.gameStatus.value.data["id"]);
+          "GAME_STOP", StationService.to.gameStatus.value.data["id"] , reason: reason);
 
       // _groupCompetition = await gamesRepository.getCompetition(_groupCompetition.id!);
     } catch (e) {
@@ -212,12 +216,20 @@ class SinglePlayerModeController extends SuperController<bool> {
   }
 
   showDialogAfterGameFinished() async {
-    var exit = await Get.dialog(AlertDialogWidget(
-        content: 'Game is finished ,what do you want? ',
+    // Create a delayed future that represents the timeout.
+    var timeoutFuture = Future.delayed(const Duration(seconds: 30), () => true);
+
+    // Show the dialog and wait for the user's response or the timeout, whichever comes first.
+    var exit = await Future.any([
+      Get.dialog(AlertDialogWidget(
+        content: 'Game is finished, what do you want?',
         actionCancelText: 'Exit',
         actionAcceptText: 'Play again',
-        onCancelClicked: () => {Get.back(result: true)},
-        onAcceptClicked: () => {Get.back(result: false)}));
+        onCancelClicked: () => Get.back(result: true), // Note: Use Get.back(result: true) instead of a set
+        onAcceptClicked: () => Get.back(result: false),
+      ) , barrierDismissible: false),
+      timeoutFuture
+    ]);
     if (exit) {
       Get.rootDelegate.backUntil(Routes.MODE);
     } else {

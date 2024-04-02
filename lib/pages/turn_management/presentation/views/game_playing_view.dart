@@ -14,8 +14,10 @@ class GamePlaying extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        return true;
+      },
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -71,7 +73,7 @@ class GamePlaying extends GetView<GroupRotationController> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        controller.stopGame() ;
+                        controller.stopGame("GroupGamePlayingScreen:user click on Quite button") ;
                       },
                       child: Container(
                         width: 200,

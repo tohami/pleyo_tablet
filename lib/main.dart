@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
@@ -28,7 +29,7 @@ Future main() async {
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runZonedGuarded<Future<void>>(() async {
-  runApp(const MyApp());
+  runApp(MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
@@ -41,7 +42,19 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  final InactivityRedirectService _inactivityService = InactivityRedirectService(
+    onTimeout: () {
+      Get.rootDelegate.backUntil(Routes.MODE);
+      // Your logic to navigate to the home screen goes here.
+      // For example, if using a navigator key: navigatorKey.currentState?.pushNamed('/home');
+    },
+  );
+
+  MyApp({Key? key}) : super(key: key){
+    // _inactivityService.startListening();
+    Get.put(_inactivityService);
+  }
 
   @override
   Widget build(BuildContext context) {

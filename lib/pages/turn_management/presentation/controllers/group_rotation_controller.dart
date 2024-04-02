@@ -8,6 +8,7 @@ import 'package:pleyo_tablet_app/model/strapi/group_competition.dart';
 import 'package:pleyo_tablet_app/model/strapi/score_response.dart' as sr;
 import 'package:pleyo_tablet_app/model/strapi/scores_response.dart' as ld;
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 
 import '../../../../model/start_game.dart';
 import '../../../../model/strapi/game_difficulty.dart';
@@ -48,6 +49,7 @@ class GroupRotationController extends SuperController<bool> {
   void onInit() {
     super.onInit();
     groupEmailController.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (groupEmailController.text.isNotEmpty &&
           isValidEmail(groupEmailController.text)) {
         isEmailValid.value = true;
@@ -67,6 +69,7 @@ class GroupRotationController extends SuperController<bool> {
 
       if(competitions == null || competitions.indexWhere((element) => element.id == _groupCompetition.id) == -1){
         print("---------------------- THIS EVENT IS NOT OURS --------------------------") ;
+        FirebaseCrashlytics.instance.log("THIS EVENT IS NOT OURS") ;
         return  ;
       }
       switch(status.type) {
@@ -76,26 +79,23 @@ class GroupRotationController extends SuperController<bool> {
           break;
         case GameStatusType.STARTING:
           gameStatus.value = 1 ;
-          FirebaseCrashlytics.instance.log("game starting");
           break;
         case GameStatusType.STARTED:
           // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
-          print("--------------------------------------------> ${status.type} ${status.data["id"]}") ;
-          print("--------------------------------------------> to GAME PLAY") ;
+          FirebaseCrashlytics.instance.log("to GAME PLAY ${status.type} ${status.data["id"]}") ;
           Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_GAME_PLAY}");
           gameStatus.value = 0 ;
-          FirebaseCrashlytics.instance.log("Game started") ;
           break;
         case GameStatusType.FINISHED:
         case GameStatusType.CLOSED:
           // gameStatus.value = 0;
 
           if (newScore.attributes?.competitions?[0].isEnded == true) {
-            print("--------------------------------------------> ${status.type} ${status.data["id"]}") ;
-            print("--------------------------------------------> back to TURN") ;
+            Get.find<InactivityRedirectService>().userInteracted() ;
+            FirebaseCrashlytics.instance.log("back to TURN ${status.type} ${status.data["id"]}") ;
             Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING);
             await Future.delayed(500.milliseconds);
-            print("--------------------------------------------> go to FINAL RESULT") ;
+            FirebaseCrashlytics.instance.log("go to FINAL RESULT") ;
             getLeaderboard();
             Get.rootDelegate.toNamed(
                 "${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_RESULT}");
@@ -108,17 +108,14 @@ class GroupRotationController extends SuperController<bool> {
           currentPlayer.value = newScore
               .attributes?.competitions?[0].currentPlayerTurn
               ?.mapTicketsToTicket();
-          print("--------------------------------------------> ${status.type} ${status.data["id"]}") ;
-          print("--------------------------------------------> back to TURN") ;
+          FirebaseCrashlytics.instance.log("back to TURN ${status.type} ${status.data["id"]}") ;
           Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING);
           startTimer();
           break;
         case GameStatusType.CRASHED:
         gameStatus.value = 0;
           FirebaseCrashlytics.instance
-              .log("Game stopped by gamehub durring game starting");
-          print("--------------------------------------------> ${status.type} ${status.data["id"]}") ;
-          print("--------------------------------------------> back to TURN") ;
+              .log("back to TURN ${status.type} ${status.data["id"]}");
           Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING);
           startTimer();
           break;
@@ -144,7 +141,6 @@ class GroupRotationController extends SuperController<bool> {
       counter--;
       remainingSeconds.value = counter ;
       if (counter == 0) {
-        print('Cancel timer');
         timer.cancel();
         startGame(defaultDifficulty!.id!) ;
       }
@@ -165,24 +161,19 @@ class GroupRotationController extends SuperController<bool> {
   // RxInt gameStatus = 0.obs;
 
   void startGame( int diff) async {
+    Get.find<InactivityRedirectService>().userInteracted() ;
     timer?.cancel() ;
     gameFail.value = false ;
     int variant = _groupCompetition.gameVariant!.id! ;
-    FirebaseCrashlytics.instance.log("Starting new game v $variant ,d $diff") ;
-    print("--------------------------------------------> START NEW GAME $variant ,d $diff") ;
-    print("--------------------------------------------> GO TO GAME STATUS") ;
+    FirebaseCrashlytics.instance.log("START NEW GAME $variant ,d $diff") ;
     Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_GAME_STATUS}");
     var now = DateTime.now();
     gameStatus.value = 1;
     await Future.delayed(const Duration(seconds: 1));
 
-    //check available balance
     try {
-      //stop game before start new one
-      FirebaseCrashlytics.instance.log("Stopping the old game ") ;
       var result = await gamesRepository.startGame(diff, variant, currentPlayer.value!.id!) ;
-      print("--------------------------------------------> START NEW GAME $variant ,d $diff API RESULT ${result.id}") ;
-      FirebaseCrashlytics.instance.log("Sending start game success") ;
+      FirebaseCrashlytics.instance.log("START NEW GAME $variant ,d $diff API RESULT ${result.id}") ;
 
       await Future.delayed(Duration(seconds: 30)) ;
       if(gameStatus.value == 1) {
@@ -214,7 +205,7 @@ class GroupRotationController extends SuperController<bool> {
         .hasMatch(email);
   }
 
-  void stopGame()async {
+  void stopGame(String reason)async {
    var exit = await Get.dialog(
       AlertDialogWidget(
           content:
@@ -236,17 +227,17 @@ class GroupRotationController extends SuperController<bool> {
       FirebaseCrashlytics.instance.log("Stopping the game by tablet") ;
       print("--------------------------------------------> STOP GAME") ;
       var newScore = await gamesRepository.updateScoreStatus("GAME_STOP",
-          StationService.to.gameStatus.value.data["id"]);
+          StationService.to.gameStatus.value.data["id"] , reason:reason);
 
       players.value = newScore.attributes?.competitions?[0].tickets?.map((e) => e.mapTicketsToTicket()).toList() ?? [] ;
       currentPlayer.value = newScore.attributes?.competitions?[0].currentPlayerTurn?.mapTicketsToTicket() ;
 
       if(newScore.attributes?.competitions?[0].isEnded == true){
-        print("--------------------------------------------> BACK TO LANDING") ;
+        FirebaseCrashlytics.instance.log(" BACK TO LANDING") ;
         getLeaderboard();
         Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING) ;
         await Future.delayed(500.milliseconds);
-        print("--------------------------------------------> GO TO RESULT") ;
+        FirebaseCrashlytics.instance.log(" GO TO RESULT") ;
         Get.rootDelegate.toNamed("${Routes.GROUP_TURN_LANDING}/${Routes.GROUP_TURN_RESULT}") ;
         return ;
       }
@@ -285,7 +276,7 @@ class GroupRotationController extends SuperController<bool> {
           },
           onAcceptClicked: () => {
             Get.back(result: false)
-          }),
+          }),barrierDismissible: false
     ) : true;
     if(exit) {
       Get.rootDelegate.backUntil(Routes.MODE);

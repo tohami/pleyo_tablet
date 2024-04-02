@@ -16,10 +16,10 @@ class SingleModeGameStatus extends GetView<SinglePlayerModeController> {
   @override
   Widget build(BuildContext context) {
     var selectedGameAttributes = controller.selectedVariant.value!.attributes!;
-    return WillPopScope(
-      onWillPop: () async {
-        controller.stopGame() ;
-        return false;
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        controller.stopGame("GameStatusScreen:user click on back button");
+        return true;
       },
       child: SafeArea(
         child: Scaffold(
@@ -32,7 +32,7 @@ class SingleModeGameStatus extends GetView<SinglePlayerModeController> {
             ),
             titleSpacing: 5,
             leading: GestureDetector(
-              onTap: () => controller.stopGame(),
+              onTap: () => controller.stopGame("GamePlayingScreen:user click on toolbar quite button"),
               child: const Icon(
                 Icons.arrow_back,
                 color: Color(ColorCode.darkGrey),

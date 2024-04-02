@@ -9,6 +9,7 @@ import 'package:pleyo_tablet_app/model/strapi/group_competition.dart' as gc;
 import 'package:pleyo_tablet_app/model/strapi/organization.dart';
 import 'package:pleyo_tablet_app/model/strapi/personas.dart';
 import 'package:pleyo_tablet_app/model/strapi/station.dart';
+import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../routes/app_pages.dart';
@@ -53,6 +54,8 @@ class GroupPlayStepsController extends SuperController<bool> {
         .addAll(StationService.to.personasGroups[personaRandomIndex].attributes!.personas!);
 
     teamNameController.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
+
       if (teamNameController.text.isNotEmpty &&
           teamNameController.text.length >= 3) {
         goPlaying.value = true;
@@ -64,6 +67,7 @@ class GroupPlayStepsController extends SuperController<bool> {
     playerName1Controller.text = templatePersonas[0].nickname ?? "";
 
     playerName1Controller.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerName1Controller.text.isNotEmpty) {
         playersPersonas[0].nickname = playerName1Controller.text;
       } else {
@@ -73,6 +77,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
     playerName2Controller.text = templatePersonas[1].nickname ?? "";
     playerName2Controller.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerName2Controller.text.isNotEmpty) {
         playersPersonas[1].nickname = playerName2Controller.text;
       } else {
@@ -82,6 +87,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
     playerName3Controller.text = templatePersonas[2].nickname ?? "";
     playerName3Controller.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerName3Controller.text.isNotEmpty) {
         playersPersonas[2].nickname = playerName3Controller.text;
       } else {
@@ -91,6 +97,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
     playerName4Controller.text = templatePersonas[3].nickname ?? "";
     playerName4Controller.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerName4Controller.text.isNotEmpty) {
         playersPersonas[3].nickname = playerName4Controller.text;
       } else {
@@ -100,6 +107,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
     playerName5Controller.text = templatePersonas[4].nickname ?? "";
     playerName5Controller.addListener(() {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       if (playerName5Controller.text.isNotEmpty) {
         playersPersonas[4].nickname = playerName5Controller.text;
       } else {
@@ -163,6 +171,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
   void createGroupCompetition() async{
     try {
+      Get.find<InactivityRedirectService>().userInteracted() ;
       createGroupLoading.value = true;
       var result = await repository.createGroupCompetition(gc.GroupCompetition(
           playersCount: template!.numberOfPlayers,

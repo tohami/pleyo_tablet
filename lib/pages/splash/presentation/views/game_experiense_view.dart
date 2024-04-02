@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_experience_select_item.dart';
@@ -62,8 +63,10 @@ class GameExperienceView extends GetView<SplashController> {
                                 selectTitle: 'Single Play',
                                 selectDetails:
                                     'Challenge yourself in a solo game and compete with others on the leaderboard.',
-                                onTap: () {
-                                  Get.rootDelegate.toNamed(Routes.SINGLE_PLAY_LANDING);
+                                onTap: () async{
+                                  Get.find<InactivityRedirectService>().startListening() ;
+                                  await Get.rootDelegate.toNamed(Routes.SINGLE_PLAY_LANDING);
+                                  Get.find<InactivityRedirectService>().stopListening() ;
                                 },
                               ),
                             ],
@@ -86,8 +89,10 @@ class GameExperienceView extends GetView<SplashController> {
                                   selectTitle: 'Group Play',
                                   selectDetails:
                                   'Join with friends or family for a group gaming session.',
-                                  onTap: () {
-                                    Get.rootDelegate.toNamed(Routes.GROUP_LANDING);
+                                  onTap: () async{
+                                    Get.find<InactivityRedirectService>().startListening() ;
+                                    await Get.rootDelegate.toNamed(Routes.GROUP_LANDING);
+                                    Get.find<InactivityRedirectService>().stopListening() ;
                                   },
                                 );
                               }),

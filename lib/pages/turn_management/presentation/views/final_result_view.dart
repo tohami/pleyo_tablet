@@ -31,8 +31,10 @@ class FinalResult extends GetView<GroupRotationController> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        return true;
+      },
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -44,7 +46,7 @@ class FinalResult extends GetView<GroupRotationController> {
             ),
             titleSpacing: 5,
             leading: GestureDetector(
-              onTap: () => Get.rootDelegate.backUntil(Routes.GROUP_TURN_RESULT),
+              onTap: () => Get.rootDelegate.backUntil(Routes.MODE),
               child: const Icon(
                 Icons.cancel_outlined,
                 color: Color(ColorCode.darkGrey),

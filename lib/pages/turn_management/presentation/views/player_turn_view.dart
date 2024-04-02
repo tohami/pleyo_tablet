@@ -22,8 +22,10 @@ class PlayerTurn extends GetView<GroupRotationController> {
   @override
   Widget build(BuildContext context) {
     var selectedGameAttributes = controller.gameVariant;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        return true;
+      },
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(

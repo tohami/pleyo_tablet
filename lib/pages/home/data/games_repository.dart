@@ -7,7 +7,7 @@ import 'games_api_provider.dart';
 
 abstract class IGamesRepository {
   Future<Score> startGame(int gameDifficulty,int gameVariant,int ticketId);
-  Future<Score> updateScoreStatus(String status,int scoreId);
+  Future<Score> updateScoreStatus(String status,int scoreId, {String? reason});
   Future<lb.LeaderboardApiResponse> listScores(String competition, String game);
 }
 
@@ -28,9 +28,9 @@ class GamesRepository extends BaseRepository
     }
   }
   @override
-  Future<Score> updateScoreStatus(String status,int scoreId) async{
+  Future<Score> updateScoreStatus(String status,int scoreId, {String? reason}) async{
     // TODO: implement getAllMerchants
-    final apiResponse = await provider.updateScoreStatus(status,scoreId) ;
+    final apiResponse = await provider.updateScoreStatus(status,scoreId , reason:reason) ;
     if(apiResponse.isOk && apiResponse.body?.data != null){
       return apiResponse.body!.data!;
     }else {

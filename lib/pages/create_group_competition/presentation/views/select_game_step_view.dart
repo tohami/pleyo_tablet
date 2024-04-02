@@ -8,6 +8,8 @@ import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
 import 'package:pleyo_tablet_app/widgets/group_game_widget.dart';
 
+import '../../../../services/InactivityRedirectService.dart';
+
 class SelectGameStep extends GetView<GroupPlayStepsController> {
   const SelectGameStep({Key? key}) : super(key: key);
 
@@ -73,15 +75,10 @@ class SelectGameStep extends GetView<GroupPlayStepsController> {
                             game: games[index],
                             isChampion: controller.isChampoinship.value,
                             onGameSelected: (variant) {
-                              print(variant.toJson());
+                              Get.find<InactivityRedirectService>().userInteracted() ;
                               controller.selectedGameVariant.value=variant;
                               controller.selectedGame = games[index].key;
                               Get.rootDelegate.toNamed("${Routes.GROUP_LANDING}/${Routes.GROUP_SELECTED_GAME_DETAILS}");
-
-                              /*showBottomSheetModal(context, variant,
-                                          (diff) {
-                                        controller.startGame(variant.id!, diff);
-                                      });*/
                             },
                           ),
                           const SizedBox(
