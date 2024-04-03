@@ -9,6 +9,7 @@ import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'bindings.dart';
 import 'consts/colors.dart';
@@ -24,6 +25,7 @@ const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin.p
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Wakelock.enable();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
