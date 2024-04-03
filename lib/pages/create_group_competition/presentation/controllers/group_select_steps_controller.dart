@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/strapi/game.dart';
@@ -202,8 +203,15 @@ class GroupPlayStepsController extends SuperController<bool> {
         Routes.GROUP_TURN_LANDING,
         arguments: result,
       );
-    }catch (e) {
-      showAlert("Error", "Connection error");
+    }catch (e, stack) {
+      showAlert("Error", "Create group error");
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
     } finally {
       createGroupLoading.value = false;
     }

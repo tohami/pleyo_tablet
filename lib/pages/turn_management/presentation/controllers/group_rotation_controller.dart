@@ -184,7 +184,7 @@ class GroupRotationController extends SuperController<bool> {
         gameFail.value = true ;
         FirebaseCrashlytics.instance.log("Start game timeout") ;
       }
-    } catch (e) {
+    } catch (e , stack) {
       if(e is MapEntry){
         showAlert("Error", e.value) ;
       }else {
@@ -194,7 +194,7 @@ class GroupRotationController extends SuperController<bool> {
       FirebaseCrashlytics.instance.log("Start game error") ;
       await FirebaseCrashlytics.instance.recordError(
           e,
-          null,
+          stack,
           reason: 'a fatal error',
           // Pass in 'fatal' argument
           fatal: true
@@ -248,12 +248,12 @@ class GroupRotationController extends SuperController<bool> {
       Get.rootDelegate.backUntil(Routes.GROUP_TURN_LANDING);
       startTimer() ;
       // _groupCompetition = await gamesRepository.getCompetition(_groupCompetition.id!);
-    }catch (e){
+    }catch (e , stack){
       print(e) ;
       FirebaseCrashlytics.instance.log("Stopping game Error") ;
       FirebaseCrashlytics.instance.recordError(
           e,
-          null,
+          stack,
           reason: 'a fatal error',
           // Pass in 'fatal' argument
           fatal: true

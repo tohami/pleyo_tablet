@@ -85,17 +85,18 @@ class StationService extends GetxService {
         if(station.attributes?.gameVariants?.data?.isNotEmpty == true && station.attributes?.organization?.data != null ){
           currentStation = station ;
           personasGroups = personas ;
+          FirebaseCrashlytics.instance.setUserIdentifier("${currentStation.attributes?.name}:${currentStation.id.toString()}") ;
 
           _initialize() ;
           isReady.value = true ;
           break ;
         }
-      } on Error catch (e) {
+      } on Error catch (e , stack) {
         // showAlert("Error", "Unable to load station data") ;
         FirebaseCrashlytics.instance.log("Get station Error") ;
         FirebaseCrashlytics.instance.recordError(
             e,
-            null,
+            stack,
             reason: 'a fatal error',
             // Pass in 'fatal' argument
             fatal: true

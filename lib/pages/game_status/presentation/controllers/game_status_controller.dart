@@ -215,12 +215,12 @@ class GameStatusController extends SuperController<bool> {
           StationService.to.gameStatus.value.data["id"]);
       Get.back();
 
-    }catch (e){
+    }catch (e , stack){
       print(e) ;
       FirebaseCrashlytics.instance.log("Stopping game Error") ;
       FirebaseCrashlytics.instance.recordError(
           e,
-          null,
+          stack,
           reason: 'a fatal error',
           // Pass in 'fatal' argument
           fatal: true

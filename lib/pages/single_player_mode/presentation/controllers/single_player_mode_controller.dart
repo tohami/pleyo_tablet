@@ -143,7 +143,7 @@ class SinglePlayerModeController extends SuperController<bool> {
           FirebaseCrashlytics.instance.log("Start game timeout");
         }
       });
-    } catch (e) {
+    } catch (e , stack) {
       if (e is MapEntry) {
         showAlert("Error", e.value);
       } else {
@@ -151,7 +151,7 @@ class SinglePlayerModeController extends SuperController<bool> {
       }
       gameStatus.value = 0;
       FirebaseCrashlytics.instance.log("Start game error");
-      await FirebaseCrashlytics.instance.recordError(e, null,
+      await FirebaseCrashlytics.instance.recordError(e, stack,
           reason: 'a fatal error',
           // Pass in 'fatal' argument
           fatal: true);
@@ -179,8 +179,15 @@ class SinglePlayerModeController extends SuperController<bool> {
           "${Routes.SINGLE_PLAY_LANDING}/${Routes.SINGLE_PLAY_SELECT_GAME}");
 
       Get.find<InactivityRedirectService>().userInteracted() ;
-    } catch (e) {
-      showAlert("Error", "Connection error");
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.log("unable to create ticket");
+      FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true
+      );
     } finally {
       createTicketLoading.value = false;
     }
@@ -208,10 +215,10 @@ class SinglePlayerModeController extends SuperController<bool> {
           "GAME_STOP", StationService.to.gameStatus.value.data["id"] , reason: reason);
 
       // _groupCompetition = await gamesRepository.getCompetition(_groupCompetition.id!);
-    } catch (e) {
+    } catch (e , stacktrace) {
       print(e);
       FirebaseCrashlytics.instance.log("Stopping game Error");
-      FirebaseCrashlytics.instance.recordError(e, null,
+      FirebaseCrashlytics.instance.recordError(e, stacktrace,
           reason: 'a fatal error',
           // Pass in 'fatal' argument
           fatal: true);
