@@ -45,7 +45,7 @@ class ScanQRView extends GetView<TicketController> {
             gradient: const LinearGradient(
               begin: Alignment(0.0, -1.0),
               end: Alignment(0.0, 1.0),
-              colors: [Color(0xff050505), Color(0xff78797b)],
+              colors: [Color(0xff0d1117), Color(0xff151b22)],
               stops: [0.0, 1.0],
             )),
         alignment: Alignment.center,

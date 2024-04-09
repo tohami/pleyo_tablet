@@ -38,7 +38,7 @@ class HomeController extends SuperController<bool> {
       change(null, status: RxStatus.success());
 
       subscription = StationService.to.gameStatus.listen((status) {
-        print(status.type) ;
+        print("Home : ${status.type}") ;
         switch(status.type) {
 
           case GameStatusType.IDLE:

@@ -76,6 +76,7 @@ class GameResultView extends GetView<GameResultController> {
                           duration: const Duration(seconds: 2),
                           curve: Curves.easeOut,
                           textStyle: TextStyles.textXLarge.copyWith(
+                            height: 1,
                             shadows: [
                               const Shadow(
                                 color: Color(0x4dfeff40),

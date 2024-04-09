@@ -27,7 +27,7 @@ class GameStatusController extends SuperController<bool> {
     super.onInit();
 
     subscription = StationService.to.gameStatus.listen((status) {
-      print(status.type) ;
+      print("status : ${status.type}") ;
       switch(status.type) {
         case GameStatusType.FINISHED:
             Get.rootDelegate.offNamed(Routes.GAME_RESULT, parameters: {

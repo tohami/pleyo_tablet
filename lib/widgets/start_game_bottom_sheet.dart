@@ -27,6 +27,7 @@ class StartGameBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     var gameDifficulties =
         gameVariation.attributes?.gameDifficulties?.data;
+    gameDifficulties?.sort((a,b) => a.attributes!.difficulty!.compareTo(b.attributes!.difficulty!)) ;
     print(gameDifficulties);
     return Container(
           margin: const EdgeInsets.symmetric(horizontal: 56, vertical: 66),
