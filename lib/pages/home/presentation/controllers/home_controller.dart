@@ -195,6 +195,7 @@ class HomeController extends SuperController<bool> {
   //1 starting
   //2 started
   RxInt gameStatus = 0.obs;
+  Timer? retryTimer ;
 
   void startGame(int variant,
       int diff) async {
@@ -212,12 +213,15 @@ class HomeController extends SuperController<bool> {
       await Future.delayed(Duration(seconds: 4)) ;
       var result = await repository.startGame(diff, variant, ticket.id!) ;
       FirebaseCrashlytics.instance.log("Sending start game success") ;
-      await Future.delayed(Duration(seconds: 20)) ;
-      if(gameStatus.value == 1) {
-        gameStatus.value = 0 ;
-        showAlert("Error", "Request timeout, unable to communicate with the server") ;
-        FirebaseCrashlytics.instance.log("Start game timeout") ;
-      }
+
+      retryTimer?.cancel() ;
+      retryTimer = Timer(Duration(seconds: 40), () {
+        if(gameStatus.value == 1) {
+          gameStatus.value = 0 ;
+          showAlert("Error", "Request timeout, unable to communicate with the server") ;
+          FirebaseCrashlytics.instance.log("Start game timeout") ;
+        }
+      });
     } catch (e) {
       if(e is MapEntry){
         showAlert("Error", e.value) ;
