@@ -11,6 +11,10 @@ import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/vie
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_game_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/selected_game_details_view.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/bindings/multiplayer_mode_binding.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_playing_view.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_status_view.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/player_name_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/bindings/single_player_mode_binding.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_status_view.dart';
@@ -30,6 +34,10 @@ import '../pages/home/bindings/home_binding.dart';
 import '../pages/home/presentation/views/home_view.dart';
 import '../pages/game_status/bindings/game_status_binding.dart';
 import '../pages/game_status/presentation/views/game_status_view.dart';
+import '../pages/multiplayer_mode/presentation/views/host_playing_view.dart';
+import '../pages/multiplayer_mode/presentation/views/host_status_view.dart';
+import '../pages/multiplayer_mode/presentation/views/select_game_view.dart';
+import '../pages/multiplayer_mode/presentation/views/welcome_view.dart';
 import '../pages/splash/bindings/splash_binding.dart';
 import '../pages/splash/presentation/views/splash_view.dart';
 
@@ -90,29 +98,59 @@ class AppPages {
           ),
         ]),
     GetPage(
-      name: Routes.SINGLE_PLAY_LANDING,
-      page: () => const PlayerNameStep(),
-      binding: SinglePlayerModeBinding(),
+        name: Routes.SINGLE_PLAY_LANDING,
+        page: () => const PlayerNameStep(),
+        binding: SinglePlayerModeBinding(),
+        children: [
+          GetPage(
+            name: Routes.SINGLE_PLAY_WELCOME,
+            page: () => const Welcome(),
+          ),
+          GetPage(
+            name: Routes.SINGLE_PLAY_SELECT_GAME,
+            page: () => const SelectGame(),
+          ),
+          GetPage(
+            name: Routes.SINGLE_PLAY_GAME_STATUS,
+            page: () => const SingleModeGameStatus(),
+          ),
+          GetPage(
+            name: Routes.SINGLE_PLAY_GAME_PLAY,
+            page: () => const SinglePlayerGamePlay(),
+          ),
+        ]),
+    GetPage(
+        name: Routes.MULTIPLAYER_LANDING,
+        page: () => const MultiplayerPlayerName(),
+        binding: MultiplayerModeBinding(),
+        children: [
+          GetPage(
+            name: Routes.MULTIPLAYER_WELCOME,
+            page: () => const MultiplayerWelcome(),
+          ),
+          GetPage(
+            name: Routes.MULTIPLAYER_SELECT_GAME,
+            page: () => const MultiplayerSelectGame(),
+          ),
+          GetPage(
+            name: Routes.MULTIPLAYER_HOST_GAME_STATUS,
+            page: () => const MultiplayerHostGameStatus(),
+          ),
+          GetPage(
+            name: Routes.MULTIPLAYER_HOST_GAME_PLAY,
+            page: () => const MultiplayerHostGamePlay(),
+          ),
+        ]),
+    GetPage(
+        name: Routes.MULTIPLAYER_GUEST_GAME_STATUS,
+        page: () => MultiplayerGuestGameStatus(),
       children: [
         GetPage(
-          name: Routes.SINGLE_PLAY_WELCOME,
-          page: () => const Welcome(),
-        ),
-        GetPage(
-          name: Routes.SINGLE_PLAY_SELECT_GAME,
-          page: () => const SelectGame(),
-        ),
-        GetPage(
-          name: Routes.SINGLE_PLAY_GAME_STATUS,
-          page: () => const SingleModeGameStatus(),
-        ),
-        GetPage(
-          name: Routes.SINGLE_PLAY_GAME_PLAY,
-          page: () => const SinglePlayerGamePlay(),
+          name: Routes.MULTIPLAYER_GUEST_GAME_PLAY,
+          page: () => const MultiplayerGuestGamePlay(),
         ),
       ]
     ),
-
     GetPage(
       name: Routes.SCAN_QR,
       page: () => ScanQRView(),

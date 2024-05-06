@@ -116,7 +116,12 @@ class GameExperienceView extends GetView<SplashController> {
                                 selectTitle: '1 vs 1 play',
                                 selectDetails:
                                 'Face off in a head-to-head battle. May the best player win!',
-                                onTap: () {  },),
+                                onTap: () async{
+                                  Get.find<InactivityRedirectService>().startListening() ;
+                                  await Get.rootDelegate.toNamed(Routes.MULTIPLAYER_LANDING);
+                                  Get.find<InactivityRedirectService>().stopListening() ;
+
+                                },),
 
                             ],
                           ),

@@ -21,6 +21,13 @@ abstract class Routes {
   static const SINGLE_PLAY_SELECT_GAME = _Paths.SINGLE_MODE_SELECT_GAME;
   static const SINGLE_PLAY_GAME_STATUS = _Paths.SINGLE_MODE_GAME_STATUS;
   static const SINGLE_PLAY_GAME_PLAY = _Paths.SINGLE_PLAY_GAME_PLAY;
+  static const MULTIPLAYER_LANDING = _Paths.MULTIPLAYER_PLAYER_NAME;
+  static const MULTIPLAYER_WELCOME = _Paths.MULTIPLAYER_WELCOME;
+  static const MULTIPLAYER_SELECT_GAME = _Paths.MULTIPLAYER_SELECT_GAME;
+  static const MULTIPLAYER_HOST_GAME_STATUS = _Paths.MULTIPLAYER_HOST_GAME_STATUS;
+  static const MULTIPLAYER_HOST_GAME_PLAY = _Paths.MULTIPLAYER_HOST_GAME_PLAY;
+  static const MULTIPLAYER_GUEST_GAME_STATUS = _Paths.MULTIPLAYER_GUEST_GAME_STATUS;
+  static const MULTIPLAYER_GUEST_GAME_PLAY = _Paths.MULTIPLAYER_GUEST_GAME_PLAY;
   static const SCAN_QR = _Paths.SCAN_QR;
   static const ACTIVATE = _Paths.ACTIVATE;
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
@@ -45,6 +52,14 @@ abstract class _Paths {
   static const WELCOME = '/welcome';
   static const SINGLE_MODE_SELECT_GAME = '/single_mode_select_game';
   static const SINGLE_MODE_GAME_STATUS = '/single_mode_game_status';
+  static const MULTIPLAYER_PLAYER_NAME = '/multiplayer_player_name';
+  static const MULTIPLAYER_WELCOME = '/multiplayer_welcome';
+  static const MULTIPLAYER_SELECT_GAME = '/multiplayer_select_game';
+  static const MULTIPLAYER_HOST_GAME_STATUS = '/multiplayer_host_game_status';
+  static const MULTIPLAYER_HOST_GAME_PLAY = '/multiplayer_host_game_play';
+  static const MULTIPLAYER_GUEST_GAME_STATUS = '/multiplayer_guest_game_status';
+  static const MULTIPLAYER_GUEST_GAME_PLAY = '/multiplayer_guest_game_play';
+
   static const SCAN_QR = '/scan_qr';
   static const ACTIVATE = '/activate';
   static const AVAILABLE_POINTS = '/available_points';

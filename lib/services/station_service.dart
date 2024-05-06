@@ -1,8 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/start_game.dart';
+import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game_message.dart';
 import 'package:pleyo_tablet_app/model/strapi/personas.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/controllers/multiplayer_guest_controller.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
 import '../main.dart';
@@ -10,6 +13,7 @@ import '../model/strapi/station.dart';
 import '../model/strapi/ticket.dart';
 import 'package:socket_io_client/socket_io_client.dart' ;
 
+import '../pages/multiplayer_mode/presentation/views/guest_name_dialog.dart';
 import '../pages/splash/data/splash_repository.dart';
 
 class StationService extends GetxService {
@@ -56,6 +60,13 @@ class StationService extends GetxService {
     });
     // socket.on('startGame',
     //         (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTING, data));
+    socket.on('JOIN_MULTIPLAYER_GAME', (data) {
+      JoinMultiplayerGameDetails details = JoinMultiplayerGameDetails.fromJson(data) ;
+      MultiplayerGuestController controller = Get.find() ;
+      controller.gameDetails = details ;
+      Get.dialog(Dialog(child: GuestNameView(details)));
+    });
+
     socket.on('gameStarted',
             (data) => gameStatus.value = GameStatus(GameStatusType.STARTED, data));
     socket.on('gameFinished',
