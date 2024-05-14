@@ -16,20 +16,14 @@ class ScanQRView extends GetView<TicketController> {
   ScanQRView({Key? key}) : super(key: key);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final decoration = BoxDecoration(
-    // color: const Color(0xff585858),
+    color:  const Color(ColorCode.black),
     borderRadius: BorderRadius.circular(12.0),
+    border: Border.all(width: 1.5, color: const Color(ColorCode.aqua)),
     boxShadow: const [
       BoxShadow(
-        color: Color(0x45000000),
-        offset: Offset(0, 3),
-        blurRadius: 6,
-      ),
-      BoxShadow(color: Color(0x53FCFCFC), blurRadius: 1, spreadRadius: -1),
-      BoxShadow(
-        color: Color(0xff585858),
-        offset: Offset(0, 3),
-        spreadRadius: 0,
-        blurRadius: 0,
+        color:  Color(ColorCode.blackBackground),
+        offset: Offset(0, 4),
+        blurRadius: 4,
       ),
     ],
   );
@@ -42,12 +36,8 @@ class ScanQRView extends GetView<TicketController> {
           body: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
-            gradient: const LinearGradient(
-              begin: Alignment(0.0, -1.0),
-              end: Alignment(0.0, 1.0),
-              colors: [Color(0xff0d1117), Color(0xff151b22)],
-              stops: [0.0, 1.0],
-            )),
+            color: Color(ColorCode.black2Background),
+            ),
         alignment: Alignment.center,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -222,11 +212,11 @@ class ScanQRView extends GetView<TicketController> {
             width: 140,
             height: 120,
             decoration: BoxDecoration(
-              // color: const Color(0xff585858),
+              color:  const Color(ColorCode.black),
               borderRadius: BorderRadius.circular(12.0),
               boxShadow: [
                 const BoxShadow(
-                  color: Color(0x45000000),
+                  color: Color(ColorCode.blackBackground),
                   offset: Offset(0, 3),
                   blurRadius: 6,
                 ),
@@ -234,7 +224,7 @@ class ScanQRView extends GetView<TicketController> {
                     color: Color(0x53FCFCFC), blurRadius: 1, spreadRadius: -1),
                 BoxShadow(
                   color:
-                      isClicked.value ? Color(0xff2FF7F7) : Color(0xff585858),
+                      isClicked.value ? Color(ColorCode.aqua) : Color(ColorCode.blackBackground),
                   offset: Offset(0, 3),
                   spreadRadius: 0,
                   blurRadius: 0,
