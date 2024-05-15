@@ -25,8 +25,8 @@ abstract class Routes {
   static const ACTIVATE = _Paths.ACTIVATE;
   static const AVAILABLE_POINTS = _Paths.AVAILABLE_POINTS;
   static const HOME = _Paths.HOME;
-  static const GAME_STATUS = _Paths.GAME_STATUS;
-  static const GAME_RESULT = _Paths.GAME_RESULT;
+  static const COMPETITION_GAME_PLAY = _Paths.COMPETITION_GAME_PLAY;
+  static const COMPETITION_GAME_STATUS = _Paths.COMPETITION_GAME_STATUS;
 }
 
 abstract class _Paths {
@@ -49,8 +49,8 @@ abstract class _Paths {
   static const ACTIVATE = '/activate';
   static const AVAILABLE_POINTS = '/available_points';
   static const HOME = '/home';
-  static const GAME_STATUS = '/game_status';
-  static const GAME_RESULT = '/game_result';
+  static const COMPETITION_GAME_STATUS = '/competition_game_status';
+  static const COMPETITION_GAME_PLAY = '/competition_game_play';
 
   static const SINGLE_PLAY_GAME_PLAY = '/single_play_game_play';
 }

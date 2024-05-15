@@ -134,7 +134,7 @@ class SinglePlayerModeController extends SuperController<bool> {
       var result =
           await gamesRepository.startGame(diff, variant, currentPlayer!.id!);
       FirebaseCrashlytics.instance.log("Sending start game success");
-      print("Sending start game success");
+      print("Sending start game success ${result?.id}");
       retryTimer?.cancel() ;
       retryTimer = Timer(Duration(seconds: 40), () {
         if (gameStatus.value == 1) {
