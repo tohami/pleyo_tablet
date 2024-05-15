@@ -7,6 +7,7 @@ class ColorCode {
   static const grey3 = 0xb4c5cfd0;
   static const grey4 = 0xbeffffff;
   static const grey5 = 0xa8c5cfd0;
+  static const grey6 = 0xFF697078;
   static const darkGrey = 0xff797979;
   static const lightGrey = 0xffb9b9b9;
   static const lightGrey2 = 0x7fc5cfd0;
@@ -75,6 +76,7 @@ class ColorCode {
   static const white2Background = 0x99ffffff;
   static const white3Background = 0xccffffff;
   static const white4Background = 0xe6ffffff;
+  static const white5Background = 0xFFC5CFD9;
   static const grayBackground = 0xffb6b6b6;
   static const yellowBackground = 0xfffeff40;
   static const darkYellowBackground = 0xffb2b22d;

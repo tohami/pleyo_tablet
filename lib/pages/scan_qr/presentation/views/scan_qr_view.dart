@@ -15,17 +15,12 @@ import 'package:pleyo_tablet_app/pages/scan_qr/presentation/controllers/scan_qr_
 class ScanQRView extends GetView<TicketController> {
   ScanQRView({Key? key}) : super(key: key);
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  final decoration = BoxDecoration(
-    color:  const Color(ColorCode.black),
-    borderRadius: BorderRadius.circular(12.0),
-    border: Border.all(width: 1.5, color: const Color(ColorCode.aqua)),
-    boxShadow: const [
-      BoxShadow(
-        color:  Color(ColorCode.blackBackground),
-        offset: Offset(0, 4),
-        blurRadius: 4,
-      ),
-    ],
+  final decoration = ShapeDecoration(
+  color: const Color(ColorCode.black),
+  shape: RoundedRectangleBorder(
+  side: const BorderSide(width: 3, color: Color(ColorCode.white5Background)),
+  borderRadius: BorderRadius.circular(16),
+    ),
   );
   final isInfoSowing = false.obs;
 
@@ -35,9 +30,9 @@ class ScanQRView extends GetView<TicketController> {
       child: Scaffold(
           body: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Color(ColorCode.black2Background),
-            ),
+          borderRadius: BorderRadius.circular(5.0),
+          color: const Color(ColorCode.black2Background),
+        ),
         alignment: Alignment.center,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,15 +41,15 @@ class ScanQRView extends GetView<TicketController> {
             ObxValue<RxString>((state) {
               return Container(
                 margin: const EdgeInsets.all(4),
-                height: 80,
-                decoration: decoration,
                 child: Center(
                   child: Text(
                     state.value,
                     style: const TextStyle(
-                      fontFamily: 'Helvetica Neue',
-                      fontSize: 30,
-                      color: Colors.red,
+                      fontFamily: 'CoconPro',
+                      fontSize: 34,
+                      fontWeight: FontWeight.w700,
+                      color: Color(ColorCode.lightGrey),
+                      height: 0,
                     ),
                     softWrap: false,
                   ),
@@ -68,50 +63,55 @@ class ScanQRView extends GetView<TicketController> {
               final currentCodeParts = state.value.split("-");
 
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: 64),
+                margin: const EdgeInsets.symmetric(horizontal: 42),
                 child: Row(
                   children: [
                     Flexible(
                       flex: 1,
                       child: Container(
-                        margin: const EdgeInsets.all(4),
-                        height: 80,
+                        height: 100,
+                        // width: 293,
+                        // margin: const EdgeInsets.all(4),
                         decoration: decoration,
-                        child: Center(
-                          child: Text(
-                            (currentCodeParts.length > 0
-                                    ? currentCodeParts[0]
-                                    : "")
-                                .padRight(4, ' -'),
-                            style: const TextStyle(
-                              fontFamily: 'Helvetica Neue',
-                              fontSize: 70,
-                              color: Color(0xc4ffffff),
-                            ),
-                            softWrap: false,
+                        alignment: Alignment.center,
+                        child: Text(
+                          (currentCodeParts.length > 0
+                                  ? currentCodeParts[0]
+                                  : "")
+                              .padRight(4, ' -'),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 80,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
                           ),
+                          softWrap: false,
                         ),
                       ),
                     ),
+                    const SizedBox(width: 5,),
                     Flexible(
                       flex: 1,
                       child: Container(
-                        margin: const EdgeInsets.all(4),
-                        height: 80,
+                        // margin: const EdgeInsets.all(4),
+                        height: 100,
+                        // width: 293,
                         decoration: decoration,
-                        child: Center(
-                          child: Text(
-                            (currentCodeParts.length > 1
-                                    ? currentCodeParts[1]
-                                    : "")
-                                .padRight(4, ' -'),
-                            style: const TextStyle(
-                              fontFamily: 'Helvetica Neue',
-                              fontSize: 70,
-                              color: Color(0xc4ffffff),
-                            ),
-                            softWrap: false,
+                        alignment: Alignment.center,
+                        child: Text(
+                          (currentCodeParts.length > 1
+                                  ? currentCodeParts[1]
+                                  : "")
+                              .padRight(4, ' -'),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 80,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
                           ),
+                          softWrap: false,
                         ),
                       ),
                     ),
@@ -179,7 +179,7 @@ class ScanQRView extends GetView<TicketController> {
     var isClicked = false.obs;
     var text = controller.inputCode;
     return AnimatedSwitcher(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       child: ObxValue((context) {
         return GestureDetector(
           onPanDown: (d) => isClicked.value = true,
@@ -192,7 +192,7 @@ class ScanQRView extends GetView<TicketController> {
             } else if (number == "X") {
               text.value = text.substring(
                   0, text.value.length - (text.value.length == 5 ? 2 : 1));
-            }else if(number == "H") {
+            } else if (number == "H") {
               Get.rootDelegate.popRoute();
             } else {
               if (text.value.length == 9) {
@@ -211,32 +211,27 @@ class ScanQRView extends GetView<TicketController> {
             margin: const EdgeInsets.all(4),
             width: 140,
             height: 120,
-            decoration: BoxDecoration(
-              color:  const Color(ColorCode.black),
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                const BoxShadow(
-                  color: Color(ColorCode.blackBackground),
-                  offset: Offset(0, 3),
-                  blurRadius: 6,
-                ),
-                const BoxShadow(
-                    color: Color(0x53FCFCFC), blurRadius: 1, spreadRadius: -1),
-                BoxShadow(
-                  color:
-                      isClicked.value ? Color(ColorCode.aqua) : Color(ColorCode.blackBackground),
-                  offset: Offset(0, 3),
-                  spreadRadius: 0,
-                  blurRadius: 0,
-                ),
-              ],
+            decoration: ShapeDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment(-1.00, 0.00),
+                end: Alignment(1, 0),
+                colors: [
+                  Color(ColorCode.primaryBackground),
+                  Color(ColorCode.grey6)
+                ],
+              ),
+              shape: RoundedRectangleBorder(
+                side:  BorderSide(width: 3, color:  isClicked.value ?const Color(ColorCode.aqua) : const Color(ColorCode.blackBackground)),
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
+
             child: Center(
               child: (number == "X")
                   ? const Icon(
                       Icons.backspace_outlined,
                       size: 88,
-                      color: Color(0xc4ffffff),
+                       color: const Color(ColorCode.aqua),
                     )
                   : (number == "Q")
                       ? Icon(
@@ -244,24 +239,25 @@ class ScanQRView extends GetView<TicketController> {
                               ? Icons.numbers
                               : Icons.qr_code,
                           size: 88,
-                          color: Color(0xc4ffffff),
+                          color: const Color(ColorCode.aqua),
                         )
                       : (number == "H")
-                          ? Icon(
+                          ? const Icon(
                               Icons.home,
                               size: 88,
-                              color: Color(0xc4ffffff),
+                              color: Color(ColorCode.aqua),
                             )
                           : Text(
                               number,
-                          style: const TextStyle(
-                            fontFamily: 'Helvetica Neue',
-                            fontSize: 100,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xc4ffffff),
-                          ),
-                          softWrap: false,
-                        ),
+                              style: const TextStyle(
+                                color: Color(ColorCode.white5Background),
+                                fontSize: 100,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              ),
+                              softWrap: false,
+                            ),
             ),
           ),
         );
