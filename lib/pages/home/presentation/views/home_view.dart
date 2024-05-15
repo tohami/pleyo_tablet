@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
+import 'package:pleyo_tablet_app/routes/app_pages.dart';
+import 'package:pleyo_tablet_app/widgets/GameWidgetSingleMode.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_form_field.dart';
 import 'package:pleyo_tablet_app/widgets/game_widget.dart';
@@ -24,70 +26,101 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(ColorCode.primary),
+        appBar: AppBar(
+          backgroundColor: const Color(ColorCode.primaryBackground),
+          title: const CustomText(
+            'Exit the session',
+            textStyle: TextStyles.textSmall,
+            textAlign: TextAlign.start,
+          ),
+          titleSpacing: 5,
+          leading: GestureDetector(
+            onTap: () => Get.rootDelegate.backUntil(Routes.SCAN_QR ,popMode: PopMode.History),
+            child: const Icon(
+              Icons.cancel_outlined,
+              color: Color(ColorCode.darkGrey),
+              size: 35,
+            ),
+          ),
+        ),
+        backgroundColor:  Color(ColorCode.primaryBackground),
         body: SingleChildScrollView(
          physics: const ClampingScrollPhysics(),
-          child: Container(
-            color: const Color(ColorCode.primary),
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        playerNameWidget(playerName: controller.ticket.attributes!.nickname! ,onLogoutClicked:  ()=>controller.onLogoutClicked()),
-                      ],
-                    ),
-                  ],
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                'Select Game',
+                textStyle: TextStyles.textMedium.copyWith(
+                  fontFamily: 'CoconPro',
+                  color: const Color(ColorCode.lightGrey6),
                 ),
-                Obx(() {
-                  // isChampion must be called any where to force rebuild
-                  controller.isChampoinship.value;
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Obx(() {
+                // isChampion must be called any where to force rebuild
+                controller.selectedVariant.value;
+
+                if(controller.games.isNotEmpty) {
+                  var games = controller.games.entries.toList();
+
+                  games.sort(((a, b) => a.key.attributes!.gamehubId! - b.key.attributes!.gamehubId!)) ;
+                  return ListView.builder(
+                    itemCount: games.length,
+                    shrinkWrap: true,
+                    clipBehavior: Clip.none ,
+                    physics: const NeverScrollableScrollPhysics() ,
+                    itemBuilder: (context , index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GameWidgetSingleMode(
+                            game: games[index],
+                            isChampion: true,
+                            selectedVariant: controller.selectedVariant.value,
+                            onExitClicked: () =>
+                            {controller.selectedVariant.value = null},
+                            onGameSelected: (variant) {
+                              print(variant.id);
+                              controller.selectedGame.value =
+                                  games[index].key;
+                              controller.selectedVariant.value = variant;
+                              // Get.rootDelegate.toNamed(Routes.SELECTED_GAME);
+                            },
+                            onSelectDifficulty: (int selectedDifficulty) {
+                              controller.startGame(
+                                  selectedDifficulty);
+                            },
+                          ),
 
 
-                  if(controller.games.isNotEmpty) {
-                    var games = controller.games.entries.toList();
 
-                    games.sort(((a, b) => a.key.attributes!.gamehubId! - b.key.attributes!.gamehubId!)) ;
-                    return ListView.builder(
-                      itemCount: games.length,
-                      shrinkWrap: true,
-                      clipBehavior: Clip.none ,
-                      physics: const NeverScrollableScrollPhysics() ,
-                      itemBuilder: (context , index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // key: ValueKey("${}"),
-                          children: [
-                            const SizedBox(
-                              height: 60,
-                            ),
-                            GameWidget(game: games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
-                              print(variant.toJson()) ;
-                              showBottomSheetModal(context , variant , (diff) {
-                                controller.startGame(variant.id!, diff);
-                              }) ;
-                            },) ,
+                          // GameWidget(game: games[index],isChampion: controller.isChampoinship.value,onPlayClicked: (variant) {
+                          //   print(variant.toJson()) ;
+                          //   showBottomSheetModal(context , variant , (diff) {
+                          //     controller.startGame( diff);
+                          //   }) ;
+                          // },) ,
+                          const SizedBox(
+                            height: 30,
+                          ),
 
-                          ],
-                        ) ;
-                      },
-                    ) ;
-                  }else {
-                    return Container() ;
-                  }
 
-                }),
-              ],
-            ),
+                        ],
+                      ) ;
+                    },
+                  ) ;
+                }else {
+                  return Container() ;
+                }
+
+              }),
+            ],
           ),
         ),
       ),

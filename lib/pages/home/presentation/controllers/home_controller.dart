@@ -10,6 +10,7 @@ import 'package:pleyo_tablet_app/model/strapi/game_variant.dart';
 import 'package:pleyo_tablet_app/routes/app_pages.dart';
 import 'package:pleyo_tablet_app/services/station_service.dart';
 import "package:collection/collection.dart";
+import 'package:pleyo_tablet_app/widgets/alert_dialog.dart';
 
 import '../../../../model/start_game.dart';
 import '../../../../model/strapi/station.dart';
@@ -26,6 +27,11 @@ class HomeController extends SuperController<bool> {
   RxBool isAddPlayerActive = false.obs;
 
   RxBool isChampoinship = true.obs;
+
+  Rx<GameVariant?> selectedVariant = Rx(null);
+  Rx<Game?> selectedGame = Rx(null);
+  RxBool gameFail = false.obs;
+  int? selectedDifficulty;
 
   late Map<Game , List<GameVariant>> games =  groupBy(station.attributes!.gameVariants!.data! , (GameVariant item) => item.attributes!.game!.data!) ;
   final IGamesRepository repository ;
@@ -49,18 +55,27 @@ class HomeController extends SuperController<bool> {
             FirebaseCrashlytics.instance.log("game starting");
             break;
           case GameStatusType.STARTED:
-            if(Navigator.of(Get.context!).canPop()) {
-              Navigator.of(Get.context!).pop();
+            // if(Navigator.of(Get.context!).canPop()) {
+            //   Navigator.of(Get.context!).pop();
+            // }
+            // Get.rootDelegate.toNamed(Routes.GAME_STATUS);
+            if (selectedVariant.value?.attributes != null) {
+              Get.rootDelegate.toNamed(
+                  "${Routes.HOME}/${Routes.COMPETITION_GAME_PLAY}");
+              gameStatus.value = 0;
             }
-            Get.rootDelegate.toNamed(Routes.GAME_STATUS);
             gameStatus.value = 0 ;
             FirebaseCrashlytics.instance.log("Game started") ;
             break;
           case GameStatusType.FINISHED:
+            showDialogAfterGameFinished();
+            break;
           case GameStatusType.CLOSED:
           case GameStatusType.CRASHED:
             FirebaseCrashlytics.instance.log("Game stopped by gamehub durring game starting") ;
             gameStatus.value = 0 ;
+            Get.rootDelegate.backUntil(Routes.HOME, popMode: PopMode.History);
+            break;
             break;
         }
       });
@@ -197,27 +212,29 @@ class HomeController extends SuperController<bool> {
   RxInt gameStatus = 0.obs;
   Timer? retryTimer ;
 
-  void startGame(int variant,
-      int diff) async {
-
+  void startGame(int diff) async {
+    this.selectedDifficulty = diff;
+    gameFail.value = false;
+    int variant = selectedVariant.value!.id!;
     FirebaseCrashlytics.instance.log("Starting new game v $variant ,d $diff") ;
+    Get.rootDelegate.toNamed(
+        "${Routes.HOME}/${Routes.COMPETITION_GAME_STATUS}");
+
     var now = DateTime.now();
     gameStatus.value = 1;
     await Future.delayed(const Duration(seconds: 1));
 
     //check available balance
     try {
-      //stop game before start new one
-      FirebaseCrashlytics.instance.log("Stopping the old game ") ;
-      await repository.updateScoreStatus("GAME_STOP", 0);
-      await Future.delayed(Duration(seconds: 4)) ;
       var result = await repository.startGame(diff, variant, ticket.id!) ;
-      FirebaseCrashlytics.instance.log("Sending start game success") ;
+      FirebaseCrashlytics.instance.log("Sending start game success ${result?.id}") ;
+      print("Sending start game success ${result?.id}") ;
 
       retryTimer?.cancel() ;
       retryTimer = Timer(Duration(seconds: 40), () {
         if(gameStatus.value == 1) {
           gameStatus.value = 0 ;
+          gameFail.value = true;
           showAlert("Error", "Request timeout, unable to communicate with the server") ;
           FirebaseCrashlytics.instance.log("Start game timeout") ;
         }
@@ -239,4 +256,64 @@ class HomeController extends SuperController<bool> {
       );
     }
   }
+
+  void stopGame(String reason) async {
+    var exit = await Get.dialog(
+        AlertDialogWidget(
+            content: 'You will lose this game’s progress. Sure? ',
+            actionCancelText: 'Quit',
+            actionAcceptText: 'Resume',
+            onCancelClicked: () => {Get.back(result: true)},
+            onAcceptClicked: () => {Get.back(result: false)}),
+        barrierDismissible: false
+    );
+    if (!exit) return;
+
+    try {
+      FirebaseCrashlytics.instance.log("Stopping the game by tablet");
+      Get.rootDelegate.backUntil(Routes.HOME, popMode: PopMode.History);
+
+      repository.updateScoreStatus(
+          "GAME_STOP", StationService.to.gameStatus.value.data["id"] , reason: reason);
+
+      // _groupCompetition = await gamesRepository.getCompetition(_groupCompetition.id!);
+    } catch (e , stacktrace) {
+      print(e);
+      FirebaseCrashlytics.instance.log("Stopping game Error");
+      FirebaseCrashlytics.instance.recordError(e, stacktrace,
+          reason: 'a fatal error',
+          // Pass in 'fatal' argument
+          fatal: true);
+    }
+    // var newCommand = messageQueueRef.push();
+    //
+    // newCommand
+    //     .set({"CommandeId": "GAME_STOP", "Data": gameData?.toJson()});
+  }
+  showDialogAfterGameFinished() async {
+    // Create a delayed future that represents the timeout.
+    var timeoutFuture = Future.delayed(const Duration(seconds: 30), () => true);
+
+    // Show the dialog and wait for the user's response or the timeout, whichever comes first.
+    var exit = await Future.any([
+      Get.dialog(AlertDialogWidget(
+        content: 'Game is finished, what do you want?',
+        actionCancelText: 'Exit',
+        actionAcceptText: 'Play again',
+        onCancelClicked: () => Get.back(result: true), // Note: Use Get.back(result: true) instead of a set
+        onAcceptClicked: () => Get.back(result: false),
+      ) , barrierDismissible: false),
+      timeoutFuture
+    ]);
+
+    if (exit) {
+      Get.rootDelegate.backUntil(Routes.MODE);
+    } else {
+      Get.rootDelegate.backUntil(Routes.HOME, popMode: PopMode.History);
+    }
+    Future.delayed(const Duration(seconds: 1));
+    repository.updateScoreStatus(
+        "GAME_STOP", StationService.to.gameStatus.value.data["id"] , reason: "Stop game automatically after its finished");
+  }
+
 }

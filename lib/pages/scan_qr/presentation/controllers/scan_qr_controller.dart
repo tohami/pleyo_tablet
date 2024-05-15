@@ -56,7 +56,7 @@ class TicketController extends SuperController<bool>
     if(isLoading.value)
       return ;
 
-    errorMsg.value = "" ;
+    errorMsg.value = " . . ." ;
     try {
       isLoading.value = true ;
       var ticket = await repository.checkTicket(code, "");
@@ -91,7 +91,7 @@ class TicketController extends SuperController<bool>
 
   Future onTicketScanned(String url) async {
     try {
-      errorMsg.value = "" ;
+      errorMsg.value = ". . ." ;
       controller?.pauseCamera() ;
       var data = url.split("/") ;
       if(data.length != 6) {

@@ -3,8 +3,6 @@ import 'package:pleyo_tablet_app/pages/activate/bindings/activate_binding.dart';
 import 'package:pleyo_tablet_app/pages/activate/presentation/views/activate_view.dart';
 import 'package:pleyo_tablet_app/pages/available_points/bindings/available_points_binding.dart';
 import 'package:pleyo_tablet_app/pages/available_points/presentation/views/available_points_view.dart';
-import 'package:pleyo_tablet_app/pages/game_result/bindings/game_result_binding.dart';
-import 'package:pleyo_tablet_app/pages/game_result/presentation/views/game_result_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/bindings/group_select_steps_binding.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/add_team_name_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/group_names_step_view.dart';
@@ -15,6 +13,8 @@ import 'package:pleyo_tablet_app/pages/multiplayer_mode/bindings/multiplayer_mod
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_status_view.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/player_name_view.dart';
+import 'package:pleyo_tablet_app/pages/home/presentation/views/competition_game_playing.dart';
+import 'package:pleyo_tablet_app/pages/home/presentation/views/competition_game_status_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/bindings/single_player_mode_binding.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/single_player_mode/presentation/views/game_status_view.dart';
@@ -170,16 +170,16 @@ class AppPages {
       name: Routes.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
-    ),
-    GetPage(
-      name: Routes.GAME_STATUS,
-      page: () => GameStatusView(),
-      binding: GameStatusBinding(),
-    ),
-    GetPage(
-      name: Routes.GAME_RESULT,
-      page: () => const GameResultView(),
-      binding: GameResultBinding(),
-    ),
+      children: [
+        GetPage(
+          name: Routes.COMPETITION_GAME_STATUS,
+          page: () => const CompetitionGameStatus(),
+        ),
+        GetPage(
+          name: Routes.COMPETITION_GAME_PLAY,
+          page: () => const CompetitionGamePlay(),
+        ),
+      ]
+    )
   ];
 }
