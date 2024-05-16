@@ -33,7 +33,9 @@ class HomeController extends SuperController<bool> {
   RxBool gameFail = false.obs;
   int? selectedDifficulty;
 
-  late Map<Game , List<GameVariant>> games =  groupBy(station.attributes!.gameVariants!.data! , (GameVariant item) => item.attributes!.game!.data!) ;
+  late Map<Game, List<GameVariant>> games = groupBy(
+      station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.competitionGameVariants!.data!,
+          (GameVariant item) => item.attributes!.game!.data!);
   final IGamesRepository repository ;
   HomeController({required this.repository});
   late StreamSubscription subscription ;

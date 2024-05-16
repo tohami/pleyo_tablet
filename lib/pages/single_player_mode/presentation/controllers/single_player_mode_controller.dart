@@ -27,8 +27,8 @@ class SinglePlayerModeController extends SuperController<bool> {
 
   Station station = StationService.to.currentStation;
   late Map<Game, List<GameVariant>> games = groupBy(
-      station.attributes!.gameVariants!.data!,
-      (GameVariant item) => item.attributes!.game!.data!);
+      station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.singlePlayGameVariants!.data!,
+          (GameVariant item) => item.attributes!.game!.data!);
 
   Ticket? currentPlayer;
 

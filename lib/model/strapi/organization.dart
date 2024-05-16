@@ -1,3 +1,5 @@
+import 'game_variant_response.dart';
+
 class Organization {
   int? id;
   _Attributes? attributes;
@@ -113,6 +115,10 @@ class ConfigurationAttributes {
   String? createdAt;
   String? updatedAt;
   List<GroupTemplates>? groupTemplates;
+  GameVariantsResponse? groupGameVariants;
+  GameVariantsResponse? multiplayerGameVariants;
+  GameVariantsResponse? singlePlayGameVariants;
+  GameVariantsResponse? competitionGameVariants;
 
   ConfigurationAttributes({this.createdAt, this.updatedAt, this.groupTemplates});
 
@@ -125,6 +131,10 @@ class ConfigurationAttributes {
         groupTemplates!.add(new GroupTemplates.fromJson(v));
       });
     }
+    groupGameVariants = json['groupGameVariants'] != null ? new GameVariantsResponse.fromJson(json['groupGameVariants']) : null;
+    multiplayerGameVariants = json['multiplayerGameVariants'] != null ? new GameVariantsResponse.fromJson(json['multiplayerGameVariants']) : null;
+    singlePlayGameVariants = json['singlePlayGameVariants'] != null ? new GameVariantsResponse.fromJson(json['singlePlayGameVariants']) : null;
+    competitionGameVariants = json['competitionGameVariants'] != null ? new GameVariantsResponse.fromJson(json['competitionGameVariants']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -135,6 +145,21 @@ class ConfigurationAttributes {
       data['groupTemplates'] =
           this.groupTemplates!.map((v) => v.toJson()).toList();
     }
+    if (this.groupGameVariants != null) {
+      data['groupGameVariants'] = this.groupGameVariants!.toJson();
+    }
+    if (this.multiplayerGameVariants != null) {
+      data['multiplayerGameVariants'] = this.multiplayerGameVariants!.toJson();
+    }
+
+    if (this.singlePlayGameVariants != null) {
+      data['singlePlayGameVariants'] = this.singlePlayGameVariants!.toJson();
+    }
+
+    if (this.competitionGameVariants != null) {
+      data['competitionGameVariants'] = this.competitionGameVariants!.toJson();
+    }
+
     return data;
   }
 }

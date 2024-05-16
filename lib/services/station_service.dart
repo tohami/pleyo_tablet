@@ -54,8 +54,8 @@ class StationService extends GetxService {
       // }
       debugPrint("new event -----------") ;
       debugPrint(event);
-      // debugPrint(args[]) ;
-      // debugPrint("---------------------") ;
+      debugPrint(args.toString()) ;
+      debugPrint("---------------------") ;
 
     });
     // socket.on('startGame',
@@ -65,6 +65,10 @@ class StationService extends GetxService {
       MultiplayerGuestController controller = Get.find() ;
       controller.gameDetails = details ;
       Get.dialog(Dialog(child: GuestNameView(details)));
+    });
+
+    socket.on('UPDATE_MULTIPLAYER_GAME', (data) {
+      gameStatus.value = GameStatus(GameStatusType.UPDATED, data) ;
     });
 
     socket.on('gameStarted',
@@ -93,7 +97,7 @@ class StationService extends GetxService {
         var station = await Get.find<ISplashRepository>().findOrCreateStation(identifier);
         var personas = await Get.find<ISplashRepository>().getPersonas();
 
-        if(station.attributes?.gameVariants?.data?.isNotEmpty == true && station.attributes?.organization?.data != null ){
+        if(station.attributes?.organization?.data != null ){
           currentStation = station ;
           personasGroups = personas ;
           FirebaseCrashlytics.instance.setUserIdentifier("${currentStation.attributes?.name}:${currentStation.id.toString()}") ;

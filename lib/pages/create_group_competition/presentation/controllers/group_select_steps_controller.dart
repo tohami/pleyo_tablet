@@ -36,7 +36,7 @@ class GroupPlayStepsController extends SuperController<bool> {
 
   Station station = StationService.to.currentStation;
   late Map<Game, List<GameVariant>> games = groupBy(
-      station.attributes!.gameVariants!.data!,
+      station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.groupGameVariants!.data!,
       (GameVariant item) => item.attributes!.game!.data!);
 
   Rx<GameVariant> selectedGameVariant = GameVariant().obs;

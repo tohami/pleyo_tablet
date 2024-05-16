@@ -32,8 +32,6 @@ import 'package:pleyo_tablet_app/pages/splash/presentation/views/game_experiense
 
 import '../pages/home/bindings/home_binding.dart';
 import '../pages/home/presentation/views/home_view.dart';
-import '../pages/game_status/bindings/game_status_binding.dart';
-import '../pages/game_status/presentation/views/game_status_view.dart';
 import '../pages/multiplayer_mode/presentation/views/host_playing_view.dart';
 import '../pages/multiplayer_mode/presentation/views/host_status_view.dart';
 import '../pages/multiplayer_mode/presentation/views/select_game_view.dart';

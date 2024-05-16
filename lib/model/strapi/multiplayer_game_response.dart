@@ -12,10 +12,10 @@ class MultiplayerGame {
   });
 
   factory MultiplayerGame.fromJson(dynamic json) => MultiplayerGame(
-    id: json['id'],
-    numberOfPlayers: json['attributes']?['numberOfPlayers'],
-    unityRoomId: json['attributes']?['unityRoomId'],
-    scores: json['attributes']?['scores']?['data'] != null ? List<Score>.from(json['attributes']?['scores']?['data']?.map((x) => Score.fromJson(x))) : [],
+    id: json['data']?['id'],
+    numberOfPlayers: json["data"]?['attributes']?['numberOfPlayers'],
+    unityRoomId: json["data"]?['attributes']?['unityRoomId'],
+    scores: json["data"]?['attributes']?['scores']?['data'] != null ? List<Score>.from(json["data"]?['attributes']?['scores']?['data']?.map((x) => Score.fromJson(x))) : [],
   );
 }
 
@@ -35,8 +35,8 @@ class Score {
   factory Score.fromJson(Map<String, dynamic> json) => Score(
     id: json['id'],
     score: json['attributes']?['score'],
-    ticket: Ticket.fromJson(json['attributes']?['ticket']?['data']),
-    station: Station.fromJson(json['attributes']?['station']?['data']),
+    ticket: json['attributes']?['ticket']?['data'] != null ? Ticket.fromJson(json['attributes']?['ticket']?['data']) : null,
+    station: json['attributes']?['station']?['data'] != null ?Station.fromJson(json['attributes']?['station']?['data']) : null,
   );
 }
 

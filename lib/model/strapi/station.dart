@@ -26,7 +26,7 @@ class Station {
 
 class _Attributes {
   String? name;
-  GameVariantsResponse? gameVariants;
+  // GameVariantsResponse? gameVariants;
   OrganizationResponse? organization;
   String? tabletSerial;
   bool? isEnabled;
@@ -35,11 +35,11 @@ class _Attributes {
   bool? multiplayerEnabled;
   bool? competitionEnabled;
 
-  _Attributes({this.name, this.gameVariants, this.organization, this.tabletSerial,  this.isEnabled});
+  _Attributes({this.name, this.organization, this.tabletSerial,  this.isEnabled});
 
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    gameVariants = json['game_variants'] != null ? new GameVariantsResponse.fromJson(json['game_variants']) : null;
+    // gameVariants = json['game_variants'] != null ? new GameVariantsResponse.fromJson(json['game_variants']) : null;
     organization = json['organization'] != null ? new OrganizationResponse.fromJson(json['organization']) : null;
     tabletSerial = json['tablet_serial'];
     isEnabled = json['isEnabled'];
@@ -52,9 +52,9 @@ class _Attributes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    if (this.gameVariants != null) {
-      data['game_variants'] = this.gameVariants!.toJson();
-    }
+    // if (this.gameVariants != null) {
+    //   data['game_variants'] = this.gameVariants!.toJson();
+    // }
     if (this.organization != null) {
       data['organization'] = this.organization!.toJson();
     }

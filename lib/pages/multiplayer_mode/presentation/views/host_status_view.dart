@@ -56,6 +56,7 @@ class MultiplayerHostGameStatus extends GetView<MultiplayerHostController> {
                   );
                 }, controller.gameFail),
                 ObxValue<RxBool>((gameFail) {
+                  var game = controller.multiplayerGame.value ;
                   return Expanded(
                     child: Stack(
                       alignment: Alignment.center,
@@ -128,28 +129,63 @@ class MultiplayerHostGameStatus extends GetView<MultiplayerHostController> {
                               )
                             : Positioned(
                                 top: 300,
+                                width: 500,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Image.asset(
-                                      'assets/images/go_arrow.png',
-                                      width: 100,
-                                      height: 80,
-                                    )
-                                        .animate(
-                                            onPlay: (controller) => controller
-                                                .repeat(reverse: true))
-                                        .moveY(
-                                            curve: Curves.ease,
-                                            begin: 1,
-                                            end: -200,
-                                            delay: 700.ms,
-                                            duration: 900.ms),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: game?.numberOfPlayers ?? 2,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        var len = game?.scores?.length ?? 0 ;
+                                        return Container(
+                                          padding: EdgeInsets.all(8),
+                                          margin: EdgeInsets.only(bottom: 8),
+                                          decoration: BoxDecoration(
+                                            color: const Color(ColorCode.black),
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            border: Border.all(
+                                                width: 3.0, color: const Color(ColorCode.grey5)),
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Color(ColorCode.shadowColor),
+                                                offset: Offset(0, 4),
+                                                blurRadius: 4,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              CustomText(
+                                                '${index + 1}. ',
+                                                textStyle: TextStyles.textXXLarge.copyWith(
+                                                  fontFamily: 'Helvetica Neue',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              CustomText(
+                                                index < len ? (game?.scores?[index].ticket?.nickname ?? "unknown") : ". . . .",
+                                                textStyle: TextStyles.textXXLarge.copyWith(
+                                                  fontFamily: 'Helvetica Neue',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Spacer(
+                                              ),
+                                              index < len ? Icon(Icons.check_circle , color: Colors.green, size: 36,) : CircularProgressIndicator(
+                                                color: Colors.yellow,
+                                              )
+                                            ],
+                                          ),
+                                        ) ;
+                                      },
+                                    ),
                                     const SizedBox(
                                       height: 150,
                                     ),
                                     CustomText(
-                                      'Game Starting!',
+                                      'Waiting for players to join',
                                       textStyle: TextStyles.textLarge.copyWith(
                                         color: Colors.white,
                                       ),
