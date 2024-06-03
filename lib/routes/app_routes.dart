@@ -3,6 +3,7 @@
 part of 'app_pages.dart';
 
 abstract class Routes {
+
   Routes._();
 
   static const SPLASH = _Paths.SPLASH;
@@ -34,6 +35,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const COMPETITION_GAME_PLAY = _Paths.COMPETITION_GAME_PLAY;
   static const COMPETITION_GAME_STATUS = _Paths.COMPETITION_GAME_STATUS;
+  static const MM = _Paths.MM;
 }
 
 abstract class _Paths {
@@ -68,4 +70,5 @@ abstract class _Paths {
   static const COMPETITION_GAME_PLAY = '/competition_game_play';
 
   static const SINGLE_PLAY_GAME_PLAY = '/single_play_game_play';
+  static const MM = '/MM';
 }

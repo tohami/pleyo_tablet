@@ -6,21 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
-import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'bindings.dart';
-import 'consts/colors.dart';
 import 'firebase_options.dart';
 import 'lang/translation_service.dart';
 import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin-staging.pleyohub.com");
-// const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://192.168.1.3:1337");
+// const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin-staging.pleyohub.com");
+const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://192.168.1.11:1337");
 // const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin.pleyohub.com");
 
 Future main() async {

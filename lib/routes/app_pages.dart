@@ -9,6 +9,8 @@ import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/vie
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_game_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/select_team_size_step_view.dart';
 import 'package:pleyo_tablet_app/pages/create_group_competition/presentation/views/selected_game_details_view.dart';
+import 'package:pleyo_tablet_app/pages/mm_mode/bindings/mm_mode_binding.dart';
+import 'package:pleyo_tablet_app/pages/mm_mode/presentation/views/mm_timeline_view.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/bindings/multiplayer_mode_binding.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_playing_view.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/views/guest_status_view.dart';
@@ -178,6 +180,11 @@ class AppPages {
           page: () => const CompetitionGamePlay(),
         ),
       ]
-    )
+    ),
+    GetPage(
+        name: Routes.MM,
+        page: () => const MMTimeline(),
+        binding: MMModeBinding(),
+    ),
   ];
 }

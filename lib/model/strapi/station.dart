@@ -34,6 +34,7 @@ class _Attributes {
   bool? groupEnabled;
   bool? multiplayerEnabled;
   bool? competitionEnabled;
+  bool? massiveMultiplayerEnabled;
 
   _Attributes({this.name, this.organization, this.tabletSerial,  this.isEnabled});
 
@@ -47,6 +48,7 @@ class _Attributes {
     groupEnabled = json['groupEnabled'];
     multiplayerEnabled = json['multiplayerEnabled'];
     competitionEnabled = json['competitionEnabled'];
+    massiveMultiplayerEnabled = json['massiveMultiplayerEnabled'];
 }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +67,7 @@ class _Attributes {
     data['competitionEnabled'] = this.competitionEnabled;
     data['groupEnabled'] = this.groupEnabled;
     data['multiplayerEnabled'] = this.multiplayerEnabled;
+    data['massiveMultiplayerEnabled'] = this.massiveMultiplayerEnabled;
     return data;
   }
 }
