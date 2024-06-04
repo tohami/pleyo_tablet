@@ -43,16 +43,10 @@ class TimelineScreen extends StatelessWidget {
                       'Game 3',
                       'Game 4',
                       'Game 5',
-                      'Game 1',
-                      'Game 2',
-                      'Game 3',
-                      'Game 4',
-                      'Game 5',
-                      'Game 1',
-                      'Game 2',
-                      'Game 3',
-                      'Game 4',
-                      'Game 5',
+                      'Game 6',
+                      'Game 7',
+                      'Game 8',
+                      'Game 9',
                     ]),
                   ),
                   VerticalDivider(color: Colors.white),
@@ -117,7 +111,18 @@ class LibrarySection extends StatelessWidget {
               ),
               itemCount: items.length,
               itemBuilder: (context, index) {
-                return LibraryItem(title: items[index]);
+                return Draggable<String>(
+                  data: items[index],
+                  feedback: Material(
+                    color: Colors.transparent,
+                    child: LibraryItem(title: items[index]),
+                  ),
+                  childWhenDragging: Opacity(
+                    opacity: 0.5,
+                    child: LibraryItem(title: items[index]),
+                  ),
+                  child: LibraryItem(title: items[index]),
+                );
               },
             ),
           ),
@@ -135,6 +140,8 @@ class LibraryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         color: Colors.primaries[title.hashCode % Colors.primaries.length],
         borderRadius: BorderRadius.circular(8),
@@ -190,7 +197,14 @@ class ControlBar extends StatelessWidget {
   }
 }
 
-class TimelineView extends StatelessWidget {
+class TimelineView extends StatefulWidget {
+  @override
+  _TimelineViewState createState() => _TimelineViewState();
+}
+
+class _TimelineViewState extends State<TimelineView> {
+  List<String> timelineItems = ['Game 1', 'Game 3', 'Video 2', 'Game 3', 'Game 3'];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -229,25 +243,51 @@ class TimelineView extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Container(
+          child: DragTarget<String>(
+            onAccept: (data) {
+              setState(() {
+                timelineItems.add(data);
+              });
+            },
+            builder: (context, candidateData, rejectedData) {
+              return Container(
             color: Colors.black,
-            child: ListView(
+                child: ReorderableListView(
               scrollDirection: Axis.horizontal,
+                  onReorder: (int oldIndex, int newIndex) {
+                    setState(() {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;
+                      }
+                      final String item = timelineItems.removeAt(oldIndex);
+                      timelineItems.insert(newIndex, item);
+                    });
+                  },
               children: [
-                TimelineItem(title: 'Game 1'),
-                TimelineItem(title: 'Game 3'),
-                TimelineItem(title: 'Video 2'),
-                TimelineItem(title: 'Game 3'),
-                TimelineItem(title: 'Game 3'),
+                    for (int index = 0; index < timelineItems.length; index++)
+                      TimelineItem(
+                        key: ValueKey(timelineItems[index]),
+                        title: timelineItems[index],
+                      ),
               ],
             ),
+              );
+            },
           ),
         ),
         GestureDetector(
+          onTap: () {
+            setState(() {
+              timelineItems.clear();
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
           child: Text(
             'Clear timeline',
             style: TextStyle(color: Colors.white, fontSize: 12 ),
           ),
+        ),
         ),
       ],
     );
@@ -257,7 +297,7 @@ class TimelineView extends StatelessWidget {
 class TimelineItem extends StatelessWidget {
   final String title;
 
-  TimelineItem({required this.title});
+  TimelineItem({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
