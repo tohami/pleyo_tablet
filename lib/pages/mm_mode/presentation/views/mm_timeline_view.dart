@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -38,25 +40,25 @@ class TimelineScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: LibrarySection(title: 'Games Library', items: [
-                      'Game 1',
-                      'Game 2',
-                      'Game 3',
-                      'Game 4',
-                      'Game 5',
-                      'Game 6',
-                      'Game 7',
-                      'Game 8',
-                      'Game 9',
+                      LibraryItemModel(id: '1', name: 'Game 1'),
+                      LibraryItemModel(id: '2', name: 'Game 2'),
+                      LibraryItemModel(id: '3', name: 'Game 3'),
+                      LibraryItemModel(id: '4', name: 'Game 4'),
+                      LibraryItemModel(id: '5', name: 'Game 5'),
+                      LibraryItemModel(id: '6', name: 'Game 6'),
+                      LibraryItemModel(id: '7', name: 'Game 7'),
+                      LibraryItemModel(id: '8', name: 'Game 8'),
+                      LibraryItemModel(id: '9', name: 'Game 9'),
                     ]),
                   ),
                   VerticalDivider(color: Colors.white),
                   Expanded(
                     child: LibrarySection(title: 'Videos Library', items: [
-                      'Video 1',
-                      'Video 2',
-                      'Video 3',
-                      'Video 4',
-                      'Video 5',
+                      LibraryItemModel(id: '10', name: 'Video 1'),
+                      LibraryItemModel(id: '11', name: 'Video 2'),
+                      LibraryItemModel(id: '12', name: 'Video 3'),
+                      LibraryItemModel(id: '13', name: 'Video 4'),
+                      LibraryItemModel(id: '14', name: 'Video 5'),
                     ]),
                   ),
                 ],
@@ -79,9 +81,16 @@ class TimelineScreen extends StatelessWidget {
   }
 }
 
+class LibraryItemModel {
+  final String id;
+  final String name;
+
+  LibraryItemModel({required this.id, required this.name});
+}
+
 class LibrarySection extends StatelessWidget {
   final String title;
-  final List<String> items;
+  final List<LibraryItemModel> items;
 
   LibrarySection({required this.title, required this.items});
 
@@ -111,17 +120,16 @@ class LibrarySection extends StatelessWidget {
               ),
               itemCount: items.length,
               itemBuilder: (context, index) {
-                return Draggable<String>(
+                return Draggable<LibraryItemModel>(
                   data: items[index],
                   feedback: Material(
-                    color: Colors.transparent,
-                    child: LibraryItem(title: items[index]),
+                    child: LibraryItem(title: items[index].name),
                   ),
                   childWhenDragging: Opacity(
                     opacity: 0.5,
-                    child: LibraryItem(title: items[index]),
+                    child: LibraryItem(title: items[index].name),
                   ),
-                  child: LibraryItem(title: items[index]),
+                  child: LibraryItem(title: items[index].name),
                 );
               },
             ),
@@ -140,8 +148,8 @@ class LibraryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
-      height: 100,
+      width: 80,
+      height: 80,
       decoration: BoxDecoration(
         color: Colors.primaries[title.hashCode % Colors.primaries.length],
         borderRadius: BorderRadius.circular(8),
@@ -203,7 +211,11 @@ class TimelineView extends StatefulWidget {
 }
 
 class _TimelineViewState extends State<TimelineView> {
-  List<String> timelineItems = ['Game 1', 'Game 3', 'Video 2', 'Game 3', 'Game 3'];
+  List<LibraryItemModel> timelineItems = [
+    LibraryItemModel(id: '1', name: 'Game 1'),
+    LibraryItemModel(id: '3', name: 'Game 3'),
+    LibraryItemModel(id: '12', name: 'Video 2'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +255,7 @@ class _TimelineViewState extends State<TimelineView> {
           ),
         ),
         Expanded(
-          child: DragTarget<String>(
+          child: DragTarget<LibraryItemModel>(
             onAccept: (data) {
               setState(() {
                 timelineItems.add(data);
@@ -251,26 +263,42 @@ class _TimelineViewState extends State<TimelineView> {
             },
             builder: (context, candidateData, rejectedData) {
               return Container(
-            color: Colors.black,
+                color: Colors.black,
                 child: ReorderableListView(
-              scrollDirection: Axis.horizontal,
+                  proxyDecorator: (child, index, animation) {
+                    return AnimatedBuilder(
+                      animation: animation,
+                      builder: (BuildContext context, Widget? child) {
+                        final double animValue = Curves.easeInOut.transform(animation.value);
+                        final double elevation = lerpDouble(0, 6, animValue)!;
+                        return Material(
+                          elevation: elevation,
+                          color: Colors.white,
+                          shadowColor: Colors.white,
+                          child: child,
+                        );
+                      },
+                      child: child,
+                    );
+                  },
+                  scrollDirection: Axis.horizontal,
                   onReorder: (int oldIndex, int newIndex) {
                     setState(() {
                       if (newIndex > oldIndex) {
                         newIndex -= 1;
                       }
-                      final String item = timelineItems.removeAt(oldIndex);
+                      final LibraryItemModel item = timelineItems.removeAt(oldIndex);
                       timelineItems.insert(newIndex, item);
                     });
                   },
-              children: [
+                  children: [
                     for (int index = 0; index < timelineItems.length; index++)
                       TimelineItem(
-                        key: ValueKey(timelineItems[index]),
-                        title: timelineItems[index],
+                        key: ValueKey(timelineItems[index].id),
+                        title: timelineItems[index].name,
                       ),
-              ],
-            ),
+                  ],
+                ),
               );
             },
           ),
@@ -283,11 +311,11 @@ class _TimelineViewState extends State<TimelineView> {
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Clear timeline',
-            style: TextStyle(color: Colors.white, fontSize: 12 ),
+            child: Text(
+              'Clear timeline',
+              style: TextStyle(color: Colors.white, fontSize: 12 ),
+            ),
           ),
-        ),
         ),
       ],
     );
@@ -302,7 +330,8 @@ class TimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120,
+      width: 80,
+      height: 80,
       margin: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         color: Colors.primaries[title.hashCode % Colors.primaries.length],

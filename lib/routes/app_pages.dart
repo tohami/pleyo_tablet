@@ -183,7 +183,7 @@ class AppPages {
     ),
     GetPage(
         name: Routes.MM,
-        page: () => const MMTimeline(),
+        page: () => MMTimeline(),
         binding: MMModeBinding(),
     ),
   ];

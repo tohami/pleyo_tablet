@@ -28,9 +28,9 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  runZonedGuarded<Future<void>>(() async {
-  runApp(MyApp());
-  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  // runZonedGuarded<Future<void>>(() async {
+    runApp(MyApp());
+  // }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
     final List<dynamic> errorAndStacktrace = pair;
