@@ -100,4 +100,9 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
       }
     }
   }
+
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
 }

@@ -114,16 +114,20 @@ class LibrarySection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 6/7,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
+                childAspectRatio: 135/175,
+                mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
               ),
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return Draggable<LibraryItemModel>(
                   data: items[index],
-                  feedback: Material(
-                    child: LibraryItem(title: items[index].name),
+                  feedback: Container(
+                    // width: 50,
+                    // height: 50,
+                    child: Material(
+                      child: LibraryItem(title: items[index].name),
+                    ),
                   ),
                   childWhenDragging: Opacity(
                     opacity: 0.5,
@@ -148,8 +152,8 @@ class LibraryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
-      height: 80,
+      width: 175,
+      height: 135,
       decoration: BoxDecoration(
         color: Colors.primaries[title.hashCode % Colors.primaries.length],
         borderRadius: BorderRadius.circular(8),
@@ -330,8 +334,8 @@ class TimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
-      height: 80,
+      width: 175,
+      height: 135,
       margin: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         color: Colors.primaries[title.hashCode % Colors.primaries.length],

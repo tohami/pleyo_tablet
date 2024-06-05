@@ -323,4 +323,9 @@ class GroupRotationController extends SuperController<bool> {
     // TODO: implement onResumed
   }
 
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
+
 }

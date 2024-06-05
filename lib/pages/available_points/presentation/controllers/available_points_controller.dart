@@ -30,4 +30,9 @@ class AvailablePointsController extends SuperController<dynamic> {
 
   @override
   void onResumed() {}
+
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
 }

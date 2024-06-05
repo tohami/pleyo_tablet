@@ -226,4 +226,9 @@ class TicketController extends SuperController<bool>
       isScanned.value = false;
     });
   }
+
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
 }

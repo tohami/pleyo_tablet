@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:responsive_framework/utils/scroll_behavior.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'bindings.dart';
@@ -63,18 +62,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return GetMaterialApp.router(
-      builder: (context, widget) => ResponsiveWrapper.builder(
-          BouncingScrollWrapper.builder(context, widget!),
-          minWidth: 600,
-          maxWidth: 600,
-          defaultScale: true,
-          defaultName: TABLET,
+      builder: (context, widget) => ResponsiveBreakpoints.builder(
+        child: widget! ,
           breakpoints: [
             // const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
             // const ResponsiveBreakpoint.autoScale(600, name: MOBILE),
             // const ResponsiveBreakpoint.autoScale(850, name: TABLET),
             // const ResponsiveBreakpoint.autoScale(1080, name: DESKTOP),
-            const ResponsiveBreakpoint.autoScale(600, name: TABLET),
+            Breakpoint(start: 451, end: 800, name: TABLET),
           ]),
       debugShowCheckedModeBanner: false,
       enableLog: true,

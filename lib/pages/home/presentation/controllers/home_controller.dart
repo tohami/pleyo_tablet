@@ -318,4 +318,9 @@ class HomeController extends SuperController<bool> {
         "GAME_STOP", StationService.to.gameStatus.value.data["id"] , reason: "Stop game automatically after its finished");
   }
 
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
+
 }

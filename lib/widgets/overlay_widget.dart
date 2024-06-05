@@ -83,7 +83,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
                     height: clickableArea,
                     child: Text(
                       'InkWell (Overlay)',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -103,7 +103,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
                   height: clickableArea,
                   child: Text(
                     'Gesture (Overlay)',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),

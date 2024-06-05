@@ -30,13 +30,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get: 4.6.1
+  get: 4.6.6
   cupertino_icons: ^1.0.2
   firebase_core: 2.11.0
   firebase_analytics: 10.2.1
   firebase_crashlytics: 3.0.8
   flutter_svg: ^1.0.0
-  responsive_framework: ^0.1.7
+  responsive_framework: 1.4.0
   qr_code_scanner: 1.0.1
   animated_flip_counter: ^0.2.4
   number_slide_animation: ^0.2.1

@@ -297,4 +297,9 @@ class SinglePlayerModeController extends SuperController<bool> {
   void onResumed() {
     // TODO: implement onResumed
   }
+
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
 }

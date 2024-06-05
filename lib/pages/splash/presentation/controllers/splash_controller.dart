@@ -72,4 +72,9 @@ class SplashController extends SuperController<dynamic> with GetSingleTickerProv
   @override
   void onResumed() {}
 
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
+
 }

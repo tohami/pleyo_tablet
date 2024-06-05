@@ -216,4 +216,9 @@ class GroupPlayStepsController extends SuperController<bool> {
       createGroupLoading.value = false;
     }
   }
+
+  @override
+  void onHidden() {
+    // TODO: implement onHidden
+  }
 }

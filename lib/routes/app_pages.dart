@@ -40,6 +40,7 @@ import '../pages/multiplayer_mode/presentation/views/select_game_view.dart';
 import '../pages/multiplayer_mode/presentation/views/welcome_view.dart';
 import '../pages/splash/bindings/splash_binding.dart';
 import '../pages/splash/presentation/views/splash_view.dart';
+import '../widgets/scale_widget.dart';
 
 part 'app_routes.dart';
 
@@ -55,136 +56,206 @@ class AppPages {
         binding: SplashBinding()),
     GetPage(
         name: Routes.MODE,
-        page: () => const GameExperienceView(),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: GameExperienceView()),
         binding: SplashBinding()),
     GetPage(
         name: Routes.GROUP_LANDING,
-        page: () => SelectTeamSizeStep(),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: SelectTeamSizeStep()),
         binding: GroupSelectStepsBinding(),
         children: [
           GetPage(
             name: Routes.GROUP_TEAM_NAME,
-            page: () => const AddTeamNameStep(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: AddTeamNameStep()),
           ),
           GetPage(
             name: Routes.GROUP_PLAYER_NAMES,
-            page: () => const GroupNamesStep(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const GroupNamesStep()),
           ),
           GetPage(
             name: Routes.GROUP_SELECT_GAME,
-            page: () => const SelectGameStep(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const SelectGameStep()),
           ),
           GetPage(
             name: Routes.GROUP_SELECTED_GAME_DETAILS,
-            page: () => const SelectedGameDetails(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const SelectedGameDetails()),
           ),
         ]),
     GetPage(
         name: Routes.GROUP_TURN_LANDING,
-        page: () => const PlayerTurn(),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: const PlayerTurn()),
         binding: GroupRotationBinding(),
         children: [
           GetPage(
             name: Routes.GROUP_TURN_GAME_STATUS,
-            page: () => const GameStatus(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const GameStatus()),
           ),
           GetPage(
             name: Routes.GROUP_TURN_GAME_PLAY,
-            page: () => const GamePlaying(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const GamePlaying()),
           ),
           GetPage(
             name: Routes.GROUP_TURN_RESULT,
-            page: () => FinalResult(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: FinalResult()),
           ),
         ]),
     GetPage(
         name: Routes.SINGLE_PLAY_LANDING,
-        page: () => const PlayerNameStep(),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: const PlayerNameStep()),
         binding: SinglePlayerModeBinding(),
         children: [
           GetPage(
             name: Routes.SINGLE_PLAY_WELCOME,
-            page: () => const Welcome(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const Welcome()),
           ),
           GetPage(
             name: Routes.SINGLE_PLAY_SELECT_GAME,
-            page: () => const SelectGame(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const SelectGame()),
           ),
           GetPage(
             name: Routes.SINGLE_PLAY_GAME_STATUS,
-            page: () => const SingleModeGameStatus(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const SingleModeGameStatus()),
           ),
           GetPage(
             name: Routes.SINGLE_PLAY_GAME_PLAY,
-            page: () => const SinglePlayerGamePlay(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const SinglePlayerGamePlay()),
           ),
         ]),
     GetPage(
         name: Routes.MULTIPLAYER_LANDING,
-        page: () => const MultiplayerPlayerName(),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: const MultiplayerPlayerName()),
         binding: MultiplayerModeBinding(),
         children: [
           GetPage(
             name: Routes.MULTIPLAYER_WELCOME,
-            page: () => const MultiplayerWelcome(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const MultiplayerWelcome()),
           ),
           GetPage(
             name: Routes.MULTIPLAYER_SELECT_GAME,
-            page: () => const MultiplayerSelectGame(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const MultiplayerSelectGame()),
           ),
           GetPage(
             name: Routes.MULTIPLAYER_HOST_GAME_STATUS,
-            page: () => const MultiplayerHostGameStatus(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const MultiplayerHostGameStatus()),
           ),
           GetPage(
             name: Routes.MULTIPLAYER_HOST_GAME_PLAY,
-            page: () => const MultiplayerHostGamePlay(),
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const MultiplayerHostGamePlay()),
           ),
         ]),
     GetPage(
         name: Routes.MULTIPLAYER_GUEST_GAME_STATUS,
-        page: () => MultiplayerGuestGameStatus(),
-      children: [
-        GetPage(
-          name: Routes.MULTIPLAYER_GUEST_GAME_PLAY,
-          page: () => const MultiplayerGuestGamePlay(),
-        ),
-      ]
-    ),
+        page: () => ScaleWidget(
+            builder: (context, child) => scaleWidgetBuilder(context, child!),
+            child: MultiplayerGuestGameStatus()),
+        children: [
+          GetPage(
+            name: Routes.MULTIPLAYER_GUEST_GAME_PLAY,
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const MultiplayerGuestGamePlay()),
+          ),
+        ]),
     GetPage(
       name: Routes.SCAN_QR,
-      page: () => ScanQRView(),
+      page: () => ScaleWidget(
+          builder: (context, child) => scaleWidgetBuilder(context, child!),
+          child: ScanQRView()),
       binding: ScanQRBinding(),
     ),
     GetPage(
       name: Routes.ACTIVATE,
-      page: () => const ActivateView(),
+      page: () => ScaleWidget(
+          builder: (context, child) => scaleWidgetBuilder(context, child!),
+          child: const ActivateView()),
       binding: ActivateBinding(),
     ),
     GetPage(
       name: Routes.AVAILABLE_POINTS,
-      page: () => const AvailablePointsView(),
+      page: () => ScaleWidget(
+          builder: (context, child) => scaleWidgetBuilder(context, child!),
+          child: const AvailablePointsView()),
       binding: AvailablePointsBinding(),
     ),
     GetPage(
-      name: Routes.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-      children: [
-        GetPage(
-          name: Routes.COMPETITION_GAME_STATUS,
-          page: () => const CompetitionGameStatus(),
-        ),
-        GetPage(
-          name: Routes.COMPETITION_GAME_PLAY,
-          page: () => const CompetitionGamePlay(),
-        ),
-      ]
-    ),
+        name: Routes.HOME,
+        page: () => const HomeView(),
+        binding: HomeBinding(),
+        children: [
+          GetPage(
+            name: Routes.COMPETITION_GAME_STATUS,
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const CompetitionGameStatus()),
+          ),
+          GetPage(
+            name: Routes.COMPETITION_GAME_PLAY,
+            page: () => ScaleWidget(
+                builder: (context, child) =>
+                    scaleWidgetBuilder(context, child!),
+                child: const CompetitionGamePlay()),
+          ),
+        ]),
     GetPage(
-        name: Routes.MM,
-        page: () => MMTimeline(),
-        binding: MMModeBinding(),
+      name: Routes.MM,
+      page: () => MMTimeline(),
+      binding: MMModeBinding(),
     ),
   ];
 }
