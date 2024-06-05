@@ -17,7 +17,7 @@ import 'shared/logger/logger_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin-staging.pleyohub.com");
-const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://192.168.1.11:1337");
+const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://192.168.1.5:1337");
 // const BASE_URL = String.fromEnvironment('SERVER' , defaultValue: "http://admin.pleyohub.com");
 
 Future main() async {

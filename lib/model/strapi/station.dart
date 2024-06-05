@@ -1,5 +1,6 @@
 import 'package:pleyo_tablet_app/model/strapi/game_variant_response.dart';
 import 'package:pleyo_tablet_app/model/strapi/organization_response.dart';
+import 'package:pleyo_tablet_app/model/strapi/videos_api_response.dart';
 
 import 'organization.dart';
 
@@ -27,6 +28,7 @@ class Station {
 class _Attributes {
   String? name;
   // GameVariantsResponse? gameVariants;
+  VideosApiResponse? videos;
   OrganizationResponse? organization;
   String? tabletSerial;
   bool? isEnabled;
@@ -41,6 +43,7 @@ class _Attributes {
   _Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     // gameVariants = json['game_variants'] != null ? new GameVariantsResponse.fromJson(json['game_variants']) : null;
+    videos = json['videos'] != null ? new VideosApiResponse.fromJson(json['videos']) : null;
     organization = json['organization'] != null ? new OrganizationResponse.fromJson(json['organization']) : null;
     tabletSerial = json['tablet_serial'];
     isEnabled = json['isEnabled'];
@@ -57,6 +60,9 @@ class _Attributes {
     // if (this.gameVariants != null) {
     //   data['game_variants'] = this.gameVariants!.toJson();
     // }
+    if (this.videos != null) {
+      data['videos'] = this.videos!.toJson();
+    }
     if (this.organization != null) {
       data['organization'] = this.organization!.toJson();
     }

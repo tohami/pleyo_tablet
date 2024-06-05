@@ -119,6 +119,7 @@ class ConfigurationAttributes {
   GameVariantsResponse? multiplayerGameVariants;
   GameVariantsResponse? singlePlayGameVariants;
   GameVariantsResponse? competitionGameVariants;
+  GameVariantsResponse? mmGameVariants;
 
   ConfigurationAttributes({this.createdAt, this.updatedAt, this.groupTemplates});
 
@@ -135,6 +136,7 @@ class ConfigurationAttributes {
     multiplayerGameVariants = json['multiplayerGameVariants'] != null ? new GameVariantsResponse.fromJson(json['multiplayerGameVariants']) : null;
     singlePlayGameVariants = json['singlePlayGameVariants'] != null ? new GameVariantsResponse.fromJson(json['singlePlayGameVariants']) : null;
     competitionGameVariants = json['competitionGameVariants'] != null ? new GameVariantsResponse.fromJson(json['competitionGameVariants']) : null;
+    mmGameVariants = json['mmGameVariants'] != null ? new GameVariantsResponse.fromJson(json['mmGameVariants']) : null;
   }
 
   Map<String, dynamic> toJson() {

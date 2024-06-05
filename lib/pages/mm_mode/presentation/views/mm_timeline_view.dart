@@ -102,10 +102,10 @@ class LibrarySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 8.0 , top: 8.0, right: 8.0),
+            padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
             child: Text(
               title,
-              style: TextStyle(color: Colors.white, fontSize: 14 ),
+              style: TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
           Expanded(
@@ -114,7 +114,7 @@ class LibrarySection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 135/175,
+                childAspectRatio: 135 / 175,
                 mainAxisSpacing: 15,
                 crossAxisSpacing: 15,
               ),
@@ -123,8 +123,6 @@ class LibrarySection extends StatelessWidget {
                 return Draggable<LibraryItemModel>(
                   data: items[index],
                   feedback: Container(
-                    // width: 50,
-                    // height: 50,
                     child: Material(
                       child: LibraryItem(title: items[index].name),
                     ),
@@ -170,11 +168,12 @@ class LibraryItem extends StatelessWidget {
 
 class ControlBar extends StatelessWidget {
   final controllersColor = const Color(0xff4D4D4D);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey[100],
-      padding: const EdgeInsets.only(left: 8.0 , right: 8.0,top: 4 , bottom: 4),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -221,6 +220,8 @@ class _TimelineViewState extends State<TimelineView> {
     LibraryItemModel(id: '12', name: 'Video 2'),
   ];
 
+  int? dropIndex;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -228,7 +229,7 @@ class _TimelineViewState extends State<TimelineView> {
       children: [
         Container(
           color: Color(0xff4D4D4D),
-          padding: const EdgeInsets.only(left: 8.0 , right: 8.0 , top: 4),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -250,7 +251,7 @@ class _TimelineViewState extends State<TimelineView> {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 8 , right: 8 , top: 3 , bottom: 2),
+          padding: EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 2),
           child: LinearProgressIndicator(
             color: Color(0xff52A2FF),
             value: 0.6,
@@ -260,9 +261,28 @@ class _TimelineViewState extends State<TimelineView> {
         ),
         Expanded(
           child: DragTarget<LibraryItemModel>(
+            onWillAccept: (data) {
+              setState(() {
+                dropIndex = null;
+              });
+              return true;
+            },
+            onMove: (details) {
+              setState(() {
+                dropIndex = details.offset.dx ~/ 180; // Approximate width of each item including margin
+                if (dropIndex! > timelineItems.length) {
+                  dropIndex = timelineItems.length;
+                }
+              });
+            },
             onAccept: (data) {
               setState(() {
-                timelineItems.add(data);
+                if (dropIndex != null) {
+                  timelineItems.insert(dropIndex!, data);
+                } else {
+                  timelineItems.add(data);
+                }
+                dropIndex = null;
               });
             },
             builder: (context, candidateData, rejectedData) {
@@ -296,11 +316,16 @@ class _TimelineViewState extends State<TimelineView> {
                     });
                   },
                   children: [
-                    for (int index = 0; index < timelineItems.length; index++)
+                    for (int index = 0; index < timelineItems.length; index++) ...[
+                      if (dropIndex != null && dropIndex == index)
+                        PlaceholderItem(key: ValueKey('placeholder_$index')),
                       TimelineItem(
                         key: ValueKey(timelineItems[index].id),
                         title: timelineItems[index].name,
                       ),
+                    ],
+                    if (dropIndex != null && dropIndex == timelineItems.length)
+                      PlaceholderItem(key: ValueKey('placeholder_end')),
                   ],
                 ),
               );
@@ -317,7 +342,7 @@ class _TimelineViewState extends State<TimelineView> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Clear timeline',
-              style: TextStyle(color: Colors.white, fontSize: 12 ),
+              style: TextStyle(color: Colors.white, fontSize: 12),
             ),
           ),
         ),
@@ -344,6 +369,30 @@ class TimelineItem extends StatelessWidget {
       child: Center(
         child: Text(
           title,
+          style: TextStyle(color: Colors.white, fontSize: 12),
+        ),
+      ),
+    );
+  }
+}
+
+class PlaceholderItem extends StatelessWidget {
+  const PlaceholderItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 175,
+      height: 135,
+      margin: const EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[400],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white, width: 2),
+      ),
+      child: Center(
+        child: Text(
+          'Drop here',
           style: TextStyle(color: Colors.white, fontSize: 12),
         ),
       ),
