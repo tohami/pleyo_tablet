@@ -1,91 +1,63 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
+
+import '../../../../base/library_item_model.dart';
 
 class MMTimeline extends GetView<MMController> {
   const MMTimeline({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: TimelineScreen(),
-    );
-  }
-}
-
-class TimelineScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Locking the orientation to landscape when this screen is displayed
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Resetting the orientation to default when leaving this screen
-        SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Color(0xff333333),
-        body: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: LibrarySection(title: 'Games Library', items: [
-                      LibraryItemModel(id: '1', name: 'Game 1'),
-                      LibraryItemModel(id: '2', name: 'Game 2'),
-                      LibraryItemModel(id: '3', name: 'Game 3'),
-                      LibraryItemModel(id: '4', name: 'Game 4'),
-                      LibraryItemModel(id: '5', name: 'Game 5'),
-                      LibraryItemModel(id: '6', name: 'Game 6'),
-                      LibraryItemModel(id: '7', name: 'Game 7'),
-                      LibraryItemModel(id: '8', name: 'Game 8'),
-                      LibraryItemModel(id: '9', name: 'Game 9'),
-                    ]),
-                  ),
-                  VerticalDivider(color: Colors.white),
-                  Expanded(
-                    child: LibrarySection(title: 'Videos Library', items: [
-                      LibraryItemModel(id: '10', name: 'Video 1'),
-                      LibraryItemModel(id: '11', name: 'Video 2'),
-                      LibraryItemModel(id: '12', name: 'Video 3'),
-                      LibraryItemModel(id: '13', name: 'Video 4'),
-                      LibraryItemModel(id: '14', name: 'Video 5'),
-                    ]),
-                  ),
-                ],
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async {
+          // Resetting the orientation to default when leaving this screen
+          SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Color(0xff333333),
+          body: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: LibrarySection(title: 'Games Library', items: controller.games),
+                    ),
+                    VerticalDivider(color: Colors.white),
+                    Expanded(
+                      child: LibrarySection(title: 'Videos Library', items: controller.videos),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            VerticalDivider(color: Colors.white),
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  ControlBar(),
-                  Expanded(child: TimelineView()),
-                ],
+              VerticalDivider(color: Colors.white),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    ControlBar(),
+                    Expanded(child: TimelineView()),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-class LibraryItemModel {
-  final String id;
-  final String name;
-
-  LibraryItemModel({required this.id, required this.name});
 }
 
 class LibrarySection extends StatelessWidget {
@@ -120,18 +92,20 @@ class LibrarySection extends StatelessWidget {
               ),
               itemCount: items.length,
               itemBuilder: (context, index) {
+                var item = items[index];
+
                 return Draggable<LibraryItemModel>(
-                  data: items[index],
+                  data: item,
                   feedback: Container(
                     child: Material(
-                      child: LibraryItem(title: items[index].name),
+                      child: LibraryItem(item: item),
                     ),
                   ),
                   childWhenDragging: Opacity(
                     opacity: 0.5,
-                    child: LibraryItem(title: items[index].name),
+                    child: LibraryItem(item: item),
                   ),
-                  child: LibraryItem(title: items[index].name),
+                  child: LibraryItem(item: item),
                 );
               },
             ),
@@ -143,24 +117,61 @@ class LibrarySection extends StatelessWidget {
 }
 
 class LibraryItem extends StatelessWidget {
-  final String title;
+  final LibraryItemModel item;
 
-  LibraryItem({required this.title});
+  LibraryItem({required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 175,
       height: 135,
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.primaries[title.hashCode % Colors.primaries.length],
+        image: DecorationImage(
+          image: CachedNetworkImageProvider(
+            item.image??""
+          ),
+          fit: BoxFit.cover,
+          opacity: 0.4
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item.name??"",
+            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.timelapse , size: 12, color: Colors.white,),
+              SizedBox(width: 4,),
+              Text(
+                (item.duration!/60).toStringAsFixed(1),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              SizedBox(width: 4,),
+              Text(
+                "Minutes",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ),
+          item.type == "GAME" ?
+          Row(
+            children: [
+              Icon(Icons.person , size: 12, color: Colors.white,),
+              SizedBox(width: 4,),
+              Text(
+                item.description??"",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ) : Container(),
+        ],
       ),
     );
   }
@@ -214,11 +225,7 @@ class TimelineView extends StatefulWidget {
 }
 
 class _TimelineViewState extends State<TimelineView> {
-  List<LibraryItemModel> timelineItems = [
-    LibraryItemModel(id: '1', name: 'Game 1'),
-    LibraryItemModel(id: '3', name: 'Game 3'),
-    LibraryItemModel(id: '12', name: 'Video 2'),
-  ];
+  List<LibraryItemModel> timelineItems = [];
 
   int? dropIndex;
 
@@ -277,6 +284,7 @@ class _TimelineViewState extends State<TimelineView> {
             },
             onAccept: (data) {
               setState(() {
+                data.internalId = DateTime.now().millisecondsSinceEpoch ;
                 if (dropIndex != null) {
                   timelineItems.insert(dropIndex!, data);
                 } else {
@@ -320,8 +328,8 @@ class _TimelineViewState extends State<TimelineView> {
                       if (dropIndex != null && dropIndex == index)
                         PlaceholderItem(key: ValueKey('placeholder_$index')),
                       TimelineItem(
-                        key: ValueKey(timelineItems[index].id),
-                        title: timelineItems[index].name,
+                        key: ValueKey(timelineItems[index].internalId),
+                        item: timelineItems[index],
                       ),
                     ],
                     if (dropIndex != null && dropIndex == timelineItems.length)
@@ -352,12 +360,14 @@ class _TimelineViewState extends State<TimelineView> {
 }
 
 class TimelineItem extends StatelessWidget {
-  final String title;
+  final LibraryItemModel item;
 
-  TimelineItem({Key? key, required this.title}) : super(key: key);
+  TimelineItem({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String title = item.name!;
+
     return Container(
       width: 175,
       height: 135,

@@ -1,9 +1,10 @@
+import 'package:pleyo_tablet_app/base/library_item_model.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_difficulty_response.dart';
 import 'package:pleyo_tablet_app/model/strapi/game_response.dart';
 
 import 'Image.dart';
 
-class GameVariant {
+class GameVariant implements LibraryItemModel {
   int? id;
   Attributes? attributes;
 
@@ -32,30 +33,56 @@ class GameVariant {
   @override
   int get hashCode => id.hashCode;
 
+  @override
+  int? get gamehubId => attributes?.gamehubId;
+
+  @override
+  // TODO: implement description
+  String get description => "${attributes?.minNumberOfPlayers} - ${attributes?.maxNumberOfPlayers} Players";
+
+  @override
+  // TODO: implement duration
+  int? get duration => attributes?.duration;
+
+  @override
+  // TODO: implement image
+  String? get image => attributes?.image?.data?.attributes?.url;
+
+  @override
+  // TODO: implement name
+  String? get name => attributes?.name;
+
+  @override
+  // TODO: implement type
+  String get type => "GAME";
+
+  @override
+  int? internalId;
+
 }
 
 class Attributes {
   String? name;
-  int? effort;
   int? gamehubId;
   String? description;
   String? subtitle;
-  String? createdAt;
-  String? updatedAt;
+  int? duration;
+  int? minNumberOfPlayers;
+  int? maxNumberOfPlayers;
   ImageResponse? image;
   GameDifficultyResponse? gameDifficulties;
   GameResponse? game;
 
-  Attributes({this.name, this.effort, this.description, this.subtitle, this.createdAt, this.updatedAt,this.image, this.gameDifficulties, this.game});
+  Attributes({this.name, this.description, this.subtitle, this.image, this.gameDifficulties, this.game});
 
   Attributes.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    effort = json['effort'];
     gamehubId = json['gamehubId'];
     description = json['description'];
     subtitle = json['subtitle'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    duration = json['duration'];
+    minNumberOfPlayers = json['minNumberOfPlayers'];
+    maxNumberOfPlayers = json['maxNumberOfPlayers'];
     image = json['image'] != null ? new ImageResponse.fromJson(json['image']) : null;
     gameDifficulties = json['game_difficulties'] != null ? new GameDifficultyResponse.fromJson(json['game_difficulties']) : null;
     game = json['game'] != null ? new GameResponse.fromJson(json['game']) : null;
@@ -64,12 +91,12 @@ class Attributes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['effort'] = this.effort;
     data['gamehubId'] = this.gamehubId;
     data['description'] = this.description;
     data['subtitle'] = this.subtitle;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['duration'] = this.duration;
+    data['minNumberOfPlayers'] = this.minNumberOfPlayers;
+    data['maxNumberOfPlayers'] = this.maxNumberOfPlayers;
     if (this.image != null) {
       data['image'] = this.image!.toJson();
     }

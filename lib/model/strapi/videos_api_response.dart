@@ -1,3 +1,5 @@
+import 'package:pleyo_tablet_app/base/library_item_model.dart';
+
 class VideosApiResponse {
   List<StationVideo>? data;
 
@@ -21,7 +23,7 @@ class VideosApiResponse {
   }
 }
 
-class StationVideo {
+class StationVideo implements LibraryItemModel {
   int? id;
   StationVideoAttributes? attributes;
 
@@ -42,6 +44,32 @@ class StationVideo {
     }
     return data;
   }
+
+  @override
+  String? get description => "";
+
+  @override
+  // TODO: implement duration
+  int? get duration => int.tryParse(attributes?.alternativeText??"");
+
+  @override
+  // TODO: implement gamehubId
+  int? get gamehubId => -1;
+
+  @override
+  // TODO: implement image
+  String? get image => attributes?.previewUrl;
+
+  @override
+  // TODO: implement name
+  String? get name => attributes?.name;
+
+  @override
+  // TODO: implement type
+  String? get type => "VIDEO";
+
+  @override
+  int? internalId;
 }
 
 class StationVideoAttributes {
@@ -49,6 +77,7 @@ class StationVideoAttributes {
   String? hash;
   String? ext;
   String? mime;
+  String? alternativeText;
   double? size;
   String? url;
   String? previewUrl;
@@ -67,6 +96,7 @@ class StationVideoAttributes {
     hash = json['hash'];
     ext = json['ext'];
     mime = json['mime'];
+    alternativeText = json['alternativeText'];
     size = json['size'];
     url = json['url'];
     previewUrl = json['previewUrl'];
@@ -78,6 +108,7 @@ class StationVideoAttributes {
     data['hash'] = this.hash;
     data['ext'] = this.ext;
     data['mime'] = this.mime;
+    data['alternativeText'] = this.alternativeText;
     data['size'] = this.size;
     data['url'] = this.url;
     data['previewUrl'] = this.previewUrl;
