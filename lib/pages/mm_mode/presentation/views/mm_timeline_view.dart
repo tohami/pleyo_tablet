@@ -177,7 +177,7 @@ class LibraryItem extends StatelessWidget {
   }
 }
 
-class ControlBar extends StatelessWidget {
+class ControlBar extends GetView<MMController> {
   final controllersColor = const Color(0xff4D4D4D);
 
   @override
@@ -210,7 +210,11 @@ class ControlBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('session Duration', style: TextStyle(color: Colors.green, fontSize: 8)),
-              Text('00:30:00', style: TextStyle(color: controllersColor, fontSize: 12)),
+              ObxValue(
+                (state) {
+                  return Text(controller.formatDuration(controller.calculateSessionDuration()), style: TextStyle(color: controllersColor, fontSize: 12));
+                } , controller.timelineItems
+              ),
             ],
           ),
         ],
@@ -219,15 +223,8 @@ class ControlBar extends StatelessWidget {
   }
 }
 
-class TimelineView extends StatefulWidget {
-  @override
-  _TimelineViewState createState() => _TimelineViewState();
-}
 
-class _TimelineViewState extends State<TimelineView> {
-  List<LibraryItemModel> timelineItems = [];
-
-  int? dropIndex;
+class TimelineView extends GetView<MMController> {
 
   @override
   Widget build(BuildContext context) {
@@ -269,72 +266,67 @@ class _TimelineViewState extends State<TimelineView> {
         Expanded(
           child: DragTarget<LibraryItemModel>(
             onWillAccept: (data) {
-              setState(() {
-                dropIndex = null;
-              });
+              controller.dropIndex.value = -1;
               return true;
             },
             onMove: (details) {
-              setState(() {
-                dropIndex = details.offset.dx ~/ 180; // Approximate width of each item including margin
-                if (dropIndex! > timelineItems.length) {
-                  dropIndex = timelineItems.length;
+                controller.dropIndex.value = details.offset.dx ~/ 180; // Approximate width of each item including margin
+                if (controller.dropIndex.value > controller.timelineItems.length) {
+                  controller.dropIndex.value = controller.timelineItems.length;
                 }
-              });
             },
             onAccept: (data) {
-              setState(() {
                 data.internalId = DateTime.now().millisecondsSinceEpoch ;
-                if (dropIndex != null) {
-                  timelineItems.insert(dropIndex!, data);
+                if (controller.dropIndex.value != -1) {
+                  controller.timelineItems.insert(controller.dropIndex.value, data);
                 } else {
-                  timelineItems.add(data);
+                  controller.timelineItems.add(data);
                 }
-                dropIndex = null;
-              });
+                controller.dropIndex.value = -1;
             },
             builder: (context, candidateData, rejectedData) {
               return Container(
                 color: Colors.black,
-                child: ReorderableListView(
-                  proxyDecorator: (child, index, animation) {
-                    return AnimatedBuilder(
-                      animation: animation,
-                      builder: (BuildContext context, Widget? child) {
-                        final double animValue = Curves.easeInOut.transform(animation.value);
-                        final double elevation = lerpDouble(0, 6, animValue)!;
-                        return Material(
-                          elevation: elevation,
-                          color: Colors.white,
-                          shadowColor: Colors.white,
+                child: Obx(() {
+                    return ReorderableListView(
+                      proxyDecorator: (child, index, animation) {
+                        return AnimatedBuilder(
+                          animation: animation,
+                          builder: (BuildContext context, Widget? child) {
+                            final double animValue = Curves.easeInOut.transform(animation.value);
+                            final double elevation = lerpDouble(0, 6, animValue)!;
+                            return Material(
+                              elevation: elevation,
+                              color: Colors.white,
+                              shadowColor: Colors.white,
+                              child: child,
+                            );
+                          },
                           child: child,
                         );
                       },
-                      child: child,
+                      scrollDirection: Axis.horizontal,
+                      onReorder: (int oldIndex, int newIndex) {
+                          if (newIndex > oldIndex) {
+                            newIndex -= 1;
+                          }
+                          final LibraryItemModel item = controller.timelineItems.removeAt(oldIndex);
+                          controller.timelineItems.insert(newIndex, item);
+                      },
+                      children: [
+                        for (int index = 0; index < controller.timelineItems.length; index++) ...[
+                          if (controller.dropIndex.value != -1 && controller.dropIndex.value == index)
+                            PlaceholderItem(key: ValueKey('placeholder_$index')),
+                          TimelineItem(
+                            key: ValueKey(controller.timelineItems[index].internalId),
+                            item: controller.timelineItems[index],
+                          ),
+                        ],
+                        if (controller.dropIndex.value != -1 && controller.dropIndex.value == controller.timelineItems.length)
+                          PlaceholderItem(key: ValueKey('placeholder_end')),
+                      ],
                     );
-                  },
-                  scrollDirection: Axis.horizontal,
-                  onReorder: (int oldIndex, int newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) {
-                        newIndex -= 1;
-                      }
-                      final LibraryItemModel item = timelineItems.removeAt(oldIndex);
-                      timelineItems.insert(newIndex, item);
-                    });
-                  },
-                  children: [
-                    for (int index = 0; index < timelineItems.length; index++) ...[
-                      if (dropIndex != null && dropIndex == index)
-                        PlaceholderItem(key: ValueKey('placeholder_$index')),
-                      TimelineItem(
-                        key: ValueKey(timelineItems[index].internalId),
-                        item: timelineItems[index],
-                      ),
-                    ],
-                    if (dropIndex != null && dropIndex == timelineItems.length)
-                      PlaceholderItem(key: ValueKey('placeholder_end')),
-                  ],
+                  }
                 ),
               );
             },
@@ -342,9 +334,7 @@ class _TimelineViewState extends State<TimelineView> {
         ),
         GestureDetector(
           onTap: () {
-            setState(() {
-              timelineItems.clear();
-            });
+            controller.timelineItems.clear();
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -366,21 +356,57 @@ class TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title = item.name!;
 
     return Container(
       width: 175,
       height: 135,
       margin: const EdgeInsets.all(4.0),
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.primaries[title.hashCode % Colors.primaries.length],
+        image: DecorationImage(
+            image: CachedNetworkImageProvider(
+                item.image??""
+            ),
+            fit: BoxFit.cover,
+            opacity: 0.4
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item.name??"",
+            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.timelapse , size: 12, color: Colors.white,),
+              SizedBox(width: 4,),
+              Text(
+                (item.duration!/60).toStringAsFixed(1),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              SizedBox(width: 4,),
+              Text(
+                "Minutes",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ),
+          item.type == "GAME" ?
+          Row(
+            children: [
+              Icon(Icons.person , size: 12, color: Colors.white,),
+              SizedBox(width: 4,),
+              Text(
+                item.description??"",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ) : Container(),
+        ],
       ),
     );
   }
