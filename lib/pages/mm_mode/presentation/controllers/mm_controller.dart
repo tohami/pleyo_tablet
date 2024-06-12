@@ -33,6 +33,8 @@ class MMController extends SuperController<bool> {
   bool isGameStarting = false ;
   RxBool isPaused = true.obs ;
   RxBool replayEnabled = false.obs;
+  RxInt playlistProgress = 0.obs; // Tracks the progress of the playlist in seconds
+  Timer? playlistTimer;
 
   MMController(
       {required this.mmRepository});
@@ -57,6 +59,7 @@ class MMController extends SuperController<bool> {
         case GameStatusType.STARTED:
         // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
           isGameStarting = false ;
+          startTimer();
           break;
         case GameStatusType.FINISHED:
           if(scoreId == currentScoreId){
@@ -74,9 +77,11 @@ class MMController extends SuperController<bool> {
           break;
         case GameStatusType.PAUSED:
           isPaused.value = true;
+          stopTimer();
           break;
         case GameStatusType.RESUMED:
           isPaused.value = false;
+          startTimer();
           break;
       }
     });
@@ -101,7 +106,7 @@ class MMController extends SuperController<bool> {
             gameDifficulty: gameDifficulty,
             station: stationId!,
             organization: organizationId!,
-            numberOfPlayers: item.attributes!.maxNumberOfPlayers!,
+            numberOfPlayers: item.attributes!.maxNumberOfPlayers??0,
           );
 
           currentRunningItem = item;
@@ -112,6 +117,7 @@ class MMController extends SuperController<bool> {
 
         isPaused.value = false ;
         isGameStarting = true;
+        startTimer();
       } else {
         print("A game is already running");
       }
@@ -195,7 +201,19 @@ Future<void> pauseGame() async {
     currentRunningItem = null;
     currentScoreId = null;
         isPaused.value = true;
-    }
+    stopTimer();
+  }
+
+  void startTimer() {
+    playlistTimer?.cancel();
+    playlistTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      playlistProgress.value++;
+    });
+  }
+
+  void stopTimer() {
+    playlistTimer?.cancel();
+  }
 
   int calculateSessionDuration () {
     if(timelineItems.isEmpty) return 0 ;
@@ -221,6 +239,7 @@ Future<void> pauseGame() async {
   @override
   void onClose() {
     subscription.cancel();
+    playlistTimer?.cancel();
     super.onClose();
   }
 

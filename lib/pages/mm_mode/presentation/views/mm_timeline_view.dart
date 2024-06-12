@@ -222,10 +222,18 @@ class ControlBar extends GetView<MMController> {
           ),
           Row(
             children: [
-              IconButton(
-                icon: Icon(Icons.skip_previous, color: controllersColor),
-                onPressed: controller.playPrevious,
-              ),
+              Obx(() {
+                return Visibility(
+                  visible: controller.currentGameIndex.value > 0,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: IconButton(
+                  icon: Icon(Icons.skip_previous, color: controllersColor),
+                  onPressed: controller.playPrevious,
+                  ),
+                );
+              }),
               Container(
                 child: ObxValue<RxBool>((state) {
                   return GestureDetector(
@@ -245,10 +253,18 @@ class ControlBar extends GetView<MMController> {
                   );
                 }, controller.isPaused),
               ),
-              IconButton(
-                icon: Icon(Icons.skip_next, color: controllersColor),
-                onPressed: controller.playNext,
-              ),
+              Obx(() {
+                return Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: controller.currentGameIndex.value < controller.timelineItems.length - 1,
+                  child: IconButton(
+                  icon: Icon(Icons.skip_next, color: controllersColor),
+                  onPressed: controller.playNext,
+                  ),
+                );
+              }),
             ],
           ),
           Column(
@@ -287,8 +303,12 @@ class TimelineView extends GetView<MMController> {
                 children: [
                   Text('Current Time',
                       style: TextStyle(color: Color(0xffBFDCFF), fontSize: 8)),
-                  Text('00:30:00',
-                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
+                  Obx(() {
+                    return Text(
+                      controller.formatDuration(controller.playlistProgress.value),
+                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
+                    );
+                  }),
                 ],
               ),
               Column(
@@ -296,8 +316,13 @@ class TimelineView extends GetView<MMController> {
                 children: [
                   Text('Time to end',
                       style: TextStyle(color: Colors.red, fontSize: 8)),
-                  Text('00:30:00',
-                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
+                  Obx(() {
+                    int timeToEnd = controller.calculateSessionDuration() - controller.playlistProgress.value;
+                    return Text(
+                      controller.formatDuration(timeToEnd),
+                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
+                    );
+                  }),
                 ],
               ),
             ],
@@ -305,12 +330,15 @@ class TimelineView extends GetView<MMController> {
         ),
         Container(
           padding: EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 2),
-          child: LinearProgressIndicator(
+          child: Obx(() {
+            double progress = controller.playlistProgress.value / controller.calculateSessionDuration();
+            return LinearProgressIndicator(
             color: Color(0xff52A2FF),
-            value: 0.6,
+              value: progress.isNaN ? 0 : progress,
             backgroundColor: Color(0xff4D4D4D),
             minHeight: 1,
-          ),
+            );
+          }),
         ),
         Expanded(
           child: DragTarget<GameVariant>(
