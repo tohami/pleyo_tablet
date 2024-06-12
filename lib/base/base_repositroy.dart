@@ -10,8 +10,8 @@ class BaseRepository  {
       final responseJson = const JsonDecoder().convert(apiResponse);
       StrapiError errorResponse = StrapiError.fromJson(responseJson);
       if (errorResponse.error != null) {
-        return MapEntry(errorResponse.error!.message!,
-            errorResponse.error!.details!.error ??
+        return MapEntry(errorResponse.error?.message??"Something went wrong ",
+            errorResponse.error?.details?.error ??
                 "Something went wrong please try again later");
       }
     }

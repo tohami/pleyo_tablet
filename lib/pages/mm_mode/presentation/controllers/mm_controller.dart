@@ -27,9 +27,9 @@ class MMController extends SuperController<bool> {
   late StreamSubscription subscription;
 
   RxInt dropIndex = (-1).obs ;
+  RxInt currentGameIndex = (-1).obs;
 
   RxList<GameVariant> timelineItems = RxList();
-  RxList<GameVariant> originalTimelineItems = RxList();
   bool isGameStarting = false ;
   RxBool isPaused = true.obs ;
   RxBool replayEnabled = false.obs;
@@ -60,13 +60,13 @@ class MMController extends SuperController<bool> {
           break;
         case GameStatusType.FINISHED:
           if(scoreId == currentScoreId){
-            await playNextGame();
+            await playNext();
           }
           break;
         case GameStatusType.CLOSED:
         case GameStatusType.CRASHED:
           if(scoreId == currentScoreId){
-            await playNextGame();
+            await playNext();
           }
           break;
         case GameStatusType.UPDATED:
@@ -87,9 +87,12 @@ class MMController extends SuperController<bool> {
       if (currentRunningItem == null || isPaused.value) {
         // If no game is running or the current game is paused, create a new game or resume
         if (currentRunningItem == null) {
-          // Create a new multiplayer game
-          final item = timelineItems[0] ;
-          final gameDifficulty = 1; // Replace with actual game difficulty if available
+          if (currentGameIndex.value == -1) {
+            currentGameIndex.value = 0;
+        }
+
+          final item = timelineItems[currentGameIndex.value];
+        final gameDifficulty = 1;
           final stationId = station.id;
           final organizationId = organization.id;
 
@@ -104,14 +107,12 @@ class MMController extends SuperController<bool> {
           currentRunningItem = item;
           currentScoreId = newGame.id;
         } else {
-          // Resume the paused game
           await mmRepository.resumeGame(multiplayerGameId: currentScoreId!);
         }
 
         isPaused.value = false ;
         isGameStarting = true;
       } else {
-        // If a game is already running, no action needed
         print("A game is already running");
       }
     } catch (e) {
@@ -120,56 +121,44 @@ class MMController extends SuperController<bool> {
     }
   }
 
-  Future<void> playNextGame() async {
+  Future<void> playNext() async {
     try {
       resetCurrentGame();
-      if (timelineItems.isNotEmpty) {
-        timelineItems.removeAt(0);
-        if (timelineItems.isNotEmpty) {
-          await playPlayList();
-        } else {
-          if (replayEnabled.value) {
-            timelineItems.addAll(originalTimelineItems);
-            await playPlayList();
-          } else {
-            currentRunningItem = null;
-            currentScoreId = null;
-            isPaused.value = true;
-            print("Playlist finished");
-          }
+      currentGameIndex.value++;
+      if (currentGameIndex.value >= timelineItems.length) {
+        if (replayEnabled.value) {
+          currentGameIndex.value = 0;
+    } else {
+          currentGameIndex.value = -1;
+          print("Playlist finished");
+          return;
         }
       }
+        await playPlayList();
     } catch (e) {
       print("Error playing next game: $e");
       rethrow;
     }
   }
 
-  Future<void> playPreviousGame() async {
+  Future<void> playPrevious() async {
     try {
       resetCurrentGame();
-      if (timelineItems.isNotEmpty && currentRunningItem != null) {
-        timelineItems.insert(0, currentRunningItem!);
-        await playPlayList();
+      currentGameIndex.value--;
+      if (currentGameIndex.value < 0) {
+        if (replayEnabled.value) {
+          currentGameIndex.value = timelineItems.length - 1;
+        } else {
+          currentGameIndex.value = -1;
+          print("No previous game");
+          return;
+        }
       }
+        await playPlayList();
     } catch (e) {
       print("Error playing previous game: $e");
       rethrow;
     }
-  }
-
-  Future<void> playNext() async {
-    if (currentRunningItem != null) {
-      await stopGame();
-    }
-    await playNextGame();
-  }
-
-  Future<void> playPrevious() async {
-    if (currentRunningItem != null) {
-      await stopGame();
-    }
-    await playPreviousGame();
   }
 
 Future<void> pauseGame() async {

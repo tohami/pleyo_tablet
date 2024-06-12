@@ -208,29 +208,24 @@ class ControlBar extends GetView<MMController> {
             children: [
               Container(
                 padding: EdgeInsets.zero,
-                child:
-                    Icon(Icons.toggle_off, color: controllersColor, size: 20),
-              ),
-              Container(
-                child: ObxValue<RxBool>((state) {
-                  return GestureDetector(
-                    onTap: () {
-                      controller.replayEnabled.value = !controller.replayEnabled.value;
+                child: Obx(() {
+                  return Switch(
+                    value: controller.replayEnabled.value,
+                    onChanged: (value) {
+                      controller.replayEnabled.value = value;
                     },
-                    child: Icon(
-                      controller.replayEnabled.value
-                          ? Icons.replay
-                          : Icons.replay_outlined,
-                      color: controllersColor,
-                      size: 20,
-                    ),
+                    activeColor: Colors.green,
                   );
-                }, controller.replayEnabled),
+                }),
               ),
             ],
           ),
           Row(
             children: [
+              IconButton(
+                icon: Icon(Icons.skip_previous, color: controllersColor),
+                onPressed: controller.playPrevious,
+              ),
               Container(
                 child: ObxValue<RxBool>((state) {
                   return GestureDetector(
@@ -249,14 +244,6 @@ class ControlBar extends GetView<MMController> {
                         size: 20),
                   );
                 }, controller.isPaused),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.skip_previous, color: controllersColor),
-                onPressed: controller.playPrevious,
               ),
               IconButton(
                 icon: Icon(Icons.skip_next, color: controllersColor),
@@ -389,8 +376,9 @@ class TimelineView extends GetView<MMController> {
                           PlaceholderItem(key: ValueKey('placeholder_$index')),
                         TimelineItem(
                           key: ValueKey(
-                              controller.timelineItems[index].internalId),
+                              '${controller.timelineItems[index].id}_$index'),
                           item: controller.timelineItems[index],
+                          isCurrent: index == controller.currentGameIndex.value,
                         ),
                       ],
                       if (controller.dropIndex.value != -1 &&
@@ -423,8 +411,9 @@ class TimelineView extends GetView<MMController> {
 
 class TimelineItem extends StatelessWidget {
   final GameVariant item;
+  final bool isCurrent;
 
-  TimelineItem({Key? key, required this.item}) : super(key: key);
+  TimelineItem({Key? key, required this.item, required this.isCurrent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -439,6 +428,10 @@ class TimelineItem extends StatelessWidget {
             fit: BoxFit.cover,
             opacity: 0.4),
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isCurrent ? Colors.green : Colors.transparent,
+          width: 3,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
