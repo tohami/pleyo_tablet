@@ -23,7 +23,7 @@ class VideosApiResponse {
   }
 }
 
-class StationVideo implements LibraryItemModel {
+class StationVideo /*implements LibraryItemModel*/ {
   int? id;
   StationVideoAttributes? attributes;
 
@@ -54,7 +54,7 @@ class StationVideo implements LibraryItemModel {
 
   @override
   // TODO: implement gamehubId
-  int? get gamehubId => -1;
+  int? get objectId => id;
 
   @override
   // TODO: implement image
@@ -70,6 +70,9 @@ class StationVideo implements LibraryItemModel {
 
   @override
   int? internalId;
+
+  @override
+  bool isPaused = false ;
 }
 
 class StationVideoAttributes {

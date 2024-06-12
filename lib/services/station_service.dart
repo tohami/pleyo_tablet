@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/model/start_game.dart';
 import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game_message.dart';
+import 'package:pleyo_tablet_app/model/strapi/organization.dart';
 import 'package:pleyo_tablet_app/model/strapi/personas.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/controllers/multiplayer_guest_controller.dart';
 import 'package:unique_identifier/unique_identifier.dart';
@@ -17,10 +18,13 @@ import '../pages/multiplayer_mode/presentation/views/guest_name_dialog.dart';
 import '../pages/splash/data/splash_repository.dart';
 
 class StationService extends GetxService {
+
   static StationService get to => Get.find();
 
   late Ticket currentTicket ;
   late Station currentStation ;
+  late Organization organization;
+
   late List<PersonaGroupData> personasGroups ;
   RxBool isReady = false.obs ;
   final Rx<GameStatus> gameStatus = GameStatus(GameStatusType.IDLE, {}).obs;
@@ -73,6 +77,10 @@ class StationService extends GetxService {
 
     socket.on('gameStarted',
             (data) => gameStatus.value = GameStatus(GameStatusType.STARTED, data));
+    socket.on('gameResumed',
+            (data) => gameStatus.value = GameStatus(GameStatusType.RESUMED, data));
+    socket.on('gamePaused',
+            (data) => gameStatus.value = GameStatus(GameStatusType.PAUSED, data));
     socket.on('gameFinished',
             (data) => gameStatus.value = GameStatus(GameStatusType.FINISHED, data));
     socket.on('gameClosed',
@@ -99,6 +107,7 @@ class StationService extends GetxService {
 
         if(station.attributes?.organization?.data != null ){
           currentStation = station ;
+          organization = station.attributes!.organization!.data! ;
           personasGroups = personas ;
           FirebaseCrashlytics.instance.setUserIdentifier("${currentStation.attributes?.name}:${currentStation.id.toString()}") ;
 

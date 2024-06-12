@@ -5,71 +5,87 @@ import '../../../model/strapi/ticket.dart';
 import 'mm_api_provider.dart';
 
 abstract class IMMRepository {
-  Future<MultiplayerGame> createMultiplayerGame({
+  Future<MultiplayerGame> createMMGame({
     required int gameVariant,
     required int gameDifficulty,
     required int station,
-    required String nickname,
     required int organization,
+    required int numberOfPlayers,
   });
 
-  joinMultiplayerGame(
-      {required int station,
-      required int organization,
-      required String nickname,
-        required int scoreId});
+  Future<void> stopGame({
+    required int multiplayerGameId,
+  });
+
+  Future<void> pauseGame({
+    required int multiplayerGameId,
+  });
+
+  Future<void> resumeGame({
+    required int multiplayerGameId,
+  });
 }
 
-class MMRepository extends BaseRepository
-    implements IMMRepository {
-  IMMProvider provider;
+class MMRepository extends BaseRepository implements IMMRepository {
+  final IMMProvider provider;
 
   MMRepository({required this.provider});
 
-  Future<MultiplayerGame> createMultiplayerGame({
+  @override
+  Future<MultiplayerGame> createMMGame({
     required int gameVariant,
     required int gameDifficulty,
     required int station,
-    required String nickname,
     required int organization,
+    required int numberOfPlayers,
   }) async {
-    // TODO: implement getAllMerchants
-    final apiResponse = await provider.createMultiplayerGame(
-        gameVariant: gameVariant,
-        gameDifficulty: gameDifficulty,
-        nickname: nickname,
-        organization: organization,
-        station: station);
+    final apiResponse = await provider.createMMGame(
+      gameVariant: gameVariant,
+      gameDifficulty: gameDifficulty,
+      organization: organization,
+      station: station,
+      numberOfPlayers: numberOfPlayers,
+    );
     if (apiResponse.isOk && apiResponse.body != null) {
       return apiResponse.body!;
     } else {
-      throw (getErrorMessage(apiResponse.bodyString!));
+      throw getErrorMessage(apiResponse.bodyString!);
     }
   }
 
-  Future<MultiplayerGame> joinMultiplayerGame({
-    required int station,
-    required String nickname,
-    required int organization,
-    required int scoreId
+  @override
+  Future<void> stopGame({
+    required int multiplayerGameId,
   }) async {
-    // TODO: implement getAllMerchants
-    final apiResponse = await provider.joinMultiplayerGame(
-        nickname: nickname, organization: organization, station: station , scoreId:scoreId);
-    if (apiResponse.isOk && apiResponse.body != null) {
-      return apiResponse.body!;
-    } else {
-      throw (getErrorMessage(apiResponse.bodyString!));
+    final apiResponse = await provider.stopGame(
+      multiplayerGameId: multiplayerGameId,
+    );
+    if (!apiResponse.isOk) {
+      throw getErrorMessage(apiResponse.bodyString!);
     }
   }
-// @override
-// Future<Score> updateScoreStatus(String status,int scoreId) async{
-//   // TODO: implement getAllMerchants
-//   final apiResponse = await provider.updateScoreStatus(status,scoreId) ;
-//   if(apiResponse.isOk && apiResponse.body?.data != null){
-//     return apiResponse.body!.data!;
-//   }else {
-//     throw(getErrorMessage(apiResponse.bodyString!)) ;
-//   }
-// }
+
+  @override
+  Future<void> pauseGame({
+    required int multiplayerGameId,
+  }) async {
+    final apiResponse = await provider.pauseGame(
+      multiplayerGameId: multiplayerGameId,
+    );
+    if (!apiResponse.isOk) {
+      throw getErrorMessage(apiResponse.bodyString!);
+    }
+  }
+
+  @override
+  Future<void> resumeGame({
+    required int multiplayerGameId,
+  }) async {
+    final apiResponse = await provider.resumeGame(
+      multiplayerGameId: multiplayerGameId,
+    );
+    if (!apiResponse.isOk) {
+      throw getErrorMessage(apiResponse.bodyString!);
+    }
+  }
 }

@@ -120,6 +120,7 @@ class ConfigurationAttributes {
   GameVariantsResponse? singlePlayGameVariants;
   GameVariantsResponse? competitionGameVariants;
   GameVariantsResponse? mmGameVariants;
+  GameVariantsResponse? promotionVideos;
 
   ConfigurationAttributes({this.createdAt, this.updatedAt, this.groupTemplates});
 
@@ -137,6 +138,7 @@ class ConfigurationAttributes {
     singlePlayGameVariants = json['singlePlayGameVariants'] != null ? new GameVariantsResponse.fromJson(json['singlePlayGameVariants']) : null;
     competitionGameVariants = json['competitionGameVariants'] != null ? new GameVariantsResponse.fromJson(json['competitionGameVariants']) : null;
     mmGameVariants = json['mmGameVariants'] != null ? new GameVariantsResponse.fromJson(json['mmGameVariants']) : null;
+    promotionVideos = json['promotionVideos'] != null ? new GameVariantsResponse.fromJson(json['promotionVideos']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -160,6 +162,14 @@ class ConfigurationAttributes {
 
     if (this.competitionGameVariants != null) {
       data['competitionGameVariants'] = this.competitionGameVariants!.toJson();
+    }
+
+    if (this.mmGameVariants != null) {
+      data['mmGameVariants'] = this.mmGameVariants!.toJson();
+    }
+
+    if (this.promotionVideos != null) {
+      data['promotionVideos'] = this.promotionVideos!.toJson();
     }
 
     return data;

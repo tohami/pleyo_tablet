@@ -4,7 +4,7 @@ import 'package:pleyo_tablet_app/model/strapi/game_response.dart';
 
 import 'Image.dart';
 
-class GameVariant implements LibraryItemModel {
+class GameVariant /*implements LibraryItemModel*/ {
   int? id;
   Attributes? attributes;
 
@@ -33,30 +33,26 @@ class GameVariant implements LibraryItemModel {
   @override
   int get hashCode => id.hashCode;
 
-  @override
-  int? get gamehubId => attributes?.gamehubId;
-
-  @override
+  // @override
   // TODO: implement description
   String get description => "${attributes?.minNumberOfPlayers} - ${attributes?.maxNumberOfPlayers} Players";
 
-  @override
+  // @override
   // TODO: implement duration
   int? get duration => attributes?.duration;
 
-  @override
+  // @override
   // TODO: implement image
   String? get image => attributes?.image?.data?.attributes?.url;
 
-  @override
+  // @override
   // TODO: implement name
   String? get name => attributes?.name;
 
   @override
   // TODO: implement type
-  String get type => "GAME";
+  String get type => attributes?.maxNumberOfPlayers != null ? "GAME" : "VIDEO";
 
-  @override
   int? internalId;
 
 }

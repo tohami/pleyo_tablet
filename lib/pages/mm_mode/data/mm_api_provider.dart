@@ -1,64 +1,86 @@
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/base/base_provider.dart';
 import 'package:pleyo_tablet_app/model/strapi/multiplayer_game_response.dart';
-import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
-import 'package:pleyo_tablet_app/model/strapi/ticket_reponse.dart';
 
 abstract class IMMProvider {
-  Future<Response<MultiplayerGame>> createMultiplayerGame({
+  Future<Response<MultiplayerGame>> createMMGame({
     required int gameVariant,
     required int gameDifficulty,
     required int station,
-    required String nickname,
     required int organization,
+    required int numberOfPlayers,
   });
 
-  joinMultiplayerGame(
-      {required int station,
-      required int organization,
-      required String nickname,
-        required int scoreId});
+  Future<Response> stopGame({
+    required int multiplayerGameId,
+  });
+
+  Future<Response> pauseGame({
+    required int multiplayerGameId,
+  });
+
+  Future<Response> resumeGame({
+    required int multiplayerGameId,
+  });
 }
 
 class MMProvider extends BaseProvider implements IMMProvider {
   @override
-  Future<Response<MultiplayerGame>> createMultiplayerGame({
+  Future<Response<MultiplayerGame>> createMMGame({
     required int gameVariant,
     required int gameDifficulty,
     required int station,
-    required String nickname,
     required int organization,
+    required int numberOfPlayers,
   }) {
     return post<MultiplayerGame>(
-        'multiplayers',
-        {
-          "data": {
-            "game_variant": gameVariant,
-            "game_difficulty": gameDifficulty,
-            "station": station,
-            "nickname": nickname,
-            "organization": organization
-          }
-        },
-        decoder: MultiplayerGame.fromJson);
+      'massive-multiplayers',
+      {
+        "data": {
+          "game_variant": gameVariant,
+          "game_difficulty": gameDifficulty,
+          "station": station,
+          "organization": organization,
+          "numberOfPlayers": numberOfPlayers,
+        }
+      },
+      decoder: MultiplayerGame.fromJson,
+    );
   }
 
   @override
-  Future<Response<MultiplayerGame>> joinMultiplayerGame({
-    required int station,
-    required String nickname,
-    required int organization,
-    required int scoreId
+  Future<Response> stopGame({
+    required int multiplayerGameId
   }) {
-    return post<MultiplayerGame>(
-        'multiplayers/$scoreId/join',
-        {
-          "data": {
-            "station": station,
-            "nickname": nickname,
-            "organization": organization
-          }
-        },
-        decoder: MultiplayerGame.fromJson);
+    return post(
+      'massive-multiplayers/$multiplayerGameId/gameUpdates',
+      {
+        "CommandeId": "GAME_STOP",
+      },
+    );
+  }
+
+  @override
+  Future<Response> pauseGame({
+    required int multiplayerGameId,
+  }) {
+    return post(
+      'massive-multiplayers/$multiplayerGameId/gameUpdates',
+      {
+        "CommandeId": "GAME_PAUSE",
+      },
+    );
+  }
+
+  @override
+  Future<Response> resumeGame({
+    required int multiplayerGameId,
+  }) {
+    return post(
+      'massive-multiplayers/$multiplayerGameId/gameUpdates',
+      {
+        "CommandeId": "GAME_RESUME",
+      },
+    );
   }
 }

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
 
 import '../../../../base/library_item_model.dart';
+import '../../../../model/strapi/game_variant.dart';
 
 class MMTimeline extends GetView<MMController> {
   const MMTimeline({Key? key}) : super(key: key);
@@ -33,11 +34,13 @@ class MMTimeline extends GetView<MMController> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: LibrarySection(title: 'Games Library', items: controller.games),
+                      child: LibrarySection(
+                          title: 'Games Library', items: controller.games),
                     ),
                     VerticalDivider(color: Colors.white),
                     Expanded(
-                      child: LibrarySection(title: 'Videos Library', items: controller.videos),
+                      child: LibrarySection(
+                          title: 'Videos Library', items: controller.videos),
                     ),
                   ],
                 ),
@@ -62,7 +65,7 @@ class MMTimeline extends GetView<MMController> {
 
 class LibrarySection extends StatelessWidget {
   final String title;
-  final List<LibraryItemModel> items;
+  final List<GameVariant> items;
 
   LibrarySection({required this.title, required this.items});
 
@@ -94,7 +97,7 @@ class LibrarySection extends StatelessWidget {
               itemBuilder: (context, index) {
                 var item = items[index];
 
-                return Draggable<LibraryItemModel>(
+                return Draggable<GameVariant>(
                   data: item,
                   feedback: Container(
                     child: Material(
@@ -117,7 +120,7 @@ class LibrarySection extends StatelessWidget {
 }
 
 class LibraryItem extends StatelessWidget {
-  final LibraryItemModel item;
+  final GameVariant item;
 
   LibraryItem({required this.item});
 
@@ -129,48 +132,61 @@ class LibraryItem extends StatelessWidget {
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: CachedNetworkImageProvider(
-            item.image??""
-          ),
-          fit: BoxFit.cover,
-          opacity: 0.4
-        ),
+            image: CachedNetworkImageProvider(item.image ?? ""),
+            fit: BoxFit.cover,
+            opacity: 0.4),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            item.name??"",
-            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+            item.name ?? "",
+            style: TextStyle(
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.timelapse , size: 12, color: Colors.white,),
-              SizedBox(width: 4,),
+              Icon(
+                Icons.timelapse,
+                size: 12,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 4,
+              ),
               Text(
-                (item.duration!/60).toStringAsFixed(1),
+                (item.duration! / 60).toStringAsFixed(1),
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
-              SizedBox(width: 4,),
+              SizedBox(
+                width: 4,
+              ),
               Text(
                 "Minutes",
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ],
           ),
-          item.type == "GAME" ?
-          Row(
-            children: [
-              Icon(Icons.person , size: 12, color: Colors.white,),
-              SizedBox(width: 4,),
-              Text(
-                item.description??"",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
-          ) : Container(),
+          item.type == "GAME"
+              ? Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      item.description ?? "",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );
@@ -192,29 +208,73 @@ class ControlBar extends GetView<MMController> {
             children: [
               Container(
                 padding: EdgeInsets.zero,
-                child: Icon(Icons.toggle_off, color: controllersColor, size: 20),
+                child:
+                    Icon(Icons.toggle_off, color: controllersColor, size: 20),
               ),
               Container(
-                child: Icon(Icons.replay, color: controllersColor, size: 20),
+                child: ObxValue<RxBool>((state) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.replayEnabled.value = !controller.replayEnabled.value;
+                    },
+                    child: Icon(
+                      controller.replayEnabled.value
+                          ? Icons.replay
+                          : Icons.replay_outlined,
+                      color: controllersColor,
+                      size: 20,
+                    ),
+                  );
+                }, controller.replayEnabled),
               ),
             ],
           ),
           Row(
             children: [
               Container(
-                child: Icon(Icons.play_circle_outline, color: controllersColor, size: 20),
+                child: ObxValue<RxBool>((state) {
+                  return GestureDetector(
+                    onTap: () {
+                      if(state.value){
+                        controller.playPlayList() ;
+                      }else {
+                        controller.pauseGame();
+                      }
+                    },
+                      child: Icon(
+                          state.value
+                              ? Icons.play_circle_outline
+                              : Icons.pause_circle_outline,
+                          color: controllersColor,
+                        size: 20),
+                  );
+                }, controller.isPaused),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.skip_previous, color: controllersColor),
+                onPressed: controller.playPrevious,
+              ),
+              IconButton(
+                icon: Icon(Icons.skip_next, color: controllersColor),
+                onPressed: controller.playNext,
               ),
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('session Duration', style: TextStyle(color: Colors.green, fontSize: 8)),
-              ObxValue(
-                (state) {
-                  return Text(controller.formatDuration(controller.calculateSessionDuration()), style: TextStyle(color: controllersColor, fontSize: 12));
-                } , controller.timelineItems
-              ),
+              Text('session Duration',
+                  style: TextStyle(color: Colors.green, fontSize: 8)),
+              ObxValue((state) {
+                return Text(
+                    controller
+                        .formatDuration(controller.calculateSessionDuration()),
+                    style: TextStyle(color: controllersColor, fontSize: 12));
+              }, controller.timelineItems),
             ],
           ),
         ],
@@ -223,9 +283,7 @@ class ControlBar extends GetView<MMController> {
   }
 }
 
-
 class TimelineView extends GetView<MMController> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -240,15 +298,19 @@ class TimelineView extends GetView<MMController> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Current Time', style: TextStyle(color: Color(0xffBFDCFF), fontSize: 8)),
-                  Text('00:30:00', style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
+                  Text('Current Time',
+                      style: TextStyle(color: Color(0xffBFDCFF), fontSize: 8)),
+                  Text('00:30:00',
+                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Time to end', style: TextStyle(color: Colors.red, fontSize: 8)),
-                  Text('00:30:00', style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
+                  Text('Time to end',
+                      style: TextStyle(color: Colors.red, fontSize: 8)),
+                  Text('00:30:00',
+                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12)),
                 ],
               ),
             ],
@@ -264,70 +326,80 @@ class TimelineView extends GetView<MMController> {
           ),
         ),
         Expanded(
-          child: DragTarget<LibraryItemModel>(
-            onWillAccept: (data) {
+          child: DragTarget<GameVariant>(
+            onWillAcceptWithDetails: (data) {
               controller.dropIndex.value = -1;
               return true;
             },
             onMove: (details) {
-                controller.dropIndex.value = details.offset.dx ~/ 180; // Approximate width of each item including margin
-                if (controller.dropIndex.value > controller.timelineItems.length) {
-                  controller.dropIndex.value = controller.timelineItems.length;
-                }
+              controller.dropIndex.value = details.offset.dx ~/
+                  180; // Approximate width of each item including margin
+              if (controller.dropIndex.value >
+                  controller.timelineItems.length) {
+                controller.dropIndex.value = controller.timelineItems.length;
+              }
             },
-            onAccept: (data) {
-                data.internalId = DateTime.now().millisecondsSinceEpoch ;
-                if (controller.dropIndex.value != -1) {
-                  controller.timelineItems.insert(controller.dropIndex.value, data);
-                } else {
-                  controller.timelineItems.add(data);
-                }
-                controller.dropIndex.value = -1;
+            onAcceptWithDetails: (data) {
+              data.data.internalId = DateTime.now().millisecondsSinceEpoch;
+              if (controller.dropIndex.value != -1) {
+                controller.timelineItems
+                    .insert(controller.dropIndex.value, data.data);
+              } else {
+                controller.timelineItems.add(data.data);
+              }
+              controller.dropIndex.value = -1;
             },
             builder: (context, candidateData, rejectedData) {
               return Container(
                 color: Colors.black,
                 child: Obx(() {
-                    return ReorderableListView(
-                      proxyDecorator: (child, index, animation) {
-                        return AnimatedBuilder(
-                          animation: animation,
-                          builder: (BuildContext context, Widget? child) {
-                            final double animValue = Curves.easeInOut.transform(animation.value);
-                            final double elevation = lerpDouble(0, 6, animValue)!;
-                            return Material(
-                              elevation: elevation,
-                              color: Colors.white,
-                              shadowColor: Colors.white,
-                              child: child,
-                            );
-                          },
-                          child: child,
-                        );
-                      },
-                      scrollDirection: Axis.horizontal,
-                      onReorder: (int oldIndex, int newIndex) {
-                          if (newIndex > oldIndex) {
-                            newIndex -= 1;
-                          }
-                          final LibraryItemModel item = controller.timelineItems.removeAt(oldIndex);
-                          controller.timelineItems.insert(newIndex, item);
-                      },
-                      children: [
-                        for (int index = 0; index < controller.timelineItems.length; index++) ...[
-                          if (controller.dropIndex.value != -1 && controller.dropIndex.value == index)
-                            PlaceholderItem(key: ValueKey('placeholder_$index')),
-                          TimelineItem(
-                            key: ValueKey(controller.timelineItems[index].internalId),
-                            item: controller.timelineItems[index],
-                          ),
-                        ],
-                        if (controller.dropIndex.value != -1 && controller.dropIndex.value == controller.timelineItems.length)
-                          PlaceholderItem(key: ValueKey('placeholder_end')),
+                  return ReorderableListView(
+                    proxyDecorator: (child, index, animation) {
+                      return AnimatedBuilder(
+                        animation: animation,
+                        builder: (BuildContext context, Widget? child) {
+                          final double animValue =
+                              Curves.easeInOut.transform(animation.value);
+                          final double elevation = lerpDouble(0, 6, animValue)!;
+                          return Material(
+                            elevation: elevation,
+                            color: Colors.white,
+                            shadowColor: Colors.white,
+                            child: child,
+                          );
+                        },
+                        child: child,
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+                    onReorder: (int oldIndex, int newIndex) {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;
+                      }
+                      final GameVariant item =
+                          controller.timelineItems.removeAt(oldIndex);
+                      controller.timelineItems.insert(newIndex, item);
+                    },
+                    children: [
+                      for (int index = 0;
+                          index < controller.timelineItems.length;
+                          index++) ...[
+                        if (controller.dropIndex.value != -1 &&
+                            controller.dropIndex.value == index)
+                          PlaceholderItem(key: ValueKey('placeholder_$index')),
+                        TimelineItem(
+                          key: ValueKey(
+                              controller.timelineItems[index].internalId),
+                          item: controller.timelineItems[index],
+                        ),
                       ],
-                    );
-                  }
-                ),
+                      if (controller.dropIndex.value != -1 &&
+                          controller.dropIndex.value ==
+                              controller.timelineItems.length)
+                        PlaceholderItem(key: ValueKey('placeholder_end')),
+                    ],
+                  );
+                }),
               );
             },
           ),
@@ -350,13 +422,12 @@ class TimelineView extends GetView<MMController> {
 }
 
 class TimelineItem extends StatelessWidget {
-  final LibraryItemModel item;
+  final GameVariant item;
 
   TimelineItem({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: 175,
       height: 135,
@@ -364,48 +435,61 @@ class TimelineItem extends StatelessWidget {
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: CachedNetworkImageProvider(
-                item.image??""
-            ),
+            image: CachedNetworkImageProvider(item.image ?? ""),
             fit: BoxFit.cover,
-            opacity: 0.4
-        ),
+            opacity: 0.4),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            item.name??"",
-            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+            item.name ?? "",
+            style: TextStyle(
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.timelapse , size: 12, color: Colors.white,),
-              SizedBox(width: 4,),
+              Icon(
+                Icons.timelapse,
+                size: 12,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 4,
+              ),
               Text(
-                (item.duration!/60).toStringAsFixed(1),
+                (item.duration! / 60).toStringAsFixed(1),
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
-              SizedBox(width: 4,),
+              SizedBox(
+                width: 4,
+              ),
               Text(
                 "Minutes",
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ],
           ),
-          item.type == "GAME" ?
-          Row(
-            children: [
-              Icon(Icons.person , size: 12, color: Colors.white,),
-              SizedBox(width: 4,),
-              Text(
-                item.description??"",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
-          ) : Container(),
+          item.type == "GAME"
+              ? Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      item.description ?? "",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );
