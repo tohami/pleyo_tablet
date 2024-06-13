@@ -392,8 +392,17 @@ class TimelineView extends GetView<MMController> {
                         newIndex -= 1;
                       }
                       final GameVariant item =
-                          controller.timelineItems.removeAt(oldIndex);
+                      controller.timelineItems.removeAt(oldIndex);
                       controller.timelineItems.insert(newIndex, item);
+                      if (oldIndex == controller.currentGameIndex.value) {
+                        controller.currentGameIndex.value = newIndex;
+                      } else if (oldIndex < controller.currentGameIndex.value &&
+                          newIndex >= controller.currentGameIndex.value) {
+                        controller.currentGameIndex.value--;
+                      } else if (oldIndex > controller.currentGameIndex.value &&
+                          newIndex <= controller.currentGameIndex.value) {
+                        controller.currentGameIndex.value++;
+                      }
                     },
                     children: [
                       for (int index = 0;
@@ -402,11 +411,26 @@ class TimelineView extends GetView<MMController> {
                         if (controller.dropIndex.value != -1 &&
                             controller.dropIndex.value == index)
                           PlaceholderItem(key: ValueKey('placeholder_$index')),
-                        TimelineItem(
+                        Dismissible(
                           key: ValueKey(
                               '${controller.timelineItems[index].id}_$index'),
+                          onDismissed: (direction) {
+                            controller.timelineItems.removeAt(index);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("${controller.timelineItems[index].name} removed from timeline"),
+                            ));
+                          },
+                          direction: index == controller.currentGameIndex.value ? DismissDirection.none : DismissDirection.vertical,
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                          child: TimelineItem(
                           item: controller.timelineItems[index],
                           isCurrent: index == controller.currentGameIndex.value,
+                        ),
                         ),
                       ],
                       if (controller.dropIndex.value != -1 &&

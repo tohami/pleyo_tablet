@@ -117,6 +117,8 @@ class MMController extends SuperController<bool> {
 
         isPaused.value = false ;
         isGameStarting = true;
+        // Sum up the durations of past games to update playlistProgress
+        syncTimeLineProgress();
         startTimer();
       } else {
         print("A game is already running");
@@ -124,6 +126,13 @@ class MMController extends SuperController<bool> {
     } catch (e) {
       print("Error starting playlist: $e");
       rethrow;
+    }
+  }
+
+  void syncTimeLineProgress () {
+    playlistProgress.value = 0;
+    for (int i = 0; i < currentGameIndex.value; i++) {
+      playlistProgress.value += timelineItems[i].duration ?? 0;
     }
   }
 
