@@ -101,6 +101,7 @@ class LibrarySection extends StatelessWidget {
                   data: item,
                   feedback: Container(
                     child: Material(
+                      color: Colors.transparent,
                       child: LibraryItem(item: item),
                     ),
                   ),
@@ -134,7 +135,7 @@ class LibraryItem extends StatelessWidget {
         image: DecorationImage(
             image: CachedNetworkImageProvider(item.image ?? ""),
             fit: BoxFit.cover,
-            opacity: 0.4),
+            opacity: 0.5),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
