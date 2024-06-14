@@ -111,14 +111,14 @@ class MMController extends SuperController<bool> {
 
           currentRunningItem = item;
           currentScoreId = newGame.id;
+          // Sum up the durations of past games to update playlistProgress
+          syncTimeLineProgress();
         } else {
           await mmRepository.resumeGame(multiplayerGameId: currentScoreId!);
         }
 
         isPaused.value = false ;
         isGameStarting = true;
-        // Sum up the durations of past games to update playlistProgress
-        syncTimeLineProgress();
         startTimer();
       } else {
         print("A game is already running");
@@ -181,6 +181,7 @@ Future<void> pauseGame() async {
     if (currentRunningItem != null && !isPaused.value) {
       await mmRepository.pauseGame(multiplayerGameId: currentScoreId!);
       isPaused.value = true;
+      stopTimer();
       print("Game paused");
     } else {
       print("No running game to pause or game already paused");
