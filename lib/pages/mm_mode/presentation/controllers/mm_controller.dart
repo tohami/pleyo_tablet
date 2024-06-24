@@ -36,8 +36,9 @@ class MMController extends SuperController<bool> {
   RxInt playlistProgress = 0.obs; // Tracks the progress of the playlist in seconds
   Timer? playlistTimer;
 
-  MMController(
-      {required this.mmRepository});
+  final double secondToWidthRatio = 2; // Configurable ratio for width per second
+
+  MMController({required this.mmRepository});
 
   @override
   void onInit() {

@@ -7,12 +7,14 @@ import 'Image.dart';
 class GameVariant /*implements LibraryItemModel*/ {
   int? id;
   Attributes? attributes;
+  int? internalId;
 
-  GameVariant({this.id, this.attributes});
+  GameVariant({this.id, this.attributes, this.internalId});
 
   GameVariant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     attributes = json['attributes'] != null ? new Attributes.fromJson(json['attributes']) : null;
+    internalId = json['internalId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -21,7 +23,16 @@ class GameVariant /*implements LibraryItemModel*/ {
     if (this.attributes != null) {
       data['attributes'] = this.attributes!.toJson();
     }
+    data['internalId'] = this.internalId;
     return data;
+  }
+
+  GameVariant copyWith({int? id, Attributes? attributes, int? internalId}) {
+    return GameVariant(
+      id: id ?? this.id,
+      attributes: attributes ?? this.attributes,
+      internalId: internalId ?? this.internalId,
+    );
   }
 
   @override
@@ -52,8 +63,6 @@ class GameVariant /*implements LibraryItemModel*/ {
   @override
   // TODO: implement type
   String get type => attributes?.maxNumberOfPlayers != null ? "GAME" : "VIDEO";
-
-  int? internalId;
 
 }
 

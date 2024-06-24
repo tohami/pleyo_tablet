@@ -230,8 +230,8 @@ class ControlBar extends GetView<MMController> {
                   maintainAnimation: true,
                   maintainState: true,
                   child: IconButton(
-                  icon: Icon(Icons.skip_previous, color: controllersColor),
-                  onPressed: controller.playPrevious,
+                    icon: Icon(Icons.skip_previous, color: controllersColor),
+                    onPressed: controller.playPrevious,
                   ),
                 );
               }),
@@ -239,17 +239,17 @@ class ControlBar extends GetView<MMController> {
                 child: ObxValue<RxBool>((state) {
                   return GestureDetector(
                     onTap: () {
-                      if(state.value){
-                        controller.playPlayList() ;
-                      }else {
+                      if (state.value) {
+                        controller.playPlayList();
+                      } else {
                         controller.pauseGame();
                       }
                     },
-                      child: Icon(
-                          state.value
-                              ? Icons.play_circle_outline
-                              : Icons.pause_circle_outline,
-                          color: controllersColor,
+                    child: Icon(
+                        state.value
+                            ? Icons.play_circle_outline
+                            : Icons.pause_circle_outline,
+                        color: controllersColor,
                         size: 20),
                   );
                 }, controller.isPaused),
@@ -259,10 +259,11 @@ class ControlBar extends GetView<MMController> {
                   maintainSize: true,
                   maintainAnimation: true,
                   maintainState: true,
-                  visible: controller.currentGameIndex.value < controller.timelineItems.length - 1,
+                  visible: controller.currentGameIndex.value <
+                      controller.timelineItems.length - 1,
                   child: IconButton(
-                  icon: Icon(Icons.skip_next, color: controllersColor),
-                  onPressed: controller.playNext,
+                    icon: Icon(Icons.skip_next, color: controllersColor),
+                    onPressed: controller.playNext,
                   ),
                 );
               }),
@@ -306,7 +307,8 @@ class TimelineView extends GetView<MMController> {
                       style: TextStyle(color: Color(0xffBFDCFF), fontSize: 8)),
                   Obx(() {
                     return Text(
-                      controller.formatDuration(controller.playlistProgress.value),
+                      controller
+                          .formatDuration(controller.playlistProgress.value),
                       style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
                     );
                   }),
@@ -318,7 +320,8 @@ class TimelineView extends GetView<MMController> {
                   Text('Time to end',
                       style: TextStyle(color: Colors.red, fontSize: 8)),
                   Obx(() {
-                    int timeToEnd = controller.calculateSessionDuration() - controller.playlistProgress.value;
+                    int timeToEnd = controller.calculateSessionDuration() -
+                        controller.playlistProgress.value;
                     return Text(
                       controller.formatDuration(timeToEnd),
                       style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
@@ -332,12 +335,13 @@ class TimelineView extends GetView<MMController> {
         Container(
           padding: EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 2),
           child: Obx(() {
-            double progress = controller.playlistProgress.value / controller.calculateSessionDuration();
+            double progress = controller.playlistProgress.value /
+                controller.calculateSessionDuration();
             return LinearProgressIndicator(
-            color: Color(0xff52A2FF),
-              value: progress.isNaN ? 0 : progress,
-            backgroundColor: Color(0xff4D4D4D),
-            minHeight: 1,
+              color: Color(0xff52A2FF),
+              value: progress.isNaN || progress.isInfinite ? 0 : progress,
+              backgroundColor: Color(0xff4D4D4D),
+              minHeight: 1,
             );
           }),
         ),
@@ -348,18 +352,25 @@ class TimelineView extends GetView<MMController> {
               return true;
             },
             onMove: (details) {
-              controller.dropIndex.value = details.offset.dx ~/
-                  180; // Approximate width of each item including margin
-              if (controller.dropIndex.value >
-                  controller.timelineItems.length) {
+              double totalWidth = 0;
+              for (int i = 0; i < controller.timelineItems.length; i++) {
+                totalWidth += controller.timelineItems[i].duration! * controller.secondToWidthRatio;
+                if (details.offset.dx < totalWidth) {
+                  controller.dropIndex.value = i;
+                  break;
+                }
+              }
+              if (details.offset.dx >= totalWidth) {
                 controller.dropIndex.value = controller.timelineItems.length;
               }
             },
+            onLeave: (data) {
+              controller.dropIndex.value = -1;
+            },
             onAcceptWithDetails: (data) {
-              data.data.internalId = DateTime.now().millisecondsSinceEpoch;
               if (controller.dropIndex.value != -1) {
                 controller.timelineItems
-                    .insert(controller.dropIndex.value, data.data);
+                    .insert(controller.dropIndex.value, data.data.copyWith(internalId: DateTime.now().millisecondsSinceEpoch));
               } else {
                 controller.timelineItems.add(data.data);
               }
@@ -393,8 +404,9 @@ class TimelineView extends GetView<MMController> {
                         newIndex -= 1;
                       }
                       final GameVariant item =
-                      controller.timelineItems.removeAt(oldIndex);
+                          controller.timelineItems.removeAt(oldIndex);
                       controller.timelineItems.insert(newIndex, item);
+
                       if (oldIndex == controller.currentGameIndex.value) {
                         controller.currentGameIndex.value = newIndex;
                       } else if (oldIndex < controller.currentGameIndex.value &&
@@ -414,24 +426,40 @@ class TimelineView extends GetView<MMController> {
                           PlaceholderItem(key: ValueKey('placeholder_$index')),
                         Dismissible(
                           key: ValueKey(
-                              '${controller.timelineItems[index].id}_$index'),
+                              '${controller.timelineItems[index].internalId}'),
                           onDismissed: (direction) {
-                            controller.timelineItems.removeAt(index);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("${controller.timelineItems[index].name} removed from timeline"),
-                            ));
+                            if (index != controller.currentGameIndex.value) {
+                              controller.timelineItems.removeAt(index);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    "${controller.timelineItems[index].name} removed from timeline"),
+                              ));
+                            }
                           },
-                          direction: index == controller.currentGameIndex.value ? DismissDirection.none : DismissDirection.vertical,
+                          direction: index == controller.currentGameIndex.value
+                              ? DismissDirection.none
+                              : DismissDirection.vertical,
                           background: Container(
                             color: Colors.red,
                             alignment: Alignment.center,
                             padding: EdgeInsets.symmetric(vertical: 20),
                             child: Icon(Icons.delete, color: Colors.white),
                           ),
-                          child: TimelineItem(
-                          item: controller.timelineItems[index],
-                          isCurrent: index == controller.currentGameIndex.value,
-                        ),
+                          child: Container(
+                            width: controller.timelineItems[index].duration! *
+                                controller.secondToWidthRatio,
+                            child: TimelineItem(
+                              key: ValueKey(
+                                  '${controller.timelineItems[index].internalId}'),
+                              item: controller.timelineItems[index],
+                              isCurrent:
+                                  index == controller.currentGameIndex.value,
+                              isGrayedOut: index <
+                                      controller.currentGameIndex.value ||
+                                  index > controller.currentGameIndex.value + 1
+                            ),
+                          ),
                         ),
                       ],
                       if (controller.dropIndex.value != -1 &&
@@ -465,13 +493,21 @@ class TimelineView extends GetView<MMController> {
 class TimelineItem extends StatelessWidget {
   final GameVariant item;
   final bool isCurrent;
+  final bool isGrayedOut;
+  // final double width;
 
-  TimelineItem({Key? key, required this.item, required this.isCurrent}) : super(key: key);
+  TimelineItem(
+      {Key? key,
+      required this.item,
+      required this.isCurrent,
+      required this.isGrayedOut,
+      /*required this.width*/})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 175,
+      // width: width,
       height: 135,
       margin: const EdgeInsets.all(4.0),
       padding: EdgeInsets.all(8),
@@ -479,7 +515,7 @@ class TimelineItem extends StatelessWidget {
         image: DecorationImage(
             image: CachedNetworkImageProvider(item.image ?? ""),
             fit: BoxFit.cover,
-            opacity: 0.4),
+            opacity: isGrayedOut ? 0.2 : 0.4),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isCurrent ? Colors.green : Colors.transparent,
@@ -518,24 +554,24 @@ class TimelineItem extends StatelessWidget {
               ),
             ],
           ),
-          item.type == "GAME"
-              ? Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 12,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      item.description ?? "",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ],
-                )
-              : Container(),
+          // item.type == "GAME"
+          //     ? Row(
+          //         children: [
+          //           Icon(
+          //             Icons.person,
+          //             size: 12,
+          //             color: Colors.white,
+          //           ),
+          //           SizedBox(
+          //             width: 4,
+          //           ),
+          //           Text(
+          //             item.description ?? "",
+          //             style: TextStyle(color: Colors.white, fontSize: 12),
+          //           ),
+          //         ],
+          //       )
+          //     : Container(),
         ],
       ),
     );
