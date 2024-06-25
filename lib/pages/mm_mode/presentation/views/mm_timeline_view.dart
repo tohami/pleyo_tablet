@@ -4,13 +4,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
 
 import '../../../../base/library_item_model.dart';
 import '../../../../model/strapi/game_variant.dart';
 
+final containersColor = Color(0xff1E1E1E) ;
+
 class MMTimeline extends GetView<MMController> {
-  const MMTimeline({Key? key}) : super(key: key);
+  MMTimeline({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +31,27 @@ class MMTimeline extends GetView<MMController> {
           return true;
         },
         child: Scaffold(
-          backgroundColor: Color(0xff333333),
+          backgroundColor: Color(0xff323232),
           body: Column(
             children: [
               Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: LibrarySection(
-                          title: 'Games Library', items: controller.games),
-                    ),
-                    VerticalDivider(color: Colors.white),
-                    Expanded(
-                      child: LibrarySection(
-                          title: 'Videos Library', items: controller.videos),
-                    ),
-                  ],
+                child: Container(
+                  padding: EdgeInsets.only(left: 16 ,right: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex:2 ,
+                        child: LibrarySection(
+                            title: 'Games Library', items: controller.games),
+                      ),
+                      SizedBox(width: 8,),
+                      Expanded(
+                        flex: 1,
+                        child: LibrarySection(
+                            title: 'Videos Library', items: controller.videos),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               VerticalDivider(color: Colors.white),
@@ -77,41 +86,48 @@ class LibrarySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
+            padding: const EdgeInsets.only(bottom: 4.0),
             child: Text(
               title,
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: 24 , fontFamily: 'Cocon' ),
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(8.0),
-              scrollDirection: Axis.horizontal,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 135 / 175,
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
+            child: Container(
+              padding: EdgeInsets.only(left: 8 , right: 8 , top: 4, bottom: 4),
+              decoration: BoxDecoration(
+                color: containersColor,
+                borderRadius: BorderRadius.all(Radius.circular(16))
               ),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                var item = items[index];
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8.0),
+                scrollDirection: Axis.horizontal,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 145 / 185,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 8,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  var item = items[index];
 
-                return Draggable<GameVariant>(
-                  data: item,
-                  feedback: Container(
-                    child: Material(
-                      color: Colors.transparent,
+                  return Draggable<GameVariant>(
+                    data: item,
+                    feedback: Container(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: LibraryItem(item: item),
+                      ),
+                    ),
+                    childWhenDragging: Opacity(
+                      opacity: 0.5,
                       child: LibraryItem(item: item),
                     ),
-                  ),
-                  childWhenDragging: Opacity(
-                    opacity: 0.5,
                     child: LibraryItem(item: item),
-                  ),
-                  child: LibraryItem(item: item),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -128,64 +144,114 @@ class LibraryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 175,
-      height: 135,
-      padding: EdgeInsets.all(8),
+      width: 185,
+      height: 145,
+      padding: EdgeInsets.only(left: 8 ,right: 8, top: 4 , bottom: 4),
       decoration: BoxDecoration(
+        gradient: LinearGradient(
+          stops: [
+            0 , 0.44 , 1
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.black.withOpacity(0.5),
+            Color(0xff888888).withOpacity(0.25),
+            Colors.white.withOpacity(0.5)
+          ]
+        ),
         image: DecorationImage(
             image: CachedNetworkImageProvider(item.image ?? ""),
             fit: BoxFit.cover,
             opacity: 0.5),
+        border: Border.all(
+          color: Color(ColorCode.aqua)
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            item.name ?? "",
-            style: TextStyle(
-                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+          Expanded(
+            child: Text(
+              item.name ?? "",
+              style: GoogleFonts.inter(
+                height: 1,
+                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+            ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.timelapse,
-                size: 12,
-                color: Colors.white,
+          Container(
+            width: 61,
+            height: 20,
+            padding: EdgeInsets.only(left: 4 ,right: 4),
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: Colors.white
               ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                (item.duration! / 60).toStringAsFixed(1),
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                "Minutes",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
+              color: Colors.black.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  (item.duration! / 60).toStringAsPrecision(1),
+                  style: GoogleFonts.inter(color: Colors.yellow, fontSize: 13 , fontWeight: FontWeight.w900 , height: 1),
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  "min",
+                  style: TextStyle(color: Colors.white, fontSize: 7),
+                ),
+                Spacer(
+                ),
+                Icon(
+                  Icons.watch_later_outlined,
+                  size: 12,
+                  color: Colors.white,
+                ),
+              ],
+            ),
           ),
           item.type == "GAME"
-              ? Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 12,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      item.description ?? "",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ],
+              ? Container(
+                  width: 61,
+                  height: 20,
+                  padding: EdgeInsets.only(left: 4, right: 4),
+                  margin: EdgeInsets.only(top: 2),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "max",
+                        style: TextStyle(color: Colors.white, fontSize: 7),
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        item.attributes?.maxNumberOfPlayers?.toString() ?? "",
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w900,
+                            height: 1),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.person,
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
                 )
               : Container(),
         ],
@@ -206,7 +272,7 @@ class ControlBar extends GetView<MMController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children: [
+                children: [
               Container(
                 padding: EdgeInsets.zero,
                 child: Obx(() {
@@ -216,14 +282,14 @@ class ControlBar extends GetView<MMController> {
                       controller.replayEnabled.value = value;
                     },
                     activeColor: Colors.green,
-                  );
-                }),
-              ),
-            ],
+                    );
+                  }),
+                  ),
+                ],
           ),
           Row(
             children: [
-              Obx(() {
+          Obx(() {
                 return Visibility(
                   visible: controller.currentGameIndex.value > 0,
                   maintainSize: true,
@@ -232,7 +298,7 @@ class ControlBar extends GetView<MMController> {
                   child: IconButton(
                     icon: Icon(Icons.skip_previous, color: controllersColor),
                     onPressed: controller.playPrevious,
-                  ),
+              ),
                 );
               }),
               Container(
@@ -240,11 +306,11 @@ class ControlBar extends GetView<MMController> {
                   return GestureDetector(
                     onTap: () {
                       if (state.value) {
-                        controller.playPlayList();
-                      } else {
-                        controller.pauseGame();
-                      }
-                    },
+                  controller.playPlayList();
+                } else {
+                  controller.pauseGame();
+                }
+              },
                     child: Icon(
                         state.value
                             ? Icons.play_circle_outline
@@ -265,8 +331,8 @@ class ControlBar extends GetView<MMController> {
                     icon: Icon(Icons.skip_next, color: controllersColor),
                     onPressed: controller.playNext,
                   ),
-                );
-              }),
+            );
+          }),
             ],
           ),
           Column(
