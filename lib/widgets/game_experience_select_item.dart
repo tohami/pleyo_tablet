@@ -51,6 +51,8 @@ class GameExperienceSelectItem extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 25, right: 20),
+                width: 100,
+                // height: 100,
                 child: Image.asset(
                   selectItemAssetUrl,
                 ),

@@ -24,9 +24,10 @@ scaleWidgetBuilder(BuildContext context,Widget child , {bool withBouncingScroll 
 
         width: ResponsiveValue<double>(context, conditionalValues: [
           Condition.equals(name: TABLET, value: 600),
+          Condition.equals(name: MOBILE, value: 600),
           // Condition.equals(name: TABLET, value: 768),
           // Condition.equals(name: DESKTOP, value: 1024),
-        ]).value,
+        ] , defaultValue: 600).value,
         child: withBouncingScroll
             ? BouncingScrollWrapper.builder(context, child, dragWithMouse: true)
             : child),
