@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
@@ -50,4 +47,15 @@ class DefaultFirebaseOptions {
     projectId: 'pleyo-operator',
     storageBucket: 'pleyo-operator.appspot.com',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBKCuOVUihRYMUjUZ5QdgwrO5xplh9d8n8',
+    appId: '1:587312422114:web:b0fc2463469a012ac092bb',
+    messagingSenderId: '587312422114',
+    projectId: 'pleyo-operator',
+    authDomain: 'pleyo-operator.firebaseapp.com',
+    storageBucket: 'pleyo-operator.appspot.com',
+    measurementId: 'G-XDNM11NZTH',
+  );
+
 }

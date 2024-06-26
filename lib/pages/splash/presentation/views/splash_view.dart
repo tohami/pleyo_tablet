@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -63,7 +64,7 @@ class SplashView extends GetView<SplashController> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: FutureBuilder<String?>(future: UniqueIdentifier.serial , builder: (context , data) {
+                child: kIsWeb? Container() : FutureBuilder<String?>(future: UniqueIdentifier.serial , builder: (context , data) {
                   return Text(data.data??"...") ;
                 }),
               )

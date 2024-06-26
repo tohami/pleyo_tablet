@@ -89,24 +89,23 @@ class LibrarySection extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4.0),
             child: Text(
               title,
-              style: TextStyle(color: Colors.white, fontSize: 24 , fontFamily: 'Cocon' ),
+              style: TextStyle(color: Colors.white, fontSize: 32 , fontFamily: 'Cocon' ),
             ),
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(left: 8 , right: 8 , top: 4, bottom: 4),
+              padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
               decoration: BoxDecoration(
                 color: containersColor,
                 borderRadius: BorderRadius.all(Radius.circular(16))
               ),
               child: GridView.builder(
-                padding: const EdgeInsets.all(8.0),
                 scrollDirection: Axis.horizontal,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 145 / 185,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 8,
+                  childAspectRatio: 135 / 185,
+                  mainAxisSpacing: 22,
+                  crossAxisSpacing: 42,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
@@ -145,7 +144,7 @@ class LibraryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 185,
-      height: 145,
+      height: 135,
       padding: EdgeInsets.only(left: 8 ,right: 8, top: 4 , bottom: 4),
       decoration: BoxDecoration(
         gradient: LinearGradient(

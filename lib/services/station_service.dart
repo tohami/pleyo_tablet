@@ -97,7 +97,8 @@ class StationService extends GetxService {
   }
 
   _init () async {
-    var identifier = await UniqueIdentifier.serial;
+
+    var identifier = kIsWeb ? Uri.base.host : await UniqueIdentifier.serial;
 
     while(true) {
       try {
@@ -109,7 +110,7 @@ class StationService extends GetxService {
           currentStation = station ;
           organization = station.attributes!.organization!.data! ;
           personasGroups = personas ;
-          FirebaseCrashlytics.instance.setUserIdentifier("${currentStation.attributes?.name}:${currentStation.id.toString()}") ;
+          // FirebaseCrashlytics.instance.setUserIdentifier("${currentStation.attributes?.name}:${currentStation.id.toString()}") ;
 
           _initialize() ;
           isReady.value = true ;
@@ -117,14 +118,16 @@ class StationService extends GetxService {
         }
       } on Error catch (e , stack) {
         // showAlert("Error", "Unable to load station data") ;
-        FirebaseCrashlytics.instance.log("Get station Error") ;
-        FirebaseCrashlytics.instance.recordError(
-            e,
-            stack,
-            reason: 'a fatal error',
-            // Pass in 'fatal' argument
-            fatal: true
-        );
+        print(e);
+        print(stack) ;
+        // FirebaseCrashlytics.instance.log("Get station Error") ;
+        // FirebaseCrashlytics.instance.recordError(
+        //     e,
+        //     stack,
+        //     reason: 'a fatal error',
+        //     // Pass in 'fatal' argument
+        //     fatal: true
+        // );
         debugPrint(e.toString());
       } finally {
         await Future.delayed(const Duration(seconds: 15));

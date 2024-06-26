@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -27,9 +28,14 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  // runZonedGuarded<Future<void>>(() async {
+  runZonedGuarded<Future<void>>(() async {
+    // if (kDebugMode) {
+    //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    // } else {
+    //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    // }
     runApp(MyApp());
-  // }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
     final List<dynamic> errorAndStacktrace = pair;
