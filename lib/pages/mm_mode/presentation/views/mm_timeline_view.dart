@@ -34,11 +34,12 @@ class MMTimeline extends GetView<MMController> {
         child: Scaffold(
           backgroundColor: Color(0xff323232),
           body: Container(
-            padding: EdgeInsets.only(left: 48 ,right: 48, top:16),
+            padding: EdgeInsets.only(top:16),
             child: Column(
               children: [
                 Expanded(
                   child: Container(
+                    padding: const EdgeInsets.only(left: 48 ,right: 48,),
                     child: Row(
                       children: [
                         Expanded(
@@ -56,16 +57,11 @@ class MMTimeline extends GetView<MMController> {
                     ),
                   ),
                 ),
-                VerticalDivider(color: Colors.white),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      ControlBar(),
-                      Expanded(child: TimelineView()),
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 48 ,right: 48,),
+                  child: ControlBar(),
                 ),
+                Expanded(child: TimelineView()),
               ],
             ),
           ),
@@ -444,40 +440,12 @@ class TimelineView extends GetView<MMController> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
-          color: Color(0xff4D4D4D),
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4),
+          color: Color(0xff585858),
+          height: 75,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Current Time',
-                      style: TextStyle(color: Color(0xffBFDCFF), fontSize: 8)),
-                  Obx(() {
-                    return Text(
-                      controller
-                          .formatDuration(controller.playlistProgress.value),
-                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
-                    );
-                  }),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Time to end',
-                      style: TextStyle(color: Colors.red, fontSize: 8)),
-                  Obx(() {
-                    int timeToEnd = controller.calculateSessionDuration() -
-                        controller.playlistProgress.value;
-                    return Text(
-                      controller.formatDuration(timeToEnd),
-                      style: TextStyle(color: Color(0xff2186FC), fontSize: 12),
-                    );
-                  }),
-                ],
-              ),
+
             ],
           ),
         ),
