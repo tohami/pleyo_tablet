@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
 
@@ -34,31 +33,28 @@ class MMTimeline extends GetView<MMController> {
         child: Scaffold(
           backgroundColor: Color(0xff323232),
           body: Container(
-            padding: EdgeInsets.only(top:16),
             child: Column(
               children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 48 ,right: 48,),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex:2 ,
-                          child: LibrarySection(
-                              title: 'Games Library', items: controller.games),
-                        ),
-                        SizedBox(width: 8,),
-                        Expanded(
-                          flex: 1,
-                          child: LibrarySection(
-                              title: 'Videos Library', items: controller.videos),
-                        ),
-                      ],
-                    ),
+                Container(
+                  padding: const EdgeInsets.only(left: 48 ,right: 48,top:16 , bottom: 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex:2 ,
+                        child: LibrarySection(
+                            title: 'Games Library', items: controller.games),
+                      ),
+                      SizedBox(width: 8,),
+                      Expanded(
+                        flex: 1,
+                        child: LibrarySection(
+                            title: 'Videos Library', items: controller.videos),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 48 ,right: 48,),
+                  padding: const EdgeInsets.only(left: 48 ,right: 48, top:15 , bottom: 34),
                   child: ControlBar(),
                 ),
                 Expanded(child: TimelineView()),
@@ -91,41 +87,40 @@ class LibrarySection extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 32 , fontFamily: 'Cocon' ),
             ),
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
-              decoration: BoxDecoration(
-                color: containersColor,
-                borderRadius: BorderRadius.all(Radius.circular(16))
+          Container(
+            height: 382,
+            padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
+            decoration: BoxDecoration(
+              color: containersColor,
+              borderRadius: BorderRadius.all(Radius.circular(16))
+            ),
+            child: GridView.builder(
+              scrollDirection: Axis.horizontal,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 135 / 185,
+                mainAxisSpacing: 22,
+                crossAxisSpacing: 42,
               ),
-              child: GridView.builder(
-                scrollDirection: Axis.horizontal,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 135 / 185,
-                  mainAxisSpacing: 22,
-                  crossAxisSpacing: 42,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  var item = items[index];
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                var item = items[index];
 
-                  return Draggable<GameVariant>(
-                    data: item,
-                    feedback: Container(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: LibraryItem(item: item),
-                      ),
-                    ),
-                    childWhenDragging: Opacity(
-                      opacity: 0.5,
+                return Draggable<GameVariant>(
+                  data: item,
+                  feedback: Container(
+                    child: Material(
+                      color: Colors.transparent,
                       child: LibraryItem(item: item),
                     ),
+                  ),
+                  childWhenDragging: Opacity(
+                    opacity: 0.5,
                     child: LibraryItem(item: item),
-                  );
-                },
-              ),
+                  ),
+                  child: LibraryItem(item: item),
+                );
+              },
             ),
           ),
         ],
@@ -173,7 +168,7 @@ class LibraryItem extends StatelessWidget {
           Expanded(
             child: Text(
               item.name ?? "",
-              style: GoogleFonts.inter(
+              style: TextStyle(fontFamily: 'Inter',
                 height: 1,
                   color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900),
             ),
@@ -194,14 +189,14 @@ class LibraryItem extends StatelessWidget {
               children: [
                 Text(
                   (item.duration! / 60).toStringAsPrecision(1),
-                  style: GoogleFonts.inter(color: Colors.yellow, fontSize: 16 , fontWeight: FontWeight.w700, height: 1 ),
+                  style: TextStyle(fontFamily: 'Inter', color: Colors.yellow, fontSize: 16 , fontWeight: FontWeight.w700, height: 1 ),
                 ),
                 SizedBox(
                   width: 2,
                 ),
                 Text(
                   "min",
-                  style: GoogleFonts.inter(color: Colors.white, fontSize: 7 , height: 1),
+                  style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 7 , height: 1),
                 ),
                 Spacer(
                 ),
@@ -229,14 +224,14 @@ class LibraryItem extends StatelessWidget {
                     children: [
                       Text(
                         "max",
-                        style: GoogleFonts.inter(color: Colors.white, fontSize: 7 , height: 1),
+                        style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 7 , height: 1),
                       ),
                       SizedBox(
                         width: 4,
                       ),
                       Text(
                         item.attributes?.maxNumberOfPlayers?.toString() ?? "",
-                        style: GoogleFonts.inter(
+                        style: TextStyle(fontFamily: 'Inter',
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
@@ -265,7 +260,6 @@ class ControlBar extends GetView<MMController> {
   Widget build(BuildContext context) {
     return Container(
       height: 89,
-      margin: const EdgeInsets.only(top: 41, bottom: 37),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -285,14 +279,14 @@ class ControlBar extends GetView<MMController> {
                     return Text(
                         controller.formatDuration(
                             controller.calculateSessionDuration()),
-                        style: GoogleFonts.inter(
+                        style: TextStyle(fontFamily: 'Inter',
                             color: Color(0xffCCCCCC),
                             fontSize: 30,
                             fontWeight: FontWeight.bold));
                   }, controller.timelineItems),
                 ),
                 Text('Actual session Duration',
-                    style: GoogleFonts.inter(
+                    style: TextStyle(fontFamily: 'Inter',
                         color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
               ],
             ),
@@ -365,7 +359,7 @@ class ControlBar extends GetView<MMController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                     Text('Time to end',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(fontFamily: 'Inter',
                             color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
                       SizedBox(height: 6,),
                       Obx(() {
@@ -374,7 +368,7 @@ class ControlBar extends GetView<MMController> {
                         return Text(
                             controller.formatDuration(
                                 timeToEnd),
-                            style: GoogleFonts.inter(
+                            style: TextStyle(fontFamily: 'Inter',
                                 color: Color(ColorCode.aqua),
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold));
@@ -391,7 +385,7 @@ class ControlBar extends GetView<MMController> {
                   Column(
                     children: [
                       Text('Loop play list',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(fontFamily: 'Inter',
                               color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
                       SizedBox(height: 6,),
                       Row(
