@@ -65,10 +65,13 @@ class StationService extends GetxService {
     // socket.on('startGame',
     //         (data) => gameStatus.value = gameStatus.value = GameStatus(GameStatusType.STARTING, data));
     socket.on('JOIN_MULTIPLAYER_GAME', (data) {
-      JoinMultiplayerGameDetails details = JoinMultiplayerGameDetails.fromJson(data) ;
-      MultiplayerGuestController controller = Get.find() ;
-      controller.gameDetails = details ;
-      Get.dialog(Dialog(child: GuestNameView(details)));
+      if(currentStation.attributes?.multiplayerEnabled == true) {
+        JoinMultiplayerGameDetails details = JoinMultiplayerGameDetails
+            .fromJson(data);
+        MultiplayerGuestController controller = Get.find();
+        controller.gameDetails = details;
+        Get.dialog(Dialog(child: GuestNameView(details)));
+      }
     });
 
     socket.on('UPDATE_MULTIPLAYER_GAME', (data) {

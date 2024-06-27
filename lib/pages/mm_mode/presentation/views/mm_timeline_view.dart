@@ -437,23 +437,63 @@ class TimelineView extends GetView<MMController> {
         Container(
           color: Color(0xff585858),
           height: 75,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 2),
           child: Obx(() {
-            double progress = controller.playlistProgress.value /
-                controller.calculateSessionDuration();
-            return LinearProgressIndicator(
-              color: Color(0xff52A2FF),
-              value: progress.isNaN || progress.isInfinite ? 0 : progress,
-              backgroundColor: Color(0xff4D4D4D),
-              minHeight: 1,
+            int timeToEnd = controller.calculateSessionDuration() -
+                controller.playlistProgress.value;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: controller.playlistProgress.value * controller.secondToWidthRatio),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/images/icon_curser.svg',
+                            width: 14,
+                          ),
+                          Container(
+                            width: 1,
+                            height: 10,
+                            color: Color(ColorCode.aqua),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('current time ',
+                              style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: Color(0xff9F9F9F),
+                                  fontSize: 14,
+                                  height: 1)),
+                          Text(controller.formatDuration(timeToEnd),
+                              style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: Color(ColorCode.aqua),
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold))
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: controller.playlistProgress.value * controller.secondToWidthRatio +7,
+                  height: 7,
+                  color: Color(ColorCode.aqua),
+                )
+              ],
             );
           }),
         ),
@@ -627,44 +667,17 @@ class TimelineItem extends StatelessWidget {
         image: DecorationImage(
             image: CachedNetworkImageProvider(item.image ?? ""),
             fit: BoxFit.cover,
-            opacity: isGrayedOut ? 0.2 : 0.4),
+            opacity: 0.2 ),
+        color: Color(isCurrent ? ColorCode.aqua : 0xffD9D9D9),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: isCurrent ? Colors.green : Colors.transparent,
-          width: 3,
-        ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             item.name ?? "",
-            style: TextStyle(
-                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.timelapse,
-                size: 12,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                (item.duration! / 60).toStringAsFixed(1),
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                "Minutes",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
+            style: TextStyle( fontFamily: "Inter",
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
           ),
           // item.type == "GAME"
           //     ? Row(
