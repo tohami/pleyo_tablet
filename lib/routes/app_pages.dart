@@ -254,7 +254,9 @@ class AppPages {
         ]),
     GetPage(
       name: Routes.MM,
-      page: () => MMTimeline(),
+      page: () => ScaleWidget(
+          builder: (context, child) => mmScaleWidgetBuilder(context, child!),
+          child: MMTimeline()),
       binding: MMModeBinding(),
     ),
   ];

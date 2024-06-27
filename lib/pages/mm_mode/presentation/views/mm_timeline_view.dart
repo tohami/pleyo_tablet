@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
@@ -32,39 +33,41 @@ class MMTimeline extends GetView<MMController> {
         },
         child: Scaffold(
           backgroundColor: Color(0xff323232),
-          body: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 16 ,right: 16),
-                  child: Row(
+          body: Container(
+            padding: EdgeInsets.only(left: 48 ,right: 48, top:16),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex:2 ,
+                          child: LibrarySection(
+                              title: 'Games Library', items: controller.games),
+                        ),
+                        SizedBox(width: 8,),
+                        Expanded(
+                          flex: 1,
+                          child: LibrarySection(
+                              title: 'Videos Library', items: controller.videos),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                VerticalDivider(color: Colors.white),
+                Expanded(
+                  flex: 1,
+                  child: Column(
                     children: [
-                      Expanded(
-                        flex:2 ,
-                        child: LibrarySection(
-                            title: 'Games Library', items: controller.games),
-                      ),
-                      SizedBox(width: 8,),
-                      Expanded(
-                        flex: 1,
-                        child: LibrarySection(
-                            title: 'Videos Library', items: controller.videos),
-                      ),
+                      ControlBar(),
+                      Expanded(child: TimelineView()),
                     ],
                   ),
                 ),
-              ),
-              VerticalDivider(color: Colors.white),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    ControlBar(),
-                    Expanded(child: TimelineView()),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -176,39 +179,39 @@ class LibraryItem extends StatelessWidget {
               item.name ?? "",
               style: GoogleFonts.inter(
                 height: 1,
-                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+                  color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900),
             ),
           ),
           Container(
-            width: 61,
-            height: 20,
-            padding: EdgeInsets.only(left: 4 ,right: 4),
+            width: 66,
+            height: 22,
+            padding: EdgeInsets.only(left: 6 , right: 6),
             decoration: BoxDecoration(
               border: Border.all(
                   color: Colors.white
               ),
               color: Colors.black.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   (item.duration! / 60).toStringAsPrecision(1),
-                  style: GoogleFonts.inter(color: Colors.yellow, fontSize: 13 , fontWeight: FontWeight.w900 , height: 1),
+                  style: GoogleFonts.inter(color: Colors.yellow, fontSize: 16 , fontWeight: FontWeight.w700, height: 1 ),
                 ),
                 SizedBox(
-                  width: 4,
+                  width: 2,
                 ),
                 Text(
                   "min",
-                  style: TextStyle(color: Colors.white, fontSize: 7),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 7 , height: 1),
                 ),
                 Spacer(
                 ),
-                Icon(
-                  Icons.watch_later_outlined,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/images/icon_duration.svg',
+                  width: 14,
                   color: Colors.white,
                 ),
               ],
@@ -216,21 +219,21 @@ class LibraryItem extends StatelessWidget {
           ),
           item.type == "GAME"
               ? Container(
-                  width: 61,
-                  height: 20,
-                  padding: EdgeInsets.only(left: 4, right: 4),
-                  margin: EdgeInsets.only(top: 2),
+                  width: 66,
+                  height: 22,
+                  padding: EdgeInsets.only(left: 6 , right: 6),
+                  margin: EdgeInsets.only(top: 3),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     color: Colors.black,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         "max",
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.inter(color: Colors.white, fontSize: 7 , height: 1),
                       ),
                       SizedBox(
                         width: 4,
@@ -239,14 +242,14 @@ class LibraryItem extends StatelessWidget {
                         item.attributes?.maxNumberOfPlayers?.toString() ?? "",
                         style: GoogleFonts.inter(
                             color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
                             height: 1),
                       ),
                       Spacer(),
-                      Icon(
-                        Icons.person,
-                        size: 12,
+                      SvgPicture.asset(
+                        'assets/images/icon_players.svg',
+                        width: 14,
                         color: Colors.white,
                       ),
                     ],
@@ -265,88 +268,169 @@ class ControlBar extends GetView<MMController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[100],
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4),
+      height: 89,
+      margin: const EdgeInsets.only(top: 41, bottom: 37),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-                children: [
-              Container(
-                padding: EdgeInsets.zero,
-                child: Obx(() {
-                  return Switch(
-                    value: controller.replayEnabled.value,
-                    onChanged: (value) {
-                      controller.replayEnabled.value = value;
-                    },
-                    activeColor: Colors.green,
-                    );
-                  }),
-                  ),
-                ],
+          Container(
+            width: 520,
+            padding: EdgeInsets.all(13),
+            decoration: BoxDecoration(
+                color: containersColor,
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ObxValue((state) {
+                    return Text(
+                        controller.formatDuration(
+                            controller.calculateSessionDuration()),
+                        style: GoogleFonts.inter(
+                            color: Color(0xffCCCCCC),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold));
+                  }, controller.timelineItems),
+                ),
+                Text('Actual session Duration',
+                    style: GoogleFonts.inter(
+                        color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+              ],
+            ),
           ),
-          Row(
-            children: [
-          Obx(() {
-                return Visibility(
-                  visible: controller.currentGameIndex.value > 0,
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: IconButton(
-                    icon: Icon(Icons.skip_previous, color: controllersColor),
-                    onPressed: controller.playPrevious,
-              ),
-                );
-              }),
-              Container(
-                child: ObxValue<RxBool>((state) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (state.value) {
-                  controller.playPlayList();
-                } else {
-                  controller.pauseGame();
-                }
-              },
-                    child: Icon(
-                        state.value
-                            ? Icons.play_circle_outline
-                            : Icons.pause_circle_outline,
-                        color: controllersColor,
-                        size: 20),
+          SizedBox(width: 14,),
+          Container(
+            // width: 450,
+            padding: EdgeInsets.all(13),
+            decoration: BoxDecoration(
+                color: containersColor,
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            child: Row(
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible: controller.currentGameIndex.value > 0,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: IconButton(
+                      icon: Icon(Icons.skip_previous, color: controllersColor),
+                      onPressed: controller.playPrevious,
+                    ),
                   );
-                }, controller.isPaused),
-              ),
-              Obx(() {
-                return Visibility(
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  visible: controller.currentGameIndex.value <
-                      controller.timelineItems.length - 1,
-                  child: IconButton(
-                    icon: Icon(Icons.skip_next, color: controllersColor),
-                    onPressed: controller.playNext,
+                }),
+                Container(
+                  child: ObxValue<RxBool>((state) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (state.value) {
+                          controller.playPlayList();
+                        } else {
+                          controller.pauseGame();
+                        }
+                      },
+                      child: SvgPicture.asset(
+                        state.value ? 'assets/images/icon_play.svg' : 'assets/images/icon_pause.svg',
+                        width: 40,
+                      )
+                    );
+                  }, controller.isPaused),
+                ),
+                Obx(() {
+                  return Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: controller.currentGameIndex.value <
+                        controller.timelineItems.length - 1,
+                    child: IconButton(
+                      icon: Icon(Icons.skip_next, color: controllersColor),
+                      onPressed: controller.playNext,
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+          SizedBox(width: 14,),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(13),
+              decoration: BoxDecoration(
+                  color: containersColor,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    Text('Time to end',
+                        style: GoogleFonts.inter(
+                            color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                      SizedBox(height: 6,),
+                      Obx(() {
+                        int timeToEnd = controller.calculateSessionDuration() -
+                            controller.playlistProgress.value;
+                        return Text(
+                            controller.formatDuration(
+                                timeToEnd),
+                            style: GoogleFonts.inter(
+                                color: Color(ColorCode.aqua),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold));
+                      })
+                    ],
                   ),
-            );
-          }),
-            ],
+                  SizedBox(width: 24,),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: controllersColor,
+                  ),
+                  SizedBox(width: 24,),
+                  Column(
+                    children: [
+                      Text('Loop play list',
+                          style: GoogleFonts.inter(
+                              color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                      SizedBox(height: 6,),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.zero,
+                            child: Obx(() {
+                              return Switch(
+                                value: controller.replayEnabled.value,
+                                onChanged: (value) {
+                                  controller.replayEnabled.value = value;
+                                },
+                                activeColor: Color(ColorCode.aqua),
+
+                              );
+                            }),
+                          ),
+                          SizedBox(width: 12,),
+                          SvgPicture.asset(
+                            'assets/images/icon_loop.svg',
+                            width: 36,
+                            height: 36,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+
+                ],
+              ),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('session Duration',
-                  style: TextStyle(color: Colors.green, fontSize: 8)),
-              ObxValue((state) {
-                return Text(
-                    controller
-                        .formatDuration(controller.calculateSessionDuration()),
-                    style: TextStyle(color: controllersColor, fontSize: 12));
-              }, controller.timelineItems),
-            ],
-          ),
+
         ],
       ),
     );
