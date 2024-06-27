@@ -36,17 +36,16 @@ class MMTimeline extends GetView<MMController> {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.only(left: 48 ,right: 48,top:16 , bottom: 24),
+                  padding: const EdgeInsets.only(left: 48 ,right: 48,top:16 /*, bottom: 24*/),
                   child: Row(
                     children: [
                       Expanded(
-                        flex:2 ,
                         child: LibrarySection(
                             title: 'Games Library', items: controller.games),
                       ),
                       SizedBox(width: 8,),
-                      Expanded(
-                        flex: 1,
+                      Container(
+                        width: 479,
                         child: LibrarySection(
                             title: 'Videos Library', items: controller.videos),
                       ),
@@ -54,7 +53,7 @@ class MMTimeline extends GetView<MMController> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 48 ,right: 48, top:15 , bottom: 34),
+                  padding: const EdgeInsets.only(left: 48 ,right: 48, top:15 , bottom: /*34*/16),
                   child: ControlBar(),
                 ),
                 Expanded(child: TimelineView()),
@@ -264,41 +263,43 @@ class ControlBar extends GetView<MMController> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 520,
-            padding: EdgeInsets.all(13),
-            decoration: BoxDecoration(
-                color: containersColor,
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: ObxValue((state) {
-                    return Text(
-                        controller.formatDuration(
-                            controller.calculateSessionDuration()),
-                        style: TextStyle(fontFamily: 'Inter',
-                            color: Color(0xffCCCCCC),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold));
-                  }, controller.timelineItems),
-                ),
-                Text('Actual session Duration',
-                    style: TextStyle(fontFamily: 'Inter',
-                        color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
-              ],
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(13),
+              decoration: BoxDecoration(
+                  color: containersColor,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: ObxValue((state) {
+                      return Text(
+                          controller.formatDuration(
+                              controller.calculateSessionDuration()),
+                          style: TextStyle(fontFamily: 'Inter',
+                              color: Color(0xffCCCCCC),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold));
+                    }, controller.timelineItems),
+                  ),
+                  Text('Actual session Duration',
+                      style: TextStyle(fontFamily: 'Inter',
+                          color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                ],
+              ),
             ),
           ),
           SizedBox(width: 14,),
           Container(
-            // width: 450,
+            width: 250,
             padding: EdgeInsets.all(13),
             decoration: BoxDecoration(
                 color: containersColor,
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Obx(() {
                   return Visibility(
@@ -307,7 +308,7 @@ class ControlBar extends GetView<MMController> {
                     maintainAnimation: true,
                     maintainState: true,
                     child: IconButton(
-                      icon: Icon(Icons.skip_previous, color: controllersColor),
+                      icon: Icon(Icons.skip_previous, color: Color(ColorCode.aqua) , size: 48,),
                       onPressed: controller.playPrevious,
                     ),
                   );
@@ -337,7 +338,7 @@ class ControlBar extends GetView<MMController> {
                     visible: controller.currentGameIndex.value <
                         controller.timelineItems.length - 1,
                     child: IconButton(
-                      icon: Icon(Icons.skip_next, color: controllersColor),
+                      icon: Icon(Icons.skip_next, color: Color(ColorCode.aqua) , size: 48,),
                       onPressed: controller.playNext,
                     ),
                   );
@@ -387,7 +388,7 @@ class ControlBar extends GetView<MMController> {
                       Text('Loop play list',
                           style: TextStyle(fontFamily: 'Inter',
                               color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
-                      SizedBox(height: 6,),
+                      SizedBox(height: 0,),
                       Row(
                         children: [
                           Container(
