@@ -7,12 +7,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
+import 'package:pleyo_tablet_app/widgets/scale_widget.dart';
 
 import '../../../../base/library_item_model.dart';
 import '../../../../model/strapi/game_variant.dart';
 
 final containersColor = Color(0xff1E1E1E) ;
-
+final timelineItemWidth = 180.0 ;
 class MMTimeline extends GetView<MMController> {
   MMTimeline({Key? key}) : super(key: key);
 
@@ -117,7 +118,12 @@ class LibrarySection extends StatelessWidget {
                     opacity: 0.5,
                     child: LibraryItem(item: item),
                   ),
-                  child: LibraryItem(item: item),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.find<MMController>().addTimeLineItem(item) ;
+                    },
+                      child: LibraryItem(item: item)
+                  ),
                 );
               },
             ),
@@ -126,6 +132,16 @@ class LibrarySection extends StatelessWidget {
       ),
     );
   }
+}
+
+Offset adjustPosition(BuildContext context, Offset position){
+  final RenderBox? renderObject = context.findRenderObject() as RenderBox?;
+  return renderObject?.globalToLocal(
+    Offset(
+      position.dx,
+      position.dy,
+    ),
+  ) ?? position;
 }
 
 class LibraryItem extends StatelessWidget {
@@ -437,65 +453,65 @@ class TimelineView extends GetView<MMController> {
         Container(
           color: Color(0xff585858),
           height: 75,
-          child: Obx(() {
-            int timeToEnd = controller.calculateSessionDuration() -
-                controller.playlistProgress.value;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: controller.playlistProgress.value * controller.secondToWidthRatio),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/icon_curser.svg',
-                            width: 14,
-                          ),
-                          Container(
-                            width: 1,
-                            height: 10,
-                            color: Color(ColorCode.aqua),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('current time ',
-                              style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  color: Color(0xff9F9F9F),
-                                  fontSize: 14,
-                                  height: 1)),
-                          Text(controller.formatDuration(timeToEnd),
-                              style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  color: Color(ColorCode.aqua),
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: controller.playlistProgress.value * controller.secondToWidthRatio +7,
-                  height: 7,
-                  color: Color(ColorCode.aqua),
-                )
-              ],
-            );
-          }),
+          // child: Obx(() {
+          //   int timeToEnd = controller.calculateSessionDuration() -
+          //       controller.playlistProgress.value;
+          //   return Column(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Container(
+          //         // padding: EdgeInsets.only(left: controller.playlistProgress.value * controller.secondToWidthRatio),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           crossAxisAlignment: CrossAxisAlignment.end,
+          //           children: [
+          //             Column(
+          //               mainAxisAlignment: MainAxisAlignment.end,
+          //               children: [
+          //                 SvgPicture.asset(
+          //                   'assets/images/icon_curser.svg',
+          //                   width: 14,
+          //                 ),
+          //                 Container(
+          //                   width: 1,
+          //                   height: 10,
+          //                   color: Color(ColorCode.aqua),
+          //                 )
+          //               ],
+          //             ),
+          //             SizedBox(
+          //               width: 10,
+          //             ),
+          //             Column(
+          //               mainAxisAlignment: MainAxisAlignment.end,
+          //               crossAxisAlignment: CrossAxisAlignment.center,
+          //               children: [
+          //                 Text('current time ',
+          //                     style: TextStyle(
+          //                         fontFamily: 'Inter',
+          //                         color: Color(0xff9F9F9F),
+          //                         fontSize: 14,
+          //                         height: 1)),
+          //                 Text(controller.formatDuration(timeToEnd),
+          //                     style: TextStyle(
+          //                         fontFamily: 'Inter',
+          //                         color: Color(ColorCode.aqua),
+          //                         fontSize: 30,
+          //                         fontWeight: FontWeight.bold))
+          //               ],
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       Container(
+          //         // width: controller.playlistProgress.value * controller.secondToWidthRatio +7,
+          //         height: 7,
+          //         color: Color(ColorCode.aqua),
+          //       )
+          //     ],
+          //   );
+          // }),
         ),
         Expanded(
           child: DragTarget<GameVariant>(
@@ -504,15 +520,10 @@ class TimelineView extends GetView<MMController> {
               return true;
             },
             onMove: (details) {
-              double totalWidth = 0;
-              for (int i = 0; i < controller.timelineItems.length; i++) {
-                totalWidth += controller.timelineItems[i].duration! * controller.secondToWidthRatio;
-                if (details.offset.dx < totalWidth) {
-                  controller.dropIndex.value = i;
-                  break;
-                }
-              }
-              if (details.offset.dx >= totalWidth) {
+              var scaledOffset = adjustPosition(context, details.offset) ;
+              controller.dropIndex.value = scaledOffset.dx ~/ timelineItemWidth; // Approximate width of each item including margin
+              if (controller.dropIndex.value >
+                  controller.timelineItems.length) {
                 controller.dropIndex.value = controller.timelineItems.length;
               }
             },
@@ -520,13 +531,7 @@ class TimelineView extends GetView<MMController> {
               controller.dropIndex.value = -1;
             },
             onAcceptWithDetails: (data) {
-              if (controller.dropIndex.value != -1) {
-                controller.timelineItems
-                    .insert(controller.dropIndex.value, data.data.copyWith(internalId: DateTime.now().millisecondsSinceEpoch));
-              } else {
-                controller.timelineItems.add(data.data);
-              }
-              controller.dropIndex.value = -1;
+              controller.addTimeLineItem(data.data) ;
             },
             builder: (context, candidateData, rejectedData) {
               return Container(
@@ -599,8 +604,7 @@ class TimelineView extends GetView<MMController> {
                             child: Icon(Icons.delete, color: Colors.white),
                           ),
                           child: Container(
-                            width: controller.timelineItems[index].duration! *
-                                controller.secondToWidthRatio,
+                            width: timelineItemWidth,
                             child: TimelineItem(
                               key: ValueKey(
                                   '${controller.timelineItems[index].internalId}'),
@@ -679,24 +683,49 @@ class TimelineItem extends StatelessWidget {
             style: TextStyle( fontFamily: "Inter",
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
           ),
-          // item.type == "GAME"
-          //     ? Row(
-          //         children: [
-          //           Icon(
-          //             Icons.person,
-          //             size: 12,
-          //             color: Colors.white,
-          //           ),
-          //           SizedBox(
-          //             width: 4,
-          //           ),
-          //           Text(
-          //             item.description ?? "",
-          //             style: TextStyle(color: Colors.white, fontSize: 12),
-          //           ),
-          //         ],
-          //       )
-          //     : Container(),
+          Spacer() ,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.timelapse,
+                size: 12,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Text(
+                (item.duration! / 60).toStringAsFixed(1),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Text(
+                "Minutes",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ),
+          item.type == "GAME"
+              ? Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      item.description ?? "",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );

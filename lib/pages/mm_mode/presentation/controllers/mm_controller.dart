@@ -36,7 +36,7 @@ class MMController extends SuperController<bool> {
   RxInt playlistProgress = 0.obs; // Tracks the progress of the playlist in seconds
   Timer? playlistTimer;
 
-  final double secondToWidthRatio = 2; // Configurable ratio for width per second
+  // final double secondToWidthRatio = 2; // Configurable ratio for width per second
 
   MMController({required this.mmRepository});
 
@@ -240,7 +240,16 @@ Future<void> pauseGame() async {
     return '$hours:$minutes:$secs';
   }
 
-
+  void addTimeLineItem(GameVariant data) {
+    var newData = data.copyWith(internalId: DateTime.now().millisecondsSinceEpoch);
+    if (dropIndex.value != -1) {
+      timelineItems
+          .insert(dropIndex.value, newData);
+    } else {
+      timelineItems.add(newData);
+    }
+    dropIndex.value = -1;
+  }
 
   @override
   void onReady() {
@@ -288,4 +297,6 @@ Future<void> pauseGame() async {
   void onHidden() {
     // TODO: implement onHidden
   }
+
+
 }
