@@ -375,7 +375,7 @@ class ControlBar extends GetView<MMController> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                    Text('Time to end',
+                    Text('Estimated time to end',
                         style: TextStyle(fontFamily: 'Inter',
                             color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
                       SizedBox(height: 6,),

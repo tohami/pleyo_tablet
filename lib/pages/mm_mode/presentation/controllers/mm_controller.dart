@@ -11,6 +11,7 @@ import 'package:pleyo_tablet_app/services/station_service.dart';
 
 import '../../../../base/library_item_model.dart';
 import '../../../../model/start_game.dart';
+import '../views/mm_timeline_view.dart';
 
 class MMController extends SuperController<bool> {
 
@@ -42,6 +43,22 @@ class MMController extends SuperController<bool> {
 
   MMController({required this.mmRepository});
 
+  void scrollToCurrentItem() {
+    if (currentGameIndex.value >= 0 &&
+        currentGameIndex.value < timelineItems.length) {
+      final targetPosition = currentGameIndex.value * timelineItemWidth;
+      final maxScrollExtent = scrollController.position.maxScrollExtent;
+
+      if (targetPosition <= maxScrollExtent) {
+        scrollController.animateTo(
+          targetPosition,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -63,6 +80,7 @@ class MMController extends SuperController<bool> {
         // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
           isGameStarting = false ;
           startTimer();
+          scrollToCurrentItem(); // Scroll to the current item when it starts
           break;
         case GameStatusType.FINISHED:
           if(scoreId == currentScoreId){
@@ -123,6 +141,7 @@ class MMController extends SuperController<bool> {
         isPaused.value = false ;
         isGameStarting = true;
         startTimer();
+        scrollToCurrentItem(); // Scroll to the current item when it starts
       } else {
         print("A game is already running");
       }
@@ -148,6 +167,7 @@ class MMController extends SuperController<bool> {
           currentGameIndex.value = 0;
     } else {
           currentGameIndex.value = -1;
+          playlistProgress.value = 0 ;
           print("Playlist finished");
           return;
         }
@@ -220,7 +240,11 @@ Future<void> pauseGame() async {
   void startTimer() {
     playlistTimer?.cancel();
     playlistTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      playlistProgress.value++;
+      if(playlistProgress >= calculateSessionDuration() ){
+        stopTimer() ;
+      }else {
+        playlistProgress.value++;
+      }
     });
   }
 
