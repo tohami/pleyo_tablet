@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/state_manager.dart';
@@ -15,6 +16,7 @@ class MMController extends SuperController<bool> {
 
   var station = StationService.to.currentStation;
   var organization = StationService.to.organization;
+  ScrollController scrollController = ScrollController();
 
   late List<GameVariant> games = station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.mmGameVariants!.data!;
   late List<GameVariant> videos = station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.promotionVideos!.data!;
@@ -260,6 +262,7 @@ Future<void> pauseGame() async {
   void onClose() {
     subscription.cancel();
     playlistTimer?.cancel();
+    scrollController.dispose();
     super.onClose();
   }
 

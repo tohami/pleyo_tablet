@@ -521,11 +521,9 @@ class TimelineView extends GetView<MMController> {
             },
             onMove: (details) {
               var scaledOffset = adjustPosition(context, details.offset) ;
-              controller.dropIndex.value = scaledOffset.dx ~/ timelineItemWidth; // Approximate width of each item including margin
-              if (controller.dropIndex.value >
-                  controller.timelineItems.length) {
-                controller.dropIndex.value = controller.timelineItems.length;
-              }
+              double scrollOffset = controller.scrollController.offset;
+              controller.dropIndex.value =
+                  ((scaledOffset.dx + scrollOffset) ~/ timelineItemWidth).clamp(0, controller.timelineItems.length); // Adjusted calculation
             },
             onLeave: (data) {
               controller.dropIndex.value = -1;
@@ -538,6 +536,7 @@ class TimelineView extends GetView<MMController> {
                 color: Colors.black,
                 child: Obx(() {
                   return ReorderableListView(
+                    scrollController: controller.scrollController, // Set the ScrollController
                     proxyDecorator: (child, index, animation) {
                       return AnimatedBuilder(
                         animation: animation,
