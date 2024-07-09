@@ -189,7 +189,7 @@ class LibraryItem extends StatelessWidget {
             ),
           ),
           Container(
-            width: 66,
+            width: 72,
             height: 22,
             padding: EdgeInsets.only(left: 6 , right: 6),
             decoration: BoxDecoration(
@@ -225,7 +225,7 @@ class LibraryItem extends StatelessWidget {
           ),
           item.type == "GAME"
               ? Container(
-                  width: 66,
+                  width: 72,
                   height: 22,
                   padding: EdgeInsets.only(left: 6 , right: 6),
                   margin: EdgeInsets.only(top: 3),
