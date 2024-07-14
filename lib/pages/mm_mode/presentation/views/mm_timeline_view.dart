@@ -46,7 +46,7 @@ class MMTimeline extends GetView<MMController> {
                       ),
                       SizedBox(width: 8,),
                       Container(
-                        width: 479,
+                        width: 550,
                         child: LibrarySection(
                             title: 'Videos Library', items: controller.videos),
                       ),
