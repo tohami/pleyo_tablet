@@ -51,11 +51,9 @@ class StationService extends GetxService {
     socket.on('StartGame', (data) => debugPrint(data));
 
     socket.onAny((event, args) {
-      // if(event == "MessageQueue" && args.CommandeId == "GAME_START"){
-      //   Future.delayed(Duration(seconds: 120)).then((value) => {
-      //     if(gameStatus.value.type != GameStatusType.STARTED)
-      //   })
-      // }
+      if(event == "MessageQueue" && args["CommandeId"] == "GAME_START"){
+        gameStatus.value = GameStatus(GameStatusType.STARTING, args) ;
+      }
       debugPrint("new event -----------") ;
       debugPrint(event);
       debugPrint(args.toString()) ;

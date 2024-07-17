@@ -31,7 +31,7 @@ class MMController extends SuperController<bool> {
 
   RxInt dropIndex = (-1).obs ;
   RxInt currentGameIndex = (-1).obs;
-
+  Rx<GameStatusType> currentGameStatus = GameStatusType.IDLE.obs ;
   RxList<GameVariant> timelineItems = RxList();
   bool isGameStarting = false ;
   RxBool isPaused = true.obs ;
@@ -66,6 +66,7 @@ class MMController extends SuperController<bool> {
     subscription = StationService.to.gameStatus.listen((status) async {
 
       var type = status.type ;
+      currentGameStatus.value = type ;
       var scoreId = status.data["id"] ;
       print("---------------------- NEW EVENT --------------------------") ;
       print("${status.type} ${scoreId} ") ;
@@ -238,18 +239,18 @@ Future<void> pauseGame() async {
   }
 
   void startTimer() {
-    playlistTimer?.cancel();
-    playlistTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if(playlistProgress >= calculateSessionDuration() ){
-        stopTimer() ;
-      }else {
-        playlistProgress.value++;
-      }
-    });
+    // playlistTimer?.cancel();
+    // playlistTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    //   if(playlistProgress >= calculateSessionDuration() ){
+    //     stopTimer() ;
+    //   }else {
+    //     playlistProgress.value++;
+    //   }
+    // });
   }
 
   void stopTimer() {
-    playlistTimer?.cancel();
+    // playlistTimer?.cancel();
   }
 
   int calculateSessionDuration () {

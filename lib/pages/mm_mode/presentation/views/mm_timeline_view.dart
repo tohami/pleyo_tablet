@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
+import 'package:pleyo_tablet_app/model/start_game.dart';
 import 'package:pleyo_tablet_app/pages/mm_mode/presentation/controllers/mm_controller.dart';
 import 'package:pleyo_tablet_app/widgets/scale_widget.dart';
 
@@ -70,6 +72,7 @@ class MMTimeline extends GetView<MMController> {
 class LibrarySection extends StatelessWidget {
   final String title;
   final List<GameVariant> items;
+  final _scrollController = ScrollController();
 
   LibrarySection({required this.title, required this.items});
 
@@ -87,45 +90,53 @@ class LibrarySection extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 32 , fontFamily: 'Cocon' ),
             ),
           ),
-          Container(
-            height: 382,
-            padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
-            decoration: BoxDecoration(
-              color: containersColor,
-              borderRadius: BorderRadius.all(Radius.circular(16))
-            ),
-            child: GridView.builder(
-              scrollDirection: Axis.horizontal,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 135 / 185,
-                mainAxisSpacing: 22,
-                crossAxisSpacing: 42,
+          Scrollbar(
+            thickness: 14,
+            thumbVisibility: true,
+            interactive: true,
+            radius: Radius.circular(8),
+            controller: _scrollController,
+            child: Container(
+              height: 382,
+              padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
+              decoration: BoxDecoration(
+                color: containersColor,
+                borderRadius: BorderRadius.all(Radius.circular(16))
               ),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                var item = items[index];
+              child: GridView.builder(
+                scrollDirection: Axis.horizontal,
+                controller: _scrollController,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 135 / 185,
+                  mainAxisSpacing: 22,
+                  crossAxisSpacing: 42,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  var item = items[index];
 
-                return Draggable<GameVariant>(
-                  data: item,
-                  feedback: Container(
-                    child: Material(
-                      color: Colors.transparent,
+                  return Draggable<GameVariant>(
+                    data: item,
+                    feedback: Container(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: LibraryItem(item: item),
+                      ),
+                    ),
+                    childWhenDragging: Opacity(
+                      opacity: 0.5,
                       child: LibraryItem(item: item),
                     ),
-                  ),
-                  childWhenDragging: Opacity(
-                    opacity: 0.5,
-                    child: LibraryItem(item: item),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.find<MMController>().addTimeLineItem(item) ;
-                    },
-                      child: LibraryItem(item: item)
-                  ),
-                );
-              },
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.find<MMController>().addTimeLineItem(item) ;
+                      },
+                        child: LibraryItem(item: item)
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -203,14 +214,14 @@ class LibraryItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  (item.duration! / 60).toStringAsPrecision(1),
+                  item.duration! < 60 ? item.duration.toString() : (item.duration! / 60).toStringAsPrecision(1),
                   style: TextStyle(fontFamily: 'Inter', color: Colors.yellow, fontSize: 16 , fontWeight: FontWeight.w700, height: 1 ),
                 ),
                 SizedBox(
                   width: 2,
                 ),
                 Text(
-                  "min",
+                  item.duration! < 60 ? "Sec":"Min",
                   style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 7 , height: 1),
                 ),
                 Spacer(
@@ -285,24 +296,50 @@ class ControlBar extends GetView<MMController> {
               decoration: BoxDecoration(
                   color: containersColor,
                   borderRadius: BorderRadius.all(Radius.circular(16))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: ObxValue((state) {
-                      return Text(
-                          controller.formatDuration(
-                              controller.calculateSessionDuration()),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Total Program Duration',
                           style: TextStyle(fontFamily: 'Inter',
-                              color: Color(0xffCCCCCC),
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold));
-                    }, controller.timelineItems),
+                              color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                      SizedBox(height: 6,),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: ObxValue((state) {
+                          return Text(
+                              controller.formatDuration(
+                                  controller.calculateSessionDuration()),
+                              style: TextStyle(fontFamily: 'Inter',
+                                  color: Color(ColorCode.aqua),
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold));
+                        }, controller.timelineItems),
+                      ),
+                    ],
                   ),
-                  Text('Actual session Duration',
-                      style: TextStyle(fontFamily: 'Inter',
-                          color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                  Spacer() ,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Remaining Program Duration',
+                          style: TextStyle(fontFamily: 'Inter',
+                              color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
+                      SizedBox(height: 6,),
+                      Obx(() {
+                        int timeToEnd = controller.calculateSessionDuration() -
+                            controller.playlistProgress.value;
+                        return Text(
+                            controller.formatDuration(
+                                timeToEnd),
+                            style: TextStyle(fontFamily: 'Inter',
+                                color: Color(ColorCode.aqua),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold));
+                      })
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -351,8 +388,8 @@ class ControlBar extends GetView<MMController> {
                     maintainSize: true,
                     maintainAnimation: true,
                     maintainState: true,
-                    visible: controller.currentGameIndex.value <
-                        controller.timelineItems.length - 1,
+                    visible: (controller.currentGameIndex.value <
+                        controller.timelineItems.length - 1 || (controller.currentGameIndex.value > -1 && controller.replayEnabled.value)),
                     child: IconButton(
                       icon: Icon(Icons.skip_next, color: Color(ColorCode.aqua) , size: 48,),
                       onPressed: controller.playNext,
@@ -372,26 +409,20 @@ class ControlBar extends GetView<MMController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                    Text('Estimated time to end',
-                        style: TextStyle(fontFamily: 'Inter',
-                            color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
-                      SizedBox(height: 6,),
-                      Obx(() {
-                        int timeToEnd = controller.calculateSessionDuration() -
-                            controller.playlistProgress.value;
-                        return Text(
-                            controller.formatDuration(
-                                timeToEnd),
-                            style: TextStyle(fontFamily: 'Inter',
-                                color: Color(ColorCode.aqua),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold));
-                      })
-                    ],
+
+                  Obx(() {
+                    if(controller.timelineItems.isEmpty || controller.currentGameIndex < 0)
+                      return Container() ;
+
+                      return Text(
+                          "${controller.currentGameIndex.value +1}/${controller.timelineItems.length}",
+                          style: TextStyle(fontFamily: 'Inter',
+                              color: Color(ColorCode.aqua),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold));
+                    }
                   ),
+
                   SizedBox(width: 24,),
                   Container(
                     width: 1,
@@ -610,9 +641,8 @@ class TimelineView extends GetView<MMController> {
                               item: controller.timelineItems[index],
                               isCurrent:
                                   index == controller.currentGameIndex.value,
-                              isGrayedOut: index <
-                                      controller.currentGameIndex.value ||
-                                  index > controller.currentGameIndex.value + 1
+                              isNext: controller.currentGameIndex.value == index - 1,
+                              isPrev: controller.currentGameIndex.value == index + 1,
                             ),
                           ),
                         ),
@@ -630,6 +660,8 @@ class TimelineView extends GetView<MMController> {
         ),
         GestureDetector(
           onTap: () {
+            controller.currentGameIndex.value = -1 ;
+            controller.stopGame() ;
             controller.timelineItems.clear();
           },
           child: Padding(
@@ -645,89 +677,120 @@ class TimelineView extends GetView<MMController> {
   }
 }
 
-class TimelineItem extends StatelessWidget {
+class TimelineItem extends GetView<MMController> {
   final GameVariant item;
   final bool isCurrent;
-  final bool isGrayedOut;
+  final bool isNext;
+  final bool isPrev;
   // final double width;
 
   TimelineItem(
       {Key? key,
       required this.item,
       required this.isCurrent,
-      required this.isGrayedOut,
+      required this.isNext,
+      required this.isPrev
       /*required this.width*/})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: width,
-      height: 135,
-      margin: const EdgeInsets.all(4.0),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: CachedNetworkImageProvider(item.image ?? ""),
-            fit: BoxFit.cover,
-            opacity: 0.2 ),
-        color: Color(isCurrent ? ColorCode.aqua : 0xffD9D9D9),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            item.name ?? "",
-            style: TextStyle( fontFamily: "Inter",
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
+    var controller = Get.find<MMController>() ;
+    return ObxValue<Rx<GameStatusType>>( (state) {
+      bool isLoading = false ;
+      if(isCurrent && [GameStatusType.IDLE, GameStatusType.STARTING].contains(state.value)){
+        isLoading = true ;
+      }
+        return Container(
+          // width: width,
+          height: 135,
+          margin: const EdgeInsets.all(4.0),
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: CachedNetworkImageProvider(item.image ?? ""),
+                fit: BoxFit.cover,
+                opacity: 0.2 ),
+            color: Color(isCurrent ? ColorCode.aqua : 0xffD9D9D9).withOpacity((isCurrent && isLoading) || isNext ? 0.5 : 1.0),
+            borderRadius: BorderRadius.circular(8),
           ),
-          Spacer() ,
-          Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.timelapse,
-                size: 12,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 4,
-              ),
               Text(
-                (item.duration! / 60).toStringAsFixed(1),
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                item.name ?? "",
+                style: TextStyle( fontFamily: "Inter",
+                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
               ),
-              SizedBox(
-                width: 4,
+              Spacer() ,
+              Animate(child: getGameStatusWidget(state.value)),
+              Spacer() ,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.timelapse,
+                    size: 12,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                      item.duration! < 60 ? item.duration.toString() : (item.duration! / 60).toStringAsPrecision(1),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    item.duration! < 60 ? "Seconds":"Minutes",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ],
               ),
-              Text(
-                "Minutes",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
+              item.type == "GAME"
+                  ? Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          item.description ?? "",
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
-          item.type == "GAME"
-              ? Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 12,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      item.description ?? "",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ],
-                )
-              : Container(),
-        ],
-      ),
+        );
+      } , controller.currentGameStatus
     );
+  }
+  Widget getGameStatusWidget(GameStatusType type) {
+    String title = "" ;
+    if(isCurrent && 
+        [GameStatusType.STARTED , 
+          GameStatusType.STARTING , 
+          GameStatusType.PAUSED , 
+          GameStatusType.RESUMED , GameStatusType.UPDATED].contains(type)){
+      title = type.title ;
+    }else if(isPrev && [GameStatusType.CLOSED , GameStatusType.FINISHED].contains(type)){
+      title = type.title ;
+    }
+    return Container(
+      child: isCurrent ? Text(
+        title ,
+        style: TextStyle( fontFamily: "Inter",
+            color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
+      ) :Container(),
+    ) ;
   }
 }
 
@@ -740,11 +803,11 @@ class PlaceholderItem extends StatelessWidget {
       width: 175,
       height: 135,
       margin: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[400],
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white, width: 2),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.grey[400],
+      //   borderRadius: BorderRadius.circular(8),
+      //   border: Border.all(color: Colors.white, width: 2),
+      // ),
       child: Center(
         child: Text(
           'Drop here',

@@ -14,9 +14,9 @@ class InitialBindings extends Bindings {
     Get.put<ISplashRepository>(SplashRepository(provider: Get.find()));
     Get.put(StationService());
 
-    Get.lazyPut<IMultiplayerProvider>(() => MultiplayerProvider());
-    Get.lazyPut<IMultiplayerRepository>(() => MultiplayerRepository(provider: Get.find()));
-    Get.put(MultiplayerGuestController(multiplayerRepository: Get.find()));
+    // Get.lazyPut<IMultiplayerProvider>(() => MultiplayerProvider());
+    // Get.lazyPut<IMultiplayerRepository>(() => MultiplayerRepository(provider: Get.find()));
+    // Get.put(MultiplayerGuestController(multiplayerRepository: Get.find()));
 
   }
 }
