@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pleyo_tablet_app/services/InactivityRedirectService.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:wakelock/wakelock.dart';
@@ -35,6 +36,16 @@ Future main() async {
     //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     // }
     runApp(MyApp());
+    SnackbarController? snackbar = null ;
+    InternetConnectionChecker().onStatusChange.listen((event) {
+      print("Network error => $event") ;
+      if(event == InternetConnectionStatus.disconnected ){
+        snackbar = Get.snackbar("No internet!!", "Internet connect lost, please check your internet connection" , isDismissible: false , backgroundColor: Colors.white,duration: Duration(days: 1) );
+        // snackbar?.show() ;
+      }else {
+        snackbar?.close() ;
+      }
+    });
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {

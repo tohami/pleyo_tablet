@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -155,6 +156,50 @@ Offset adjustPosition(BuildContext context, Offset position){
   ) ?? position;
 }
 
+class InfoWidget extends StatelessWidget{
+  final String label ;
+  final String value ;
+  final Widget icon ;
+  final Color valueColor ;
+
+  const InfoWidget ({Key? key, required this.label , required this.value , required this.icon , required this.valueColor}) : super(key: key) ;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 120,
+      height: 32,
+      padding: EdgeInsets.only(left: 6 , right: 6),
+      decoration: BoxDecoration(
+        border: Border.all(
+            color: Colors.white
+        ),
+        color: Colors.black.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            value,
+            style: TextStyle(fontFamily: 'Inter', color: valueColor, fontSize: 24 , fontWeight: FontWeight.w700, height: 1 ),
+          ),
+          SizedBox(
+            width: 4,
+          ),
+          Text(
+           label,
+            style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 16 , height: 1),
+          ),
+          Spacer(
+          ),
+          icon,
+        ],
+      ),
+    ) ;
+  }
+
+}
 class LibraryItem extends StatelessWidget {
   final GameVariant item;
 
@@ -199,79 +244,27 @@ class LibraryItem extends StatelessWidget {
                   color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900),
             ),
           ),
-          Container(
-            width: 72,
-            height: 22,
-            padding: EdgeInsets.only(left: 6 , right: 6),
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.white
+          InfoWidget(
+              label: item.duration! < 60 ? "Sec" : "Min",
+              value: item.duration! < 60
+                  ? item.duration.toString()
+                  : (item.duration! / 60).toStringAsPrecision(1),
+              icon: SvgPicture.asset(
+                'assets/images/icon_duration.svg',
+                width: 24,
+                color: Colors.white,
               ),
-              color: Colors.black.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  item.duration! < 60 ? item.duration.toString() : (item.duration! / 60).toStringAsPrecision(1),
-                  style: TextStyle(fontFamily: 'Inter', color: Colors.yellow, fontSize: 16 , fontWeight: FontWeight.w700, height: 1 ),
-                ),
-                SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  item.duration! < 60 ? "Sec":"Min",
-                  style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 7 , height: 1),
-                ),
-                Spacer(
-                ),
-                SvgPicture.asset(
-                  'assets/images/icon_duration.svg',
-                  width: 14,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
+              valueColor: Colors.yellow),
           item.type == "GAME"
-              ? Container(
-                  width: 72,
-                  height: 22,
-                  padding: EdgeInsets.only(left: 6 , right: 6),
-                  margin: EdgeInsets.only(top: 3),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(6),
+              ? InfoWidget(
+                  label: "max",
+                  value: item.attributes?.maxNumberOfPlayers?.toString() ?? "",
+                  icon: SvgPicture.asset(
+                    'assets/images/icon_players.svg',
+                    width: 24,
+                    color: Colors.white,
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "max",
-                        style: TextStyle(fontFamily: 'Inter',color: Colors.white, fontSize: 7 , height: 1),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        item.attributes?.maxNumberOfPlayers?.toString() ?? "",
-                        style: TextStyle(fontFamily: 'Inter',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            height: 1),
-                      ),
-                      Spacer(),
-                      SvgPicture.asset(
-                        'assets/images/icon_players.svg',
-                        width: 14,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                )
+                  valueColor: Colors.white)
               : Container(),
         ],
       ),
@@ -305,23 +298,20 @@ class ControlBar extends GetView<MMController> {
                           style: TextStyle(fontFamily: 'Inter',
                               color: Color(0xff9F9F9F), fontSize: 14, height: 1)),
                       SizedBox(height: 6,),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: ObxValue((state) {
-                          return Text(
-                              controller.formatDuration(
-                                  controller.calculateSessionDuration()),
-                              style: TextStyle(fontFamily: 'Inter',
-                                  color: Color(ColorCode.aqua),
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold));
-                        }, controller.timelineItems),
-                      ),
+                      ObxValue((state) {
+                        return Text(
+                            controller.formatDuration(
+                                controller.calculateSessionDuration()),
+                            style: TextStyle(fontFamily: 'Inter',
+                                color: Color(ColorCode.aqua),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold));
+                      }, controller.timelineItems),
                     ],
                   ),
                   Spacer() ,
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Remaining Program Duration',
                           style: TextStyle(fontFamily: 'Inter',
@@ -373,7 +363,7 @@ class ControlBar extends GetView<MMController> {
                         if (state.value) {
                           controller.playPlayList();
                         } else {
-                          controller.pauseGame();
+                          controller.stopGame();
                         }
                       },
                       child: SvgPicture.asset(
@@ -483,7 +473,7 @@ class TimelineView extends GetView<MMController> {
       children: [
         Container(
           color: Color(0xff585858),
-          height: 75,
+          height: 50,
           // child: Obx(() {
           //   int timeToEnd = controller.calculateSessionDuration() -
           //       controller.playlistProgress.value;
@@ -629,9 +619,21 @@ class TimelineView extends GetView<MMController> {
                               : DismissDirection.vertical,
                           background: Container(
                             color: Colors.red,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Icon(Icons.delete, color: Colors.white),
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Icon(Icons.delete, color: Colors.white),
+                                ),
+                                Spacer(),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Icon(Icons.delete, color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                           child: Container(
                             width: timelineItemWidth,
@@ -703,7 +705,7 @@ class TimelineItem extends GetView<MMController> {
       }
         return Container(
           // width: width,
-          height: 135,
+          height: 160,
           margin: const EdgeInsets.all(4.0),
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -717,55 +719,45 @@ class TimelineItem extends GetView<MMController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                item.name ?? "",
-                style: TextStyle( fontFamily: "Inter",
-                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
-              ),
-              Spacer() ,
-              Animate(child: getGameStatusWidget(state.value)),
-              Spacer() ,
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.timelapse,
-                    size: 12,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
                   Text(
-                      item.duration! < 60 ? item.duration.toString() : (item.duration! / 60).toStringAsPrecision(1),
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    item.duration! < 60 ? "Seconds":"Minutes",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    item.name ?? "",
+                    style: TextStyle( fontFamily: "Inter",
+                        color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900),
                   ),
                 ],
               ),
+              Spacer() ,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Animate(child: getGameStatusWidget(state.value)),
+                ],
+              ),
+              Spacer() ,
+              InfoWidget(
+                  label: item.duration! < 60 ? "Sec" : "Min",
+                  value: item.duration! < 60
+                      ? item.duration.toString()
+                      : (item.duration! / 60).toStringAsPrecision(1),
+                  icon: SvgPicture.asset(
+                    'assets/images/icon_duration.svg',
+                    width: 24,
+                    color: Colors.white,
+                  ),
+                  valueColor: Colors.yellow),
               item.type == "GAME"
-                  ? Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          size: 12,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          item.description ?? "",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ],
-                    )
+                  ? InfoWidget(
+                  label: "max",
+                  value: item.attributes?.maxNumberOfPlayers?.toString() ?? "",
+                  icon: SvgPicture.asset(
+                    'assets/images/icon_players.svg',
+                    width: 24,
+                    color: Colors.white,
+                  ),
+                  valueColor: Colors.white)
                   : Container(),
             ],
           ),
@@ -775,11 +767,11 @@ class TimelineItem extends GetView<MMController> {
   }
   Widget getGameStatusWidget(GameStatusType type) {
     String title = "" ;
-    if(isCurrent && 
-        [GameStatusType.STARTED , 
-          GameStatusType.STARTING , 
-          GameStatusType.PAUSED , 
-          GameStatusType.RESUMED , GameStatusType.UPDATED].contains(type)){
+    if(isCurrent &&
+        [GameStatusType.STARTED ,
+          GameStatusType.STARTING ,
+          GameStatusType.PAUSED ,
+          GameStatusType.RESUMED , GameStatusType.UPDATED, GameStatusType.CLOSED].contains(type)){
       title = type.title ;
     }else if(isPrev && [GameStatusType.CLOSED , GameStatusType.FINISHED].contains(type)){
       title = type.title ;

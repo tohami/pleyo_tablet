@@ -14,6 +14,7 @@ import '../controllers/multiplayer_guest_controller.dart';
 class MultiplayerGuestGameStatus extends GetView<MultiplayerGuestController> {
   const MultiplayerGuestGameStatus({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return BackButtonListener(
