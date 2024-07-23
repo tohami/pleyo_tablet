@@ -14,29 +14,36 @@ import '../../../../model/start_game.dart';
 import '../views/mm_timeline_view.dart';
 
 class MMController extends SuperController<bool> {
-
   var station = StationService.to.currentStation;
   var organization = StationService.to.organization;
   ScrollController scrollController = ScrollController();
 
-  late List<GameVariant> games = station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.mmGameVariants!.data!;
-  late List<GameVariant> videos = station.attributes!.organization!.data!.attributes!.configuration!.data!.attributes!.promotionVideos!.data!;
+  late List<GameVariant> games = station.attributes!.organization!.data!
+      .attributes!.configuration!.data!.attributes!.mmGameVariants!.data!;
+  late List<GameVariant> videos = station.attributes!.organization!.data!
+      .attributes!.configuration!.data!.attributes!.promotionVideos!.data!;
 
-  GameVariant? currentRunningItem ;
-  int? currentScoreId ;
+  GameVariant? currentRunningItem;
+
+  int? currentScoreId;
 
   final IMMRepository mmRepository;
 
   late StreamSubscription subscription;
 
-  RxInt dropIndex = (-1).obs ;
+  RxInt dropIndex = (-1).obs;
+
   RxInt currentGameIndex = (-1).obs;
-  Rx<GameStatusType> currentGameStatus = GameStatusType.IDLE.obs ;
+  Rx<GameStatusType> currentGameStatus = GameStatusType.IDLE.obs;
+
   RxList<GameVariant> timelineItems = RxList();
-  bool isGameStarting = false ;
-  RxBool isPaused = true.obs ;
+  bool isGameStarting = false;
+
+  RxBool isPaused = true.obs;
+
   RxBool replayEnabled = false.obs;
-  RxInt playlistProgress = 0.obs; // Tracks the progress of the playlist in seconds
+  RxInt playlistProgress =
+      0.obs; // Tracks the progress of the playlist in seconds
   Timer? playlistTimer;
 
   // final double secondToWidthRatio = 2; // Configurable ratio for width per second
@@ -64,33 +71,32 @@ class MMController extends SuperController<bool> {
     super.onInit();
 
     subscription = StationService.to.gameStatus.listen((status) async {
-
-      var type = status.type ;
-      currentGameStatus.value = type ;
-      var scoreId = status.data["id"] ;
-      print("---------------------- NEW EVENT --------------------------") ;
-      print("${status.type} ${scoreId} ") ;
+      var type = status.type;
+      currentGameStatus.value = type;
+      var scoreId = status.data["id"];
+      print("---------------------- NEW EVENT --------------------------");
+      print("${status.type} ${scoreId} ");
 
       switch (status.type) {
         case GameStatusType.IDLE:
           break;
         case GameStatusType.STARTING:
-        // no need its mean the game starting command send from pleyohub
+          // no need its mean the game starting command send from pleyohub
           break;
         case GameStatusType.STARTED:
-        // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
-          isGameStarting = false ;
+          // Get.rootDelegate.backUntil(Routes.SELECT_GAME_DIFFICULTY) ;
+          isGameStarting = false;
           startTimer();
           scrollToCurrentItem(); // Scroll to the current item when it starts
           break;
         case GameStatusType.FINISHED:
-          if(scoreId == currentScoreId){
+          if (scoreId == currentScoreId) {
             await playNext();
           }
           break;
         case GameStatusType.CLOSED:
         case GameStatusType.CRASHED:
-          if(scoreId == currentScoreId){
+          if (scoreId == currentScoreId) {
             await playNext();
           }
           break;
@@ -116,10 +122,10 @@ class MMController extends SuperController<bool> {
         if (currentRunningItem == null) {
           if (currentGameIndex.value == -1) {
             currentGameIndex.value = 0;
-        }
+          }
 
           final item = timelineItems[currentGameIndex.value];
-        final gameDifficulty = 1;
+          final gameDifficulty = 1;
           final stationId = station.id;
           final organizationId = organization.id;
 
@@ -128,7 +134,7 @@ class MMController extends SuperController<bool> {
             gameDifficulty: gameDifficulty,
             station: stationId!,
             organization: organizationId!,
-            numberOfPlayers: item.attributes!.maxNumberOfPlayers??0,
+            numberOfPlayers: item.attributes!.maxNumberOfPlayers ?? 0,
           );
 
           currentRunningItem = item;
@@ -139,7 +145,7 @@ class MMController extends SuperController<bool> {
           await mmRepository.resumeGame(multiplayerGameId: currentScoreId!);
         }
 
-        isPaused.value = false ;
+        isPaused.value = false;
         isGameStarting = true;
         startTimer();
         scrollToCurrentItem(); // Scroll to the current item when it starts
@@ -152,7 +158,7 @@ class MMController extends SuperController<bool> {
     }
   }
 
-  void syncTimeLineProgress () {
+  void syncTimeLineProgress() {
     playlistProgress.value = 0;
     for (int i = 0; i < currentGameIndex.value; i++) {
       playlistProgress.value += timelineItems[i].duration ?? 0;
@@ -161,27 +167,97 @@ class MMController extends SuperController<bool> {
 
   Future<void> playNext() async {
     try {
+      if(currentRunningItem != null){
+        var result = await showStopGameConfirmationDialog() ;
+        if(!result) {
+          return ;
+        }
+      }
       resetCurrentGame();
       currentGameIndex.value++;
       if (currentGameIndex.value >= timelineItems.length) {
         if (replayEnabled.value) {
           currentGameIndex.value = 0;
-    } else {
+        } else {
           currentGameIndex.value = -1;
-          playlistProgress.value = 0 ;
+          playlistProgress.value = 0;
           print("Playlist finished");
           return;
         }
       }
-        await playPlayList();
+      await playPlayList();
     } catch (e) {
       print("Error playing next game: $e");
       rethrow;
     }
   }
 
+  var dontShowAgain = false.obs;
+  var skipDialogUntil = DateTime(0).obs;
+
+  Future<bool> showStopGameConfirmationDialog() async{
+
+    final currentTime = DateTime.now();
+
+    if (currentTime.isBefore(skipDialogUntil.value)) {
+      return true;
+    }
+    dontShowAgain.value = false ;
+
+    bool? result = await Get.dialog<bool>(
+      AlertDialog(
+        title: Text('Stop Game Confirmation'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Are you sure you want to stop the current running game?'),
+            Obx(
+                  () => Row(
+                children: [
+                  Checkbox(
+                    value: dontShowAgain.value,
+                    onChanged: (bool? value) {
+                      dontShowAgain.value = value ?? false;
+                    },
+                  ),
+                  Text("Don't show this dialog for next 5 minutes"),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back(result: false);
+            },
+            child: Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (dontShowAgain.value) {
+                skipDialogUntil.value = currentTime.add(Duration(minutes: 5));
+              }
+              Get.back(result: true);
+            },
+            child: Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    return result ?? false;
+  }
+
+
   Future<void> playPrevious() async {
     try {
+      if(currentRunningItem != null){
+        var result = await showStopGameConfirmationDialog() ;
+        if(!result) {
+          return ;
+        }
+      }
       resetCurrentGame();
       currentGameIndex.value--;
       if (currentGameIndex.value < 0) {
@@ -193,32 +269,38 @@ class MMController extends SuperController<bool> {
           return;
         }
       }
-        await playPlayList();
+      await playPlayList();
     } catch (e) {
       print("Error playing previous game: $e");
       rethrow;
     }
   }
 
-Future<void> pauseGame() async {
-  try {
-    if (currentRunningItem != null && !isPaused.value) {
-      await mmRepository.pauseGame(multiplayerGameId: currentScoreId!);
-      isPaused.value = true;
-      stopTimer();
-      print("Game paused");
-    } else {
-      print("No running game to pause or game already paused");
+  Future<void> pauseGame() async {
+    try {
+      if (currentRunningItem != null && !isPaused.value) {
+        await mmRepository.pauseGame(multiplayerGameId: currentScoreId!);
+        isPaused.value = true;
+        stopTimer();
+        print("Game paused");
+      } else {
+        print("No running game to pause or game already paused");
+      }
+    } catch (e) {
+      print("Error pausing game: $e");
+      rethrow;
     }
-  } catch (e) {
-    print("Error pausing game: $e");
-    rethrow;
   }
-}
 
   Future<void> stopGame() async {
     try {
       if (currentRunningItem != null && !isPaused.value) {
+        if(currentRunningItem != null){
+          var result = await showStopGameConfirmationDialog() ;
+          if(!result) {
+            return ;
+          }
+        }
         await mmRepository.stopGame(multiplayerGameId: currentScoreId!);
         resetCurrentGame();
         print("Game stopped");
@@ -234,7 +316,7 @@ Future<void> pauseGame() async {
   void resetCurrentGame() {
     currentRunningItem = null;
     currentScoreId = null;
-        isPaused.value = true;
+    isPaused.value = true;
     stopTimer();
   }
 
@@ -253,10 +335,12 @@ Future<void> pauseGame() async {
     // playlistTimer?.cancel();
   }
 
-  int calculateSessionDuration () {
-    if(timelineItems.isEmpty) return 0 ;
-    if(timelineItems.length == 1) return timelineItems[0].duration??0 ;
-    return timelineItems.map((element) => element.duration ?? 0).reduce((value, element) => value + element);
+  int calculateSessionDuration() {
+    if (timelineItems.isEmpty) return 0;
+    if (timelineItems.length == 1) return timelineItems[0].duration ?? 0;
+    return timelineItems
+        .map((element) => element.duration ?? 0)
+        .reduce((value, element) => value + element);
   }
 
   String formatDuration(int seconds) {
@@ -268,10 +352,10 @@ Future<void> pauseGame() async {
   }
 
   void addTimeLineItem(GameVariant data) {
-    var newData = data.copyWith(internalId: DateTime.now().millisecondsSinceEpoch);
+    var newData =
+        data.copyWith(internalId: DateTime.now().millisecondsSinceEpoch);
     if (dropIndex.value != -1) {
-      timelineItems
-          .insert(dropIndex.value, newData);
+      timelineItems.insert(dropIndex.value, newData);
     } else {
       timelineItems.add(newData);
     }
