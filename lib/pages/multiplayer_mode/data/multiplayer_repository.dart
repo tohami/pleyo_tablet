@@ -1,4 +1,5 @@
 import 'package:pleyo_tablet_app/base/base_repositroy.dart';
+import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket_reponse.dart';
 import '../../../model/strapi/multiplayer_game_response.dart';
 import '../../../model/strapi/ticket.dart';
@@ -13,7 +14,7 @@ abstract class IMultiplayerRepository {
     required int organization,
   });
 
-  joinMultiplayerGame(
+  Future<JoinMultiplayerGameData> joinMultiplayerGame(
       {required int station,
       required int organization,
       required String nickname,
@@ -47,7 +48,7 @@ class MultiplayerRepository extends BaseRepository
     }
   }
 
-  Future<MultiplayerGame> joinMultiplayerGame({
+  Future<JoinMultiplayerGameData> joinMultiplayerGame({
     required int station,
     required String nickname,
     required int organization,

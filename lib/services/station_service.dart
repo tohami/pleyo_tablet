@@ -6,6 +6,7 @@ import 'package:pleyo_tablet_app/model/start_game.dart';
 import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game_message.dart';
 import 'package:pleyo_tablet_app/model/strapi/organization.dart';
 import 'package:pleyo_tablet_app/model/strapi/personas.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/controllers/join_game_controller.dart';
 import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/controllers/multiplayer_guest_controller.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
@@ -66,7 +67,7 @@ class StationService extends GetxService {
       if(currentStation.attributes?.multiplayerEnabled == true) {
         JoinMultiplayerGameDetails details = JoinMultiplayerGameDetails
             .fromJson(data);
-        MultiplayerGuestController controller = Get.find();
+        JoinGameController controller = Get.find();
         controller.gameDetails = details;
         Get.dialog(Dialog(child: GuestNameView(details)));
       }

@@ -52,7 +52,7 @@ class MultiplayerGuestGamePlay extends GetView<MultiplayerGuestController> {
 
                 SizedBox(height: 60,) ,
                 CustomText(
-                  '${controller.playerNameController.text}',
+                  '${controller.playerName}',
                   textStyle: TextStyles.textXXLarge.copyWith(
                     fontFamily: 'Helvetica Neue',
                     color: Colors.white,

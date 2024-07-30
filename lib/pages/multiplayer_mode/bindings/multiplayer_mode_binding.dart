@@ -4,6 +4,7 @@ import '../../home/data/games_api_provider.dart';
 import '../../home/data/games_repository.dart';
 import '../data/multiplayer_api_provider.dart';
 import '../data/multiplayer_repository.dart';
+import '../presentation/controllers/multiplayer_guest_controller.dart';
 import '../presentation/controllers/multiplayer_host_controller.dart';
 
 class MultiplayerModeBinding extends Bindings {
@@ -13,5 +14,6 @@ class MultiplayerModeBinding extends Bindings {
     // Get.lazyPut<IMultiplayerRepository>(() => MultiplayerRepository(provider: Get.find()));
 
     Get.lazyPut(() => MultiplayerHostController(multiplayerRepository: Get.find()));
+    Get.lazyPut(() => MultiplayerGuestController(multiplayerRepository: Get.find()));
   }
 }

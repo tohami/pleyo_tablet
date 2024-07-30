@@ -46,6 +46,7 @@ class Attributes {
   String? gameStartDate;
   bool? visible;
   bool? completed;
+  String? stopReason ;
   List<Competitions>? competitions;
 
   Attributes({this.gameEndDate, this.score, this.gameStartDate, this.visible, this.completed, this.competitions});
@@ -56,6 +57,7 @@ class Attributes {
     gameStartDate = json['gameStartDate'];
     visible = json['visible'];
     completed = json['completed'];
+    stopReason = json['stop_reason'];
     if (json['competitions'] != null) {
       competitions = <Competitions>[];
       json['competitions'].forEach((v) { competitions!.add(new Competitions.fromJson(v)); });
@@ -69,6 +71,7 @@ class Attributes {
     data['gameStartDate'] = this.gameStartDate;
     data['visible'] = this.visible;
     data['completed'] = this.completed;
+    data['stop_reason'] = this.stopReason;
     if (this.competitions != null) {
       data['competitions'] = this.competitions!.map((v) => v.toJson()).toList();
     }

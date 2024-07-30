@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/consts/colors.dart';
 import 'package:pleyo_tablet_app/consts/text_styles.dart';
 import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game_message.dart';
+import 'package:pleyo_tablet_app/pages/multiplayer_mode/presentation/controllers/join_game_controller.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text.dart';
 import 'package:pleyo_tablet_app/widgets/custom_text_field.dart';
 
@@ -16,7 +17,7 @@ class GuestNameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MultiplayerGuestController controller = Get.find();
+    JoinGameController controller = Get.find();
     return ObxValue<RxBool>((goPlaying) {
       return Stack(
         clipBehavior: Clip.none,

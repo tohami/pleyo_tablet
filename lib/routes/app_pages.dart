@@ -202,6 +202,7 @@ class AppPages {
         page: () => ScaleWidget(
             builder: (context, child) => scaleWidgetBuilder(context, child!),
             child: MultiplayerGuestGameStatus()),
+        binding: MultiplayerModeBinding(),
         children: [
           GetPage(
             name: Routes.MULTIPLAYER_GUEST_GAME_PLAY,
