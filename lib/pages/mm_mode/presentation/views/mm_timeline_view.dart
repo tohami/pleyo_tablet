@@ -99,7 +99,7 @@ class LibrarySection extends StatelessWidget {
             controller: _scrollController,
             child: Container(
               height: 382,
-              padding: EdgeInsets.only(left: 36 , right: 36 , top: 36, bottom: 33),
+              padding: EdgeInsets.only(left: 36 , right: 36 , top: 16, bottom: 49),
               decoration: BoxDecoration(
                 color: containersColor,
                 borderRadius: BorderRadius.all(Radius.circular(16))
@@ -661,7 +661,13 @@ class TimelineView extends GetView<MMController> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async{
+            if(controller.currentRunningItem != null){
+              var result = await controller.showStopGameConfirmationDialog() ;
+              if(!result) {
+                return ;
+              }
+            }
             controller.currentGameIndex.value = -1 ;
             controller.stopGame() ;
             controller.timelineItems.clear();
