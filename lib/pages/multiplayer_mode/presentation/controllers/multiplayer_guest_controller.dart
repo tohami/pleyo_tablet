@@ -7,6 +7,7 @@ import 'package:pleyo_tablet_app/services/station_service.dart';
 import 'package:pleyo_tablet_app/model/strapi/score_response.dart' as sr;
 
 import '../../../../model/start_game.dart';
+import '../../../../model/strapi/multiplayer_game_response.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../widgets/alert_dialog.dart';
 import '../../data/multiplayer_repository.dart';
@@ -14,10 +15,11 @@ import '../../data/multiplayer_repository.dart';
 class MultiplayerGuestController extends SuperController<bool> {
   int? scoreId = Get.rootDelegate.arguments()["score"] ;
   String? playerName = Get.rootDelegate.arguments()["name"] ;
+  Rx<MultiplayerGame?> multiplayerGame = Rx(Get.rootDelegate.arguments()["gameDetails"]) ;
+
 
   final IMultiplayerRepository multiplayerRepository;
 
-  RxBool gameFail = false.obs;
   RxInt gameStatus = 0.obs;
   late StreamSubscription subscription;
 
@@ -67,7 +69,7 @@ class MultiplayerGuestController extends SuperController<bool> {
               popMode: PopMode.History);
           break;
         case GameStatusType.UPDATED:
-          // TODO: Handle this case.
+          multiplayerGame.value = MultiplayerGame.fromJson(status.data);
           break;
         case GameStatusType.PAUSED:
           // TODO: Handle this case.

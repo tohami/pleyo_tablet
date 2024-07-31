@@ -63,7 +63,8 @@ class JoinGameController extends SuperController<bool> {
     await Future.delayed(Duration(milliseconds: 500));
     Get.rootDelegate.toNamed(Routes.MULTIPLAYER_GUEST_GAME_STATUS, arguments: {
       "score" : myScore?.id,
-      "name": playerNameController.text
+      "name": playerNameController.text,
+      "gameDetails": joinMultiplayerGameData,
     });
 
     Get.find<InactivityRedirectService>().userInteracted() ;
