@@ -168,7 +168,7 @@ class MultiplayerHostController extends SuperController<bool> {
   RxBool createTicketLoading = false.obs;
 
   void onPlayerNameSelected() async {
-    if (playerNameController.text.length < 4) return;
+    if (playerNameController.text.length < 3) return;
 
     Get.rootDelegate
         .toNamed("${Routes.MULTIPLAYER_LANDING}/${Routes.MULTIPLAYER_WELCOME}");

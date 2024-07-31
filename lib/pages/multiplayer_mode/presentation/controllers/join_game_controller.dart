@@ -51,14 +51,14 @@ class JoinGameController extends SuperController<bool> {
   RxBool createTicketLoading = false.obs;
 
   void onPlayerNameSelected() async {
-    if (playerNameController.text.length < 4) return;
+    if (playerNameController.text.length < 3) return;
     var joinMultiplayerGameData = await multiplayerRepository.joinMultiplayerGame(
         station: StationService.to.currentStation.id!,
         organization: StationService.to.currentStation.attributes!.organization!.data!.id!,
         nickname: playerNameController.text,
         scoreId: gameDetails.multiplayerGame!
     ) ;
-    var myScore = joinMultiplayerGameData.attributes?.scores?.data?.firstWhereOrNull((element) => StationService.to.currentStation.id == element?.id ) ;
+    var myScore = joinMultiplayerGameData.scores?.firstWhereOrNull((element) => StationService.to.currentStation.id == element?.id ) ;
     Get.back();
     await Future.delayed(Duration(milliseconds: 500));
     Get.rootDelegate.toNamed(Routes.MULTIPLAYER_GUEST_GAME_STATUS, arguments: {

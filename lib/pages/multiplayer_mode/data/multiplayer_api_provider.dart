@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:pleyo_tablet_app/base/base_provider.dart';
-import 'package:pleyo_tablet_app/model/strapi/join_multiplayer_game.dart';
 import 'package:pleyo_tablet_app/model/strapi/multiplayer_game_response.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket.dart';
 import 'package:pleyo_tablet_app/model/strapi/ticket_reponse.dart';
@@ -14,7 +13,7 @@ abstract class IMultiplayerProvider {
     required int organization,
   });
 
-  Future<Response<JoinMultiplayerGameData>> joinMultiplayerGame(
+  Future<Response<MultiplayerGame>> joinMultiplayerGame(
       {required int station,
       required int organization,
       required String nickname,
@@ -45,13 +44,13 @@ class MultiplayerProvider extends BaseProvider implements IMultiplayerProvider {
   }
 
   @override
-  Future<Response<JoinMultiplayerGameData>> joinMultiplayerGame({
+  Future<Response<MultiplayerGame>> joinMultiplayerGame({
     required int station,
     required String nickname,
     required int organization,
     required int scoreId
   }) {
-    return post<JoinMultiplayerGameData>(
+    return post<MultiplayerGame>(
         'multiplayers/$scoreId/join',
         {
           "data": {
@@ -60,6 +59,6 @@ class MultiplayerProvider extends BaseProvider implements IMultiplayerProvider {
             "organization": organization
           }
         },
-        decoder: JoinMultiplayerGameData.fromJson);
+        decoder: MultiplayerGame.fromJson);
   }
 }
