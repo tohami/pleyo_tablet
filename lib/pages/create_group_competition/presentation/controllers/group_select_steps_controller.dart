@@ -204,7 +204,11 @@ class GroupPlayStepsController extends SuperController<bool> {
         arguments: result,
       );
     }catch (e, stack) {
-      showAlert("Error", "Create group error");
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while joining the game. Please try again." , duration: Duration(seconds: 5)));
+      }
       FirebaseCrashlytics.instance.recordError(
           e,
           stack,

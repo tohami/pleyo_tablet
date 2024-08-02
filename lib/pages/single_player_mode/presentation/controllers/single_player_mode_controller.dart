@@ -144,10 +144,10 @@ class SinglePlayerModeController extends SuperController<bool> {
         }
       });
     } catch (e , stack) {
-      if (e is MapEntry) {
-        showAlert("Error", e.value);
-      } else {
-        showAlert("Error", "Connection error");
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while starting the game. Please try again." , duration: Duration(seconds: 5)));
       }
       gameStatus.value = 0;
       FirebaseCrashlytics.instance.log("Start game error");
@@ -180,6 +180,12 @@ class SinglePlayerModeController extends SuperController<bool> {
 
       Get.find<InactivityRedirectService>().userInteracted() ;
     } catch (e, stack) {
+      createTicketLoading.value = false;
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while creating the ticket. Please try again." , duration: Duration(seconds: 5)));
+      }
       FirebaseCrashlytics.instance.log("unable to create ticket");
       FirebaseCrashlytics.instance.recordError(
           e,

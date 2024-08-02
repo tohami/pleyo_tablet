@@ -94,9 +94,9 @@ class ActivateController extends SuperController<dynamic> with GetSingleTickerPr
     } catch (e) {
       printError(info: e.toString()) ;
       if(e is MapEntry){
-        var result = await showAlert(e.key, e.value) ;
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
       }else {
-        var result = await showAlert("Error", "Unable to activate the ticket, try again") ;
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while joining the game. Please try again." , duration: Duration(seconds: 5)));
       }
     }
   }

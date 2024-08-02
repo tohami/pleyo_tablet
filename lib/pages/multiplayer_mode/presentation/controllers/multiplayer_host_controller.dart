@@ -151,10 +151,11 @@ class MultiplayerHostController extends SuperController<bool> {
         }
       });
     } catch (e , stack) {
-      if (e is MapEntry) {
-        showAlert("Error", e.value);
-      } else {
-        showAlert("Error", "Connection error");
+      createTicketLoading.value = false;
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while starting the game. Please try again." , duration: Duration(seconds: 5)));
       }
       gameStatus.value = 0;
       FirebaseCrashlytics.instance.log("Start game error");

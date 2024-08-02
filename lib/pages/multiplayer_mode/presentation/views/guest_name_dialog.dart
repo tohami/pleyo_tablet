@@ -142,8 +142,7 @@ class GuestNameView extends StatelessWidget {
             Positioned(
               top: 215,
               left: 16,
-              child: ObxValue<RxBool>((state) {
-                return GestureDetector(
+              child: GestureDetector(
                   onTap: () {
                     Get.back();
                   },
@@ -154,15 +153,8 @@ class GuestNameView extends StatelessWidget {
                           'assets/images/go_button_active_bg.png',
                           color: Colors.red,
                           height: 165,
-                          width: 171)
-                          .animate(target: state.value ? 1 : 0)
-                          .scaleX(
-                          duration: GetNumUtils(500).milliseconds,
-                          begin: 1,
-                          end: 0.8),
-                      state.value
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : CustomText(
+                          width: 171),
+                      CustomText(
                         'Cancel',
                         textStyle: TextStyles.textXLarge.copyWith(
                           fontFamily: 'CoconPro',
@@ -171,8 +163,7 @@ class GuestNameView extends StatelessWidget {
                       )
                     ],
                   ),
-                );
-              }, controller.createTicketLoading),
+                ),
             ),
           ],
         ),

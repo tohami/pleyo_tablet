@@ -154,7 +154,11 @@ class MMController extends SuperController<bool> {
       }
     } catch (e) {
       print("Error starting playlist: $e");
-      rethrow;
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while Starting the game. Please try again." , duration: Duration(seconds: 5)));
+      };
     }
   }
 
@@ -188,7 +192,6 @@ class MMController extends SuperController<bool> {
       await playPlayList();
     } catch (e) {
       print("Error playing next game: $e");
-      rethrow;
     }
   }
 
@@ -287,8 +290,11 @@ class MMController extends SuperController<bool> {
         print("No running game to pause or game already paused");
       }
     } catch (e) {
-      print("Error pausing game: $e");
-      rethrow;
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while pausing the game. Please try again." , duration: Duration(seconds: 5)));
+      }
     }
   }
 
@@ -309,7 +315,11 @@ class MMController extends SuperController<bool> {
       }
     } catch (e) {
       print("Error stopping game: $e");
-      rethrow;
+      if(e is MapEntry){
+        Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
+      }else {
+        Get.showSnackbar(GetSnackBar(title: "Error",message: "An error occurred while stopping the game. Please try again." , duration: Duration(seconds: 5)));
+      }
     }
   }
 

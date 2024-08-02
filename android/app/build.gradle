@@ -86,7 +86,7 @@ android {
                     if (buildType == 'debug'){
                         newName = "app-debug.apk"
                     } else {
-                        newName = "${appName}_${buildType}_${flutterVersionName}_S${dartEnvironmentVariables.ID}.apk"
+                        newName = "${appName}_${buildType}_${flutterVersionName}.apk"
                     }
                     output.outputFileName = newName
                 }
