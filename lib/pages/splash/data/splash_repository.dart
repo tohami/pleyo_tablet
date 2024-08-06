@@ -6,7 +6,7 @@ import '../../../model/strapi/ticket_reponse.dart';
 import 'splash_api_provider.dart';
 
 abstract class ISplashRepository {
-  Future<Station> findOrCreateStation(serial);
+  Future<Station> findOrCreateStation(String serial);
   Future<List<PersonaGroupData>> getPersonas() ;
 }
 
@@ -16,7 +16,7 @@ class SplashRepository extends BaseRepository implements ISplashRepository {
   final ISplashProvider provider;
 
   @override
-  Future<Station> findOrCreateStation(serial) async {
+  Future<Station> findOrCreateStation(String serial) async {
     // TODO: implement getAllMerchants
     final apiResponse = await provider.findOrCreateStation(serial);
     if (apiResponse.isOk && apiResponse.body?.data != null) {

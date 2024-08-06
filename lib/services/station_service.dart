@@ -110,7 +110,7 @@ class StationService extends GetxService {
     while (true) {
       try {
         var station =
-            await Get.find<ISplashRepository>().findOrCreateStation(identifier);
+            await Get.find<ISplashRepository>().findOrCreateStation((kDebugMode ? "bde09856b1ec9e3c" : identifier!));
         var personas = await Get.find<ISplashRepository>().getPersonas();
 
         if (station.attributes?.organization?.data != null) {

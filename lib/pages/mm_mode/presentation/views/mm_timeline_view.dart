@@ -352,7 +352,15 @@ class ControlBar extends GetView<MMController> {
                     maintainState: true,
                     child: IconButton(
                       icon: Icon(Icons.skip_previous, color: Color(ColorCode.aqua) , size: 48,),
-                      onPressed: controller.playPrevious,
+                      onPressed: () async{
+                        if(controller.currentRunningItem != null){
+                          var result = await controller.showStopGameConfirmationDialog() ;
+                          if(!result) {
+                            return ;
+                          }
+                        }
+                        controller.playPrevious();
+                      },
                     ),
                   );
                 }),
@@ -382,7 +390,15 @@ class ControlBar extends GetView<MMController> {
                         controller.timelineItems.length - 1 || (controller.currentGameIndex.value > -1 && controller.replayEnabled.value)),
                     child: IconButton(
                       icon: Icon(Icons.skip_next, color: Color(ColorCode.aqua) , size: 48,),
-                      onPressed: controller.playNext,
+                      onPressed: () async {
+                        if (controller.currentRunningItem != null) {
+                          var result = await controller.showStopGameConfirmationDialog();
+                          if (!result) {
+                            return;
+                          }
+                        }
+                        controller.playNext();
+                      },
                     ),
                   );
                 }),
@@ -607,6 +623,9 @@ class TimelineView extends GetView<MMController> {
                           onDismissed: (direction) {
                             if (index != controller.currentGameIndex.value) {
                               controller.timelineItems.removeAt(index);
+                              if(index < controller.currentGameIndex.value) {
+                                controller.currentGameIndex.value--;
+                              }
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text(
@@ -669,7 +688,7 @@ class TimelineView extends GetView<MMController> {
               }
             }
             controller.currentGameIndex.value = -1 ;
-            controller.stopGame() ;
+            controller.stopGame(showAlert:false) ;
             controller.timelineItems.clear();
           },
           child: Padding(

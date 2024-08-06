@@ -171,12 +171,6 @@ class MMController extends SuperController<bool> {
 
   Future<void> playNext() async {
     try {
-      if(currentRunningItem != null){
-        var result = await showStopGameConfirmationDialog() ;
-        if(!result) {
-          return ;
-        }
-      }
       resetCurrentGame();
       currentGameIndex.value++;
       if (currentGameIndex.value >= timelineItems.length) {
@@ -255,12 +249,6 @@ class MMController extends SuperController<bool> {
 
   Future<void> playPrevious() async {
     try {
-      if(currentRunningItem != null){
-        var result = await showStopGameConfirmationDialog() ;
-        if(!result) {
-          return ;
-        }
-      }
       resetCurrentGame();
       currentGameIndex.value--;
       if (currentGameIndex.value < 0) {
@@ -298,10 +286,11 @@ class MMController extends SuperController<bool> {
     }
   }
 
-  Future<void> stopGame() async {
+  Future<void> stopGame({bool showAlert = true}) async {
+
     try {
       if (currentRunningItem != null && !isPaused.value) {
-        if(currentRunningItem != null){
+        if(showAlert && currentRunningItem != null){
           var result = await showStopGameConfirmationDialog() ;
           if(!result) {
             return ;
