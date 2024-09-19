@@ -28,8 +28,9 @@ class AlertDialogWidget extends StatelessWidget {
       child: AlertDialog(
         content: CustomText(
           content,
+          maxLines: 4,
           textAlign: TextAlign.start,
-          textStyle: TextStyles.textMedium.copyWith(
+          textStyle: TextStyles.textLarge.copyWith(
             fontFamily: 'Helvetica Neue',
             color: const Color(ColorCode.grey4),
             fontWeight: FontWeight.normal,
@@ -37,7 +38,7 @@ class AlertDialogWidget extends StatelessWidget {
         ),
         insetPadding: const EdgeInsets.symmetric(horizontal: 50),
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 45, vertical: 25),
+        const EdgeInsets.symmetric(horizontal: 45, vertical: 25),
         backgroundColor: const Color(ColorCode.black),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(45.0),
@@ -45,12 +46,48 @@ class AlertDialogWidget extends StatelessWidget {
               color: Color(ColorCode.primaryBackground), width: 6),
         ),
         actions: <Widget>[
-          Row(
+          Column(
             children: [
               TextButton(
+                onPressed: onAcceptClicked,
                 child: Container(
-                  width: 135,
-                  height: 40,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(ColorCode.black5),
+                    borderRadius: BorderRadius.circular(56.0),
+                    border: Border.all(
+                        width: 1.0, color: const Color(ColorCode.aqua)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 12),
+                      Icon(Icons.check_circle,
+                          size: 32, color: const Color(ColorCode.aqua)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: CustomText(
+                          actionAcceptText,
+                          textAlign: TextAlign.start,
+                          textStyle: TextStyles.textLarge.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(ColorCode.aqua)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextButton(
+                onPressed: onCancelClicked,
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
@@ -66,35 +103,25 @@ class AlertDialogWidget extends StatelessWidget {
                     border: Border.all(
                         width: 1.0, color: const Color(ColorCode.pink6)),
                   ),
-                  child: CustomText(
-                    actionCancelText,
-                    textStyle: TextStyles.textXSmall.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(ColorCode.pink6)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 12),
+                      Icon(Icons.cancel,
+                          size: 32, color: const Color(ColorCode.pink6)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: CustomText(
+                          actionCancelText,
+                          textAlign: TextAlign.start,
+                          textStyle: TextStyles.textLarge.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(ColorCode.pink6)),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                onPressed: onCancelClicked,
-              ),
-              Expanded(child: Container()),
-              TextButton(
-                child: Container(
-                  width: 135,
-                  height: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(ColorCode.black5),
-                    borderRadius: BorderRadius.circular(56.0),
-                    border: Border.all(
-                        width: 1.0, color: const Color(ColorCode.aqua)),
-                  ),
-                  child: CustomText(
-                    actionAcceptText,
-                    textStyle: TextStyles.textXSmall.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(ColorCode.aqua)),
-                  ),
-                ),
-                onPressed: onAcceptClicked,
               ),
             ],
           ),

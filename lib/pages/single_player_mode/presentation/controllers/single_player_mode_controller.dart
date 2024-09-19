@@ -144,6 +144,9 @@ class SinglePlayerModeController extends SuperController<bool> {
         }
       });
     } catch (e , stack) {
+      await Get.rootDelegate.backUntil(
+          "${Routes.SINGLE_PLAY_LANDING}/${Routes.SINGLE_PLAY_SELECT_GAME}",
+          popMode: PopMode.History);
       if(e is MapEntry){
         Get.showSnackbar(GetSnackBar(title: e.key.toString().tr,message: e.value , duration: Duration(seconds: 5),));
       }else {
@@ -242,9 +245,9 @@ class SinglePlayerModeController extends SuperController<bool> {
     // Show the dialog and wait for the user's response or the timeout, whichever comes first.
     var exit = await Future.any([
       Get.dialog(AlertDialogWidget(
-        content: 'Game is finished, what do you want?',
-        actionCancelText: 'Exit',
-        actionAcceptText: 'Play again',
+        content: 'Game over! Do you want to explore more games or return to the main menu?',
+        actionCancelText: 'Return to Main Menu',
+        actionAcceptText: 'Find More Games',
         onCancelClicked: () => Get.back(result: true), // Note: Use Get.back(result: true) instead of a set
         onAcceptClicked: () => Get.back(result: false),
       ) , barrierDismissible: false),

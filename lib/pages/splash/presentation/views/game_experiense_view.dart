@@ -116,12 +116,35 @@ class GameExperienceView extends GetView<SplashController> {
                                 selectTitle: '1 vs 1 play',
                                 selectDetails:
                                 'Face off in a head-to-head battle. May the best player win!',
-                                onTap: () async{
-                                  Get.find<InactivityRedirectService>().startListening() ;
-                                  await Get.rootDelegate.toNamed(Routes.MULTIPLAYER_LANDING);
-                                  Get.find<InactivityRedirectService>().stopListening() ;
+                                onTap: () async {
+                                  // Get.find<InactivityRedirectService>().startListening() ;
+                                  // await Get.rootDelegate.toNamed(Routes.MULTIPLAYER_LANDING);
+                                  // Get.find<InactivityRedirectService>().stopListening() ;
+                                  //
 
-                                },),
+                                  Get.snackbar(
+                                      "Soon", "This feature is coming soon!" , titleText:  CustomText(
+                                    "Soon",
+                                    maxLines: 4,
+                                    textAlign: TextAlign.start,
+                                    textStyle: TextStyles.textLarge.copyWith(
+                                      fontFamily: 'Helvetica Neue',
+                                      color: const Color(ColorCode.grey4),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ) , messageText : CustomText(
+                                  "This feature is coming soon!",
+                                      maxLines: 4,
+                                      textAlign: TextAlign.start,
+                                      textStyle: TextStyles.textLarge.copyWith(
+                                        fontFamily: 'Helvetica Neue',
+                                        color: const Color(ColorCode.grey4),
+                                        fontWeight: FontWeight.normal,
+                                      )
+                                  ) , dismissDirection: DismissDirection.up,
+
+                                  );
+                                })
 
                             ],
                           ),
