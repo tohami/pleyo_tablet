@@ -224,9 +224,9 @@ class MultiplayerHostController extends SuperController<bool> {
     // Show the dialog and wait for the user's response or the timeout, whichever comes first.
     var exit = await Future.any([
       Get.dialog(AlertDialogWidget(
-        content: 'Game is finished, what do you want?',
-        actionCancelText: 'Exit',
-        actionAcceptText: 'Play again',
+        content: 'Game over! Do you want to explore more games or return to the main menu?',
+        actionCancelText: 'Return to Main Menu',
+        actionAcceptText: 'Find More Games',
         onCancelClicked: () => Get.back(result: true), // Note: Use Get.back(result: true) instead of a set
         onAcceptClicked: () => Get.back(result: false),
       ) , barrierDismissible: false),
