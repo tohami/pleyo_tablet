@@ -123,16 +123,7 @@ class GameExperienceView extends GetView<SplashController> {
                                   //
 
                                   Get.snackbar(
-                                      "Soon", "This feature is coming soon!" , titleText:  CustomText(
-                                    "Soon",
-                                    maxLines: 4,
-                                    textAlign: TextAlign.start,
-                                    textStyle: TextStyles.textLarge.copyWith(
-                                      fontFamily: 'Helvetica Neue',
-                                      color: const Color(ColorCode.grey4),
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ) , messageText : CustomText(
+                                      "", "This feature is coming soon!" , titleText: Container() , messageText : CustomText(
                                   "This feature is coming soon!",
                                       maxLines: 4,
                                       textAlign: TextAlign.start,
